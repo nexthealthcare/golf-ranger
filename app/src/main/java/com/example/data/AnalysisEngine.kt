@@ -230,7 +230,56 @@ object AnalysisEngine {
         "단순한 스윙 폼 교정 이전에 ${bodyType.bodyCause}를 회복해야 스윙 보상이 자연스럽게 해소됩니다. " +
         "처방된 모빌리티 세트와 드릴을 주 4회 실천하십시오."
 
+    val mbti = when (bodyType.code) {
+      "TYPE-A (EE)" -> com.example.model.GolfMbti(
+        code = "BSE-T",
+        name = "배치기 타이거",
+        animalEmoji = "🐯",
+        tagline = "폭발적인 파워, 그러나 임팩트 때 먼저 일어서는 호랑이!",
+        superpower = "강력한 상체 파워와 공격적인 비거리 잠재력",
+        bodyCause = "골반 전후방 틸트 분리 조절력 결핍 & 발목 가동성 부족",
+        quickFix = "다운스윙 때 엉덩이를 벽에 붙이고 1초 유지하기"
+      )
+      "TYPE-B (OTT)" -> com.example.model.GolfMbti(
+        code = "OSD-D",
+        name = "엎어치기 드래곤",
+        animalEmoji = "🐲",
+        tagline = "넘치는 비거리 욕심에 상체가 덤벼드는 용!",
+        superpower = "공을 향한 저돌적인 파워와 날카로운 스윙 스피드",
+        bodyCause = "흉추 상체 독립 회전 가동성 잠김 및 견갑대 안정성 부족",
+        quickFix = "백스윙 탑에서 등을 타깃으로 향한 채 하체 먼저 출발하기"
+      )
+      "TYPE-C (CW)" -> com.example.model.GolfMbti(
+        code = "CWR-E",
+        name = "치킨윙 이글",
+        animalEmoji = "🦅",
+        tagline = "날갯짓은 화려하지만 팔꿈치가 당겨지는 독수리!",
+        superpower = "빠른 클럽헤드 스피드와 정교한 손목 감각",
+        bodyCause = "어깨 내회전 및 견갑상완 관절 가동 범위 제한",
+        quickFix = "임팩트 통과 후 양 팔꿈치를 모으고 악수하듯 뻗어주기"
+      )
+      "TYPE-D (SCP)" -> com.example.model.GolfMbti(
+        code = "SCP-B",
+        name = "스쿠핑 베어",
+        animalEmoji = "🐻",
+        tagline = "곰처럼 묵직하게 공을 띄우려 퍼올리는 곰!",
+        superpower = "부드러운 쇼트게임 터치 감각과 로브샷 감각",
+        bodyCause = "손목 힌지 가동성 및 코킹 정적 유지력 부족",
+        quickFix = "왼손등이 타깃을 향하게 유지하며 볼 5cm 앞 디봇 내기"
+      )
+      else -> com.example.model.GolfMbti(
+        code = "STF-L",
+        name = "방전 레오파드",
+        animalEmoji = "🐆",
+        tagline = "전반엔 맹수처럼 질주하다 후반에 지치는 표범!",
+        superpower = "초반 홀 폭발적인 집중력과 완벽한 파 세이브",
+        bodyCause = "단일 하지 지탱 밸런스 및 둔근 피로 회복력 저하",
+        quickFix = "루틴 때 둔근에 힘주고 티샷 전 심호흡 2번 하기"
+      )
+    }
+
     return AnalysisReport(
+      mbti = mbti,
       bodyType = bodyType,
       bodyContribution = bodyPct,
       swingContribution = swingPct,

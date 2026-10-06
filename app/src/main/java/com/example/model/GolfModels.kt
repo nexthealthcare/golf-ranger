@@ -21,8 +21,20 @@ data class GolferProfile(
 )
 
 /**
- * 골프 신체 기능 분석 유형 (Golf Body Performance Classification)
- * 전문 스포츠 퍼포먼스 랩 표준 분류 체계
+ * 재미와 직관성을 더한 골프 바디 MBTI 유형
+ */
+data class GolfMbti(
+  val code: String,              // 예: "BSE-T"
+  val name: String,              // 예: "배치기 타이거"
+  val animalEmoji: String,       // 예: "🐯"
+  val tagline: String,           // 예: "폭발적인 파워, 그러나 임팩트 때 먼저 일어서는 호랑이!"
+  val superpower: String,        // 장점: "강력한 상체 파워와 공격적인 비거리"
+  val bodyCause: String,         // 원인: "골반 전후방 틸트 분리 조절력 결핍 & 발목 가동성 부족"
+  val quickFix: String           // 1줄 치트키: "다운스윙 때 엉덩이를 뒤로 밀어 공간 확보하기"
+)
+
+/**
+ * 골프 신체 기능 분석 유형
  */
 data class GolfBodyType(
   val code: String,              // 예: "TYPE-A (EE)", "TYPE-B (OTT)"
@@ -52,7 +64,7 @@ data class ScreeningItem(
 )
 
 /**
- * 신체 검진 판정 등급 (Clinical Assessment Grade)
+ * 신체 검진 판정 등급
  */
 enum class ScreeningGrade(val label: String, val code: String) {
   PASS("정상 (Normal)", "PASS"),
@@ -61,7 +73,7 @@ enum class ScreeningGrade(val label: String, val code: String) {
 }
 
 /**
- * 처방 모빌리티 운동 (Prescription Mobility Exercise)
+ * 처방 모빌리티 운동
  */
 data class BodyExercise(
   val title: String,
@@ -76,7 +88,7 @@ data class BodyExercise(
 )
 
 /**
- * 처방 골프 실전 드릴 (Prescription Golf Drill)
+ * 처방 골프 실전 드릴
  */
 data class GolfDrill(
   val title: String,
@@ -90,9 +102,10 @@ data class GolfDrill(
 )
 
 /**
- * 바디-스윙-게임 통합 분석 리포트 (Performance Diagnostic Report)
+ * 바디-스윙-게임 통합 분석 리포트
  */
 data class AnalysisReport(
+  val mbti: GolfMbti,
   val bodyType: GolfBodyType,
   val bodyContribution: Int,
   val swingContribution: Int,

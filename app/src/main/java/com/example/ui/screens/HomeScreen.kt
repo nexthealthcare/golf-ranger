@@ -84,7 +84,7 @@ fun HomeScreen(
     topBar = {
       GolfTopBar(
         title = "골프레인저",
-        subtitle = "골프 기능 해부학 & 스윙 메커니즘 랩"
+        subtitle = "골프조교의 바디-스윙 진단 & MBTI 솔루션"
       )
     },
     containerColor = MaterialTheme.colorScheme.background,
@@ -95,15 +95,17 @@ fun HomeScreen(
         .fillMaxSize()
         .padding(innerPadding)
         .verticalScroll(rememberScrollState())
-        .padding(horizontal = 20.dp, vertical = 16.dp)
+        .padding(horizontal = 18.dp, vertical = 14.dp)
     ) {
-      // 1. 헤더 진단 현황 메트릭 카드 (Garmin / WHOOP Health Status Card)
+      val mbti = report?.mbti
+
+      // 1. 헤더 진단 현황 메트릭 카드
       Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = androidx.compose.foundation.BorderStroke(1.dp, SurfaceBorder),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        border = androidx.compose.foundation.BorderStroke(1.5.dp, PerformanceGreenPrimary),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
       ) {
         Column(modifier = Modifier.padding(18.dp)) {
           Row(
@@ -111,17 +113,23 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
           ) {
-            Text(
-              text = "골퍼 신체 기능 분석",
-              fontSize = 12.sp,
-              fontWeight = FontWeight.SemiBold,
-              color = TextTertiary,
-              letterSpacing = 0.5.sp
-            )
+            Box(
+              modifier = Modifier
+                .clip(RoundedCornerShape(6.dp))
+                .background(PerformanceGreenContainer)
+                .padding(horizontal = 8.dp, vertical = 3.dp)
+            ) {
+              Text(
+                text = "GOLF BODY MBTI",
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                color = PerformanceGreenPrimary
+              )
+            }
 
             Box(
               modifier = Modifier
-                .clip(RoundedCornerShape(4.dp))
+                .clip(RoundedCornerShape(6.dp))
                 .background(Color(0xFFF1F3F5))
                 .padding(horizontal = 8.dp, vertical = 3.dp)
             ) {
@@ -136,19 +144,24 @@ fun HomeScreen(
 
           Spacer(modifier = Modifier.height(10.dp))
 
-          Text(
-            text = bodyType?.name ?: "얼리 익스텐션 보상 유형",
-            fontSize = 19.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = TextPrimary
-          )
-
-          Text(
-            text = bodyType?.categoryTitle ?: "골반 틸트 & 발목 족배굴곡 제한군",
-            fontSize = 13.sp,
-            fontWeight = FontWeight.Normal,
-            color = TextSecondary
-          )
+          Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = mbti?.animalEmoji ?: "🐯", fontSize = 36.sp)
+            Spacer(modifier = Modifier.width(10.dp))
+            Column {
+              Text(
+                text = "${mbti?.name ?: "배치기 타이거"} (${mbti?.code ?: "BSE-T"})",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = TextPrimary
+              )
+              Text(
+                text = "“${mbti?.tagline ?: "폭발적인 파워, 그러나 임팩트 때 먼저 일어서는 호랑이!"}”",
+                fontSize = 12.5.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = PerformanceGreenPrimary
+              )
+            }
+          }
 
           Spacer(modifier = Modifier.height(14.dp))
 
@@ -213,8 +226,8 @@ fun HomeScreen(
       Spacer(modifier = Modifier.height(8.dp))
 
       PerformanceMenuRow(
-        title = "종합 분석 및 처방 리포트",
-        subtitle = "신체/기술/게임 기여도 및 인과관계 진단서",
+        title = "🏆 AI 종합 분석 & 골프 MBTI 처방전",
+        subtitle = "신체/기술/게임 3분할 기여도 및 인과관계 진단서",
         tag = "report_action_card",
         onClick = {
           viewModel.refreshAnalysis()
@@ -225,8 +238,8 @@ fun HomeScreen(
       Spacer(modifier = Modifier.height(8.dp))
 
       PerformanceMenuRow(
-        title = "골프 신체검진 13항목",
-        subtitle = "관절 가동성 및 조절력 측정 프로토콜",
+        title = "🩺 골프 신체검진 13항목",
+        subtitle = "대표 일러스트 및 친절한 음성 안내",
         tag = "screening_action_card",
         onClick = { viewModel.navigateTo(GolfScreen.SCREENING) }
       )
@@ -234,8 +247,8 @@ fun HomeScreen(
       Spacer(modifier = Modifier.height(8.dp))
 
       PerformanceMenuRow(
-        title = "처방 모빌리티 및 실전 드릴 루틴",
-        subtitle = "좌우 세트 가이드 및 음성 안내 트레이닝 (${completedExercises.size}개 완료)",
+        title = "💪 처방 모빌리티 및 실전 드릴 루틴",
+        subtitle = "좌우 세트 가이드 및 음성 실행 트레이닝 (${completedExercises.size}개 완료)",
         tag = "routine_action_card",
         onClick = { viewModel.navigateTo(GolfScreen.ROUTINE) }
       )

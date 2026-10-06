@@ -136,8 +136,8 @@ fun GolfRangerApp(viewModel: GolfRangerViewModel) {
             viewModel.refreshAnalysis()
             viewModel.navigateTo(GolfScreen.REPORT)
           },
-          icon = { Icon(Icons.Default.Psychology, contentDescription = "진단리포트", modifier = Modifier.size(20.dp)) },
-          label = { Text("리포트", fontSize = 11.sp, fontWeight = if (currentScreen == GolfScreen.REPORT) FontWeight.SemiBold else FontWeight.Normal) },
+          icon = { Icon(Icons.Default.Psychology, contentDescription = "AI분석", modifier = Modifier.size(20.dp)) },
+          label = { Text("AI분석", fontSize = 11.sp, fontWeight = if (currentScreen == GolfScreen.REPORT) FontWeight.SemiBold else FontWeight.Normal) },
           colors = navColors,
           modifier = Modifier.testTag("nav_item_report")
         )
@@ -145,8 +145,8 @@ fun GolfRangerApp(viewModel: GolfRangerViewModel) {
         NavigationBarItem(
           selected = currentScreen == GolfScreen.ROUTINE,
           onClick = { viewModel.navigateTo(GolfScreen.ROUTINE) },
-          icon = { Icon(Icons.Default.Timer, contentDescription = "루틴", modifier = Modifier.size(20.dp)) },
-          label = { Text("루틴", fontSize = 11.sp, fontWeight = if (currentScreen == GolfScreen.ROUTINE) FontWeight.SemiBold else FontWeight.Normal) },
+          icon = { Icon(Icons.Default.Timer, contentDescription = "트레이닝", modifier = Modifier.size(20.dp)) },
+          label = { Text("트레이닝", fontSize = 11.sp, fontWeight = if (currentScreen == GolfScreen.ROUTINE) FontWeight.SemiBold else FontWeight.Normal) },
           colors = navColors,
           modifier = Modifier.testTag("nav_item_routine")
         )

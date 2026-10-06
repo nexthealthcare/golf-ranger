@@ -2,55 +2,55 @@ package com.example.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Professional Performance Sport Palette (Garmin / Apple Health / WHOOP inspired)
-// Deep refined golf green, restrained saturation, high readability
-val PerformanceGreenPrimary = Color(0xFF1B4332)   // Deep refined heritage athletic green
-val PerformanceGreenDark = Color(0xFF143326)
-val PerformanceGreenSubtle = Color(0xFF2D6A4F) // Muted athletic green
-val PerformanceGreenContainer = Color(0xFFEAF2ED)
-val OnPerformanceGreenContainer = Color(0xFF0F291E)
+// 골프레인저 산뜻한 그린 & 클린 화이트 팔레트 (높은 가시성과 친근한 비주얼)
+val FairwayGreenPrimary = Color(0xFF1E7E34)     // 싱그러운 필드 페어웨이 그린
+val FairwayGreenDark = Color(0xFF14532D)        // 딥 포레스트 그린
+val FairwayGreenLight = Color(0xFF22C55E)       // 밝은 포인트 그린
+val FairwayGreenContainer = Color(0xFFE8F5E9)   // 화사한 연초록 컨테이너
+val OnFairwayGreenContainer = Color(0xFF0F5132)
 
-// Neutrals & Surfaces
-val BackgroundLight = Color(0xFFF8F9FA)      // Clean laboratory / performance slate white
-val SurfaceCard = Color(0xFFFFFFFF)          // Pure white card surfaces
-val SurfaceCardSecondary = Color(0xFFF1F3F5) // Subtle secondary block
-val SurfaceBorder = Color(0xFFE5E7EB)        // Precision 1px hairline border
-val SurfaceBorderFocus = Color(0xFFD1D5DB)
+// 퍼포먼스 & 보조 색상
+val PerformanceGreenPrimary = FairwayGreenPrimary
+val PerformanceGreenDark = FairwayGreenDark
+val PerformanceGreenSubtle = Color(0xFF2E7D32)
+val PerformanceGreenContainer = FairwayGreenContainer
+val OnPerformanceGreenContainer = OnFairwayGreenContainer
+val PineGreenPrimary = FairwayGreenPrimary
+val PineGreenLight = FairwayGreenLight
 
-// Typography Colors (Strict Contrast for 40~60s readability)
-val TextPrimary = Color(0xFF191F24)          // Deep slate charcoal
-val TextSecondary = Color(0xFF495057)        // Balanced secondary body
-val TextTertiary = Color(0xFF6C757D)         // Metadata & labels
-val TextDisabled = Color(0xFFADB5BD)
+// 산뜻한 화이트 & 뉴트럴 배경
+val CleanWhiteBackground = Color(0xFFF7FAF8)    // 쾌적하고 눈이 편안한 밝은 배경
+val CleanWhiteSurface = Color(0xFFFFFFFF)       // 순백색 카드 서피스
+val CleanWhiteSurfaceVariant = Color(0xFFF1F5F2)
+val CleanWhiteBorder = Color(0xFFE2E8F0)        // 부드러운 경계선
+val BackgroundLight = CleanWhiteBackground
+val SurfaceCard = CleanWhiteSurface
+val SurfaceCardSecondary = CleanWhiteSurfaceVariant
+val SurfaceBorder = CleanWhiteBorder
+val SurfaceBorderFocus = Color(0xFFCBD5E1)
 
-// Controlled status tokens (subtle, non-flashy)
-val StatusPass = Color(0xFF15803D)           // Restrained forest green
-val StatusPassBg = Color(0xFFE7F5EC)
-val StatusCaution = Color(0xFFB45309)        // Restrained amber
+// 선명한 텍스트 가독성 (40~60대 골퍼도 또렷하게 읽히는 대비)
+val TextMainDark = Color(0xFF111827)            // 진한 차콜 블랙
+val TextMuted = Color(0xFF4B5563)               // 부드러운 중간 톤
+val TextSubtle = Color(0xFF6B7280)              // 캡션 텍스트
+val TextPrimary = TextMainDark
+val TextSecondary = TextMuted
+val TextTertiary = TextSubtle
+val TextDisabled = Color(0xFF9CA3AF)
+
+// 포인트 액센트
+val EnergeticGold = Color(0xFFD97706)           // 활력 넘치는 골드 오렌지 (드릴)
+val EnergeticGoldLight = Color(0xFFFEF3C7)
+val AccentGold = EnergeticGold
+val EnergeticCoral = Color(0xFFDC2626)          // 주의 알림 코랄 레드
+
+// 직관적인 3등급 상태 태그
+val StatusPass = Color(0xFF16A34A)              // 정상 (그린)
+val StatusPassBg = Color(0xFFDCFCE7)
+val StatusCaution = Color(0xFFD97706)           // 주의 (옐로우/앰버)
 val StatusCautionBg = Color(0xFFFEF3C7)
-val StatusRestricted = Color(0xFFB91C1C)     // Restrained red
+val StatusRestricted = Color(0xFFDC2626)        // 제한 (레드)
 val StatusRestrictedBg = Color(0xFFFEE2E2)
-
-// Mappings for existing component references
-val FairwayGreenPrimary = PerformanceGreenPrimary
-val FairwayGreenDark = PerformanceGreenDark
-val FairwayGreenLight = PerformanceGreenSubtle
-val FairwayGreenContainer = PerformanceGreenContainer
-val OnFairwayGreenContainer = OnPerformanceGreenContainer
-val EnergeticGold = StatusCaution
-val EnergeticGoldLight = StatusCautionBg
-val EnergeticCoral = StatusRestricted
-val PineGreenPrimary = PerformanceGreenPrimary
-val PineGreenLight = PerformanceGreenSubtle
-val AccentGold = StatusCaution
-
-val CleanWhiteBackground = BackgroundLight
-val CleanWhiteSurface = SurfaceCard
-val CleanWhiteSurfaceVariant = SurfaceCardSecondary
-val CleanWhiteBorder = SurfaceBorder
-val TextMainDark = TextPrimary
-val TextMuted = TextSecondary
-val TextSubtle = TextTertiary
 
 val TagMintBg = StatusPassBg
 val TagMintText = StatusPass
@@ -59,4 +59,4 @@ val TagAmberText = StatusCaution
 val TagRedBg = StatusRestrictedBg
 val TagRedText = StatusRestricted
 val TagBlueBg = Color(0xFFE0F2FE)
-val TagBlueText = Color(0xFF0369A1)
+val TagBlueText = Color(0xFF0284C7)

@@ -3,35 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>골프레인저 - 골프 기능 해부학 & 스윙 메커니즘 랩</title>
-  <meta name="description" content="아마추어 골퍼를 위한 바디-스윙-게임 통합 분석 및 맞춤 처방 솔루션">
+  <title>골프레인저 - 골프 바디 MBTI & 스윙 조교</title>
+  <meta name="description" content="아마추어 골퍼를 위한 골프 바디 MBTI 진단 및 스윙 보상 동작 해결 솔루션">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
   <style>
     :root {
-      --primary: #1B4332;
-      --primary-dark: #143326;
-      --primary-subtle: #2D6A4F;
-      --primary-container: #EAF2ED;
-      --on-primary-container: #0F291E;
-
-      --bg: #F8F9FA;
+      --primary: #147A40;
+      --primary-light: #22C55E;
+      --primary-bg: #E8F7ED;
+      --gold: #F59E0B;
+      --gold-bg: #FEF3C7;
+      --red: #EF4444;
+      --red-bg: #FEE2E2;
+      --bg: #F8FAF9;
       --surface: #FFFFFF;
-      --surface-secondary: #F1F3F5;
+      --text: #111827;
+      --text-muted: #4B5563;
       --border: #E5E7EB;
-
-      --text-primary: #191F24;
-      --text-secondary: #495057;
-      --text-tertiary: #6C757D;
-
-      --status-pass: #15803D;
-      --status-pass-bg: #E7F5EC;
-      --status-caution: #B45309;
-      --status-caution-bg: #FEF3C7;
-      --status-restricted: #B91C1C;
-      --status-restricted-bg: #FEE2E2;
-
-      --radius-sm: 6px;
-      --radius-md: 10px;
+      --radius: 16px;
     }
 
     * {
@@ -43,8 +32,8 @@
     }
 
     body {
-      background-color: #ECEFF1;
-      color: var(--text-primary);
+      background-color: var(--bg);
+      color: var(--text);
       display: flex;
       justify-content: center;
       min-height: 100vh;
@@ -52,20 +41,19 @@
 
     #app-container {
       width: 100%;
-      max-width: 440px;
+      max-width: 460px;
       background: var(--bg);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       position: relative;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 0 24px rgba(0,0,0,0.06);
     }
 
-    /* Top Bar */
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 14px 20px;
+      padding: 14px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -74,35 +62,38 @@
       z-index: 100;
     }
 
-    .topbar-content h1 {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text-primary);
-      letter-spacing: -0.2px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .topbar-content p {
-      font-size: 12px;
-      color: var(--text-tertiary);
-      margin-top: 1px;
-    }
-
-    .back-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--primary-bg);
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--text-primary);
-      margin-right: 12px;
+      font-size: 20px;
     }
 
-    /* Main Scroll Area */
+    .brand-text h1 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .brand-text p {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
     main {
       flex: 1;
-      padding: 18px 20px 96px 20px;
+      padding: 16px;
+      padding-bottom: 90px;
       overflow-y: auto;
     }
 
@@ -114,170 +105,100 @@
       display: block;
     }
 
-    /* Professional Card */
     .card {
       background: var(--surface);
+      border-radius: var(--radius);
       border: 1px solid var(--border);
-      border-radius: var(--radius-md);
       padding: 18px;
       margin-bottom: 14px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
 
-    .card-title {
-      font-size: 14.5px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .card-subtitle {
-      font-size: 12px;
-      color: var(--text-tertiary);
-      margin-top: 2px;
+    .card.highlight {
+      border: 2px solid var(--primary);
     }
 
     .badge {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 4px;
       display: inline-block;
-    }
-
-    .badge-primary {
-      background: var(--primary-container);
-      color: var(--primary);
-    }
-
-    .badge-neutral {
-      background: var(--surface-secondary);
-      color: var(--text-secondary);
-    }
-
-    .badge-pass {
-      background: var(--status-pass-bg);
-      color: var(--status-pass);
-    }
-
-    .badge-caution {
-      background: var(--status-caution-bg);
-      color: var(--status-caution);
-    }
-
-    .badge-restricted {
-      background: var(--status-restricted-bg);
-      color: var(--status-restricted);
-    }
-
-    /* Metric Bar */
-    .metric-strip {
-      background: var(--surface-secondary);
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      display: flex;
-      justify-content: space-between;
-      margin-top: 14px;
-    }
-
-    .metric-item .metric-label {
+      padding: 4px 10px;
+      border-radius: 6px;
       font-size: 11px;
-      color: var(--text-tertiary);
+      font-weight: 700;
     }
 
-    .metric-item .metric-value {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-top: 2px;
-    }
+    .badge-primary { background: var(--primary-bg); color: var(--primary); }
+    .badge-gold { background: var(--gold-bg); color: var(--gold); }
+    .badge-red { background: var(--red-bg); color: var(--red); }
 
-    .metric-item .metric-value.accent {
-      color: var(--primary);
-    }
-
-    /* Buttons */
     .btn {
-      width: 100%;
-      height: 48px;
-      border-radius: 8px;
-      border: none;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      transition: opacity 0.15s ease;
-    }
-
-    .btn:hover {
-      opacity: 0.95;
+      width: 100%;
+      height: 48px;
+      border-radius: 12px;
+      border: none;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
     .btn-primary {
       background: var(--primary);
-      color: #FFFFFF;
+      color: #fff;
+    }
+
+    .btn-primary:active {
+      background: #0F5E30;
     }
 
     .btn-outline {
-      background: #FFFFFF;
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-      height: 44px;
+      background: #fff;
+      border: 1.5px solid var(--border);
+      color: var(--text);
     }
 
     .btn-sm {
-      height: 34px;
+      height: 36px;
+      padding: 0 14px;
       font-size: 12px;
-      padding: 0 12px;
+      border-radius: 8px;
       width: auto;
-      border-radius: 6px;
     }
 
-    /* Pipeline / Flow */
-    .pipeline-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      margin-top: 14px;
+    .btn-gold {
+      background: var(--gold);
+      color: #fff;
     }
 
-    .pipeline-step {
-      flex: 1;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      border-radius: var(--radius-sm);
-      padding: 10px 6px;
+    /* Metric Grid */
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      background: #F3F4F6;
+      padding: 12px;
+      border-radius: 12px;
+      margin-top: 12px;
       text-align: center;
-      cursor: pointer;
     }
 
-    .pipeline-step.active {
-      border-color: var(--primary);
-      background: var(--primary-container);
+    .metric-row .item .lbl {
+      font-size: 11px;
+      color: var(--text-muted);
     }
 
-    .pipeline-step .num {
-      font-size: 10.5px;
-      font-weight: 700;
-      color: var(--text-tertiary);
-    }
-
-    .pipeline-step.active .num {
-      color: var(--primary);
-    }
-
-    .pipeline-step .txt {
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--text-primary);
+    .metric-row .item .val {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text);
       margin-top: 2px;
     }
 
-    .pipeline-step .sub {
-      font-size: 10.5px;
-      color: var(--text-tertiary);
+    .metric-row .item .val.primary {
+      color: var(--primary);
     }
 
     /* Chips */
@@ -289,134 +210,130 @@
     }
 
     .chip {
-      padding: 6px 12px;
+      padding: 7px 12px;
+      border-radius: 8px;
       border: 1px solid var(--border);
-      background: var(--surface);
-      border-radius: 6px;
-      font-size: 12.5px;
+      background: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
       cursor: pointer;
-      color: var(--text-secondary);
-      user-select: none;
     }
 
     .chip.active {
       background: var(--primary);
       border-color: var(--primary);
-      color: #FFFFFF;
-      font-weight: 600;
+      color: #fff;
     }
 
-    .chip.active-danger {
-      background: var(--status-restricted);
-      border-color: var(--status-restricted);
-      color: #FFFFFF;
-      font-weight: 600;
+    .chip.active-red {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
     }
 
-    /* Checklist Item */
+    /* Checkbox rows */
     .check-row {
       display: flex;
       align-items: center;
-      padding: 9px 10px;
-      border-radius: 6px;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
       cursor: pointer;
       margin-bottom: 4px;
       border: 1px solid transparent;
     }
 
     .check-row.checked {
-      background: var(--primary-container);
-      border-color: rgba(27, 67, 50, 0.15);
+      background: var(--primary-bg);
+      border-color: rgba(20, 122, 64, 0.2);
     }
 
     .check-box {
       width: 18px;
       height: 18px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      background: #FFFFFF;
+      border-radius: 5px;
+      border: 1.5px solid var(--border);
+      background: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: 10px;
       flex-shrink: 0;
     }
 
     .check-row.checked .check-box {
       background: var(--primary);
       border-color: var(--primary);
+      color: #fff;
+      font-size: 12px;
     }
 
-    .check-box svg {
-      display: none;
+    /* Progress bar */
+    .progress-bar-bg {
+      height: 8px;
+      background: #E5E7EB;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 10px 0;
     }
 
-    .check-row.checked .check-box svg {
-      display: block;
-    }
-
-    /* Schematic Canvas Box */
-    .schematic-box {
-      background: var(--surface-secondary);
-      border-radius: 8px;
-      height: 130px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 12px 0;
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      transition: width 0.3s ease;
     }
 
     /* 3-State Assessment Buttons */
-    .grade-btn-group {
-      display: flex;
+    .grade-btns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
     .grade-btn {
-      flex: 1;
-      border: 1px solid var(--border);
-      background: #FFFFFF;
-      border-radius: 8px;
-      padding: 12px 4px;
+      padding: 12px 6px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: #fff;
       text-align: center;
       cursor: pointer;
     }
 
     .grade-btn.active-pass {
-      border: 1.5px solid var(--status-pass);
-      background: rgba(21, 128, 61, 0.08);
-      color: var(--status-pass);
+      border-color: var(--primary);
+      background: var(--primary-bg);
+      color: var(--primary);
     }
 
     .grade-btn.active-caution {
-      border: 1.5px solid var(--status-caution);
-      background: rgba(180, 83, 9, 0.08);
-      color: var(--status-caution);
+      border-color: var(--gold);
+      background: var(--gold-bg);
+      color: var(--gold);
     }
 
     .grade-btn.active-restricted {
-      border: 1.5px solid var(--status-restricted);
-      background: rgba(185, 28, 28, 0.08);
-      color: var(--status-restricted);
+      border-color: var(--red);
+      background: var(--red-bg);
+      color: var(--red);
     }
 
     .grade-btn .title {
-      font-size: 13.5px;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 700;
     }
 
     .grade-btn .sub {
       font-size: 11px;
-      color: var(--text-tertiary);
+      color: var(--text-muted);
       margin-top: 2px;
     }
 
-    /* Navigation Bar */
+    /* Nav */
     nav {
       position: sticky;
       bottom: 0;
-      background: #FFFFFF;
+      background: var(--surface);
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-around;
@@ -424,52 +341,37 @@
       z-index: 100;
     }
 
-    .nav-item {
+    .nav-btn {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
+      gap: 2px;
       background: none;
       border: none;
-      color: var(--text-tertiary);
+      color: var(--text-muted);
       font-size: 11px;
-      cursor: pointer;
-      padding: 4px 12px;
-      border-radius: 8px;
-    }
-
-    .nav-item.active {
-      color: var(--primary);
       font-weight: 600;
+      cursor: pointer;
     }
 
-    .nav-item.active .icon-pill {
-      background: var(--primary-container);
+    .nav-btn.active {
+      color: var(--primary);
     }
 
-    .icon-pill {
-      width: 44px;
-      height: 26px;
-      border-radius: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.15s ease;
+    .nav-btn span.icon {
+      font-size: 18px;
     }
 
     /* Modal */
     .modal-backdrop {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       background: rgba(0,0,0,0.5);
-      z-index: 200;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      z-index: 200;
     }
 
     .modal-backdrop.active {
@@ -477,19 +379,14 @@
     }
 
     .modal-card {
-      background: #FFFFFF;
+      background: #fff;
       width: 100%;
-      max-width: 400px;
-      border-radius: 12px;
-      padding: 20px;
+      max-width: 420px;
+      border-radius: 18px;
+      padding: 22px;
       max-height: 90vh;
       overflow-y: auto;
     }
-
-    /* Utility */
-    .mt-8 { margin-top: 8px; }
-    .mt-12 { margin-top: 12px; }
-    .mt-16 { margin-top: 16px; }
   </style>
 </head>
 <body>
@@ -498,130 +395,123 @@
 
   <!-- Header -->
   <header>
-    <div style="display: flex; align-items: center;">
-      <button id="back-btn" class="back-btn" style="display: none;" onclick="goBack()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      </button>
-      <div class="topbar-content">
+    <div class="brand">
+      <div class="brand-icon">⛳</div>
+      <div class="brand-text">
         <h1 id="topbar-title">골프레인저</h1>
-        <p id="topbar-subtitle">골프 기능 해부학 & 스윙 메커니즘 랩</p>
+        <p id="topbar-subtitle">골프조교의 바디-스윙 진단 & MBTI 처방</p>
       </div>
     </div>
+    <button id="back-btn" class="btn btn-outline btn-sm" style="display: none;" onclick="goBack()">이전</button>
   </header>
 
-  <!-- Screens -->
+  <!-- Main Content -->
   <main>
 
-    <!-- SCREEN 1: HOME -->
+    <!-- 1. HOME SCREEN -->
     <section id="screen-home" class="screen active">
-      <!-- 1. 진단 현황 메트릭 카드 -->
-      <div class="card">
+      <!-- MBTI 결과 프리뷰 카드 -->
+      <div class="card highlight">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 12px; font-weight: 600; color: var(--text-tertiary); letter-spacing: 0.5px;">골퍼 신체 기능 분석</span>
-          <span class="badge badge-neutral">재검진 D-14</span>
+          <span class="badge badge-primary">GOLF BODY MBTI</span>
+          <span class="badge badge-gold">재검진 D-14</span>
         </div>
-        <h2 id="home-classification-name" style="font-size: 19px; font-weight: 600; color: var(--text-primary); margin-top: 8px;">얼리 익스텐션 보상 유형</h2>
-        <p id="home-classification-sub" style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">골반 틸트 & 발목 족배굴곡 제한군</p>
 
-        <div class="metric-strip">
-          <div class="metric-item">
-            <div class="metric-label">평균 핸디</div>
-            <div id="home-handicap-val" class="metric-value">18</div>
+        <div style="display: flex; align-items: center; gap: 14px; margin-top: 12px;">
+          <div style="font-size: 42px;">🐯</div>
+          <div>
+            <h2 style="font-size: 19px; font-weight: 800; color: var(--text);">배치기 타이거 (BSE-T)</h2>
+            <p style="font-size: 12.5px; font-weight: 600; color: var(--primary); margin-top: 2px;">“폭발적인 파워, 그러나 임팩트 때 먼저 일어서요!”</p>
           </div>
-          <div class="metric-item">
-            <div class="metric-label">가동성 제한</div>
-            <div id="home-restricted-val" class="metric-value" style="color: var(--status-restricted);">3개 항목</div>
+        </div>
+
+        <div class="metric-row">
+          <div class="item">
+            <div class="lbl">평균 핸디</div>
+            <div id="home-handicap-val" class="val">18</div>
           </div>
-          <div class="metric-item">
-            <div class="metric-label">예상 타수 절감</div>
-            <div id="home-strokes-val" class="metric-value accent">-3~5타</div>
+          <div class="item">
+            <div class="lbl">신체 제한</div>
+            <div id="home-restricted-val" class="val" style="color: var(--red);">3개 항목</div>
+          </div>
+          <div class="item">
+            <div class="lbl">타수 절감</div>
+            <div class="val primary">-3~5타</div>
           </div>
         </div>
       </div>
 
-      <!-- Main CTA -->
+      <!-- 메인 CTA -->
       <button class="btn btn-primary" onclick="navigateTo('survey')">
-        정밀 설문 및 신체검진 시작
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        <span>🚀 3분 정밀 설문 & 신체검진 시작하기</span>
       </button>
 
-      <!-- 2. Body -> Swing -> Game Pipeline -->
-      <div class="card mt-16">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div class="card-title">인과관계 메커니즘 분석</div>
-          <span style="font-size: 11.5px; font-weight: 600; color: var(--primary);">Body → Swing → Game</span>
-        </div>
+      <!-- 인과관계 체인 -->
+      <div class="card" style="margin-top: 14px;">
+        <div style="font-size: 14px; font-weight: 800; color: var(--text);">🔗 바디 → 스윙 → 게임 인과관계 사이클</div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">골프 문제의 80%는 신체의 움직임 제한에서 시작됩니다.</p>
 
-        <div class="pipeline-row">
-          <div class="pipeline-step active" onclick="setPipelineStep('body')">
-            <div class="num">01</div>
-            <div class="txt">신체 가동성</div>
-            <div class="sub">원인 발생</div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 12px; text-align: center;">
+          <div style="background: var(--primary-bg); padding: 10px 4px; border-radius: 10px; border: 1px solid rgba(20,122,64,0.2);">
+            <div style="font-size: 11px; font-weight: 800; color: var(--primary);">01 바디</div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--text); margin-top: 2px;">가동성 결핍</div>
           </div>
-          <div class="pipeline-step" onclick="setPipelineStep('swing')">
-            <div class="num">02</div>
-            <div class="txt">스윙 메커니즘</div>
-            <div class="sub">보상 동작</div>
+          <div style="background: var(--gold-bg); padding: 10px 4px; border-radius: 10px; border: 1px solid rgba(245,158,11,0.2);">
+            <div style="font-size: 11px; font-weight: 800; color: var(--gold);">02 스윙</div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--text); margin-top: 2px;">보상 동작</div>
           </div>
-          <div class="pipeline-step" onclick="setPipelineStep('game')">
-            <div class="num">03</div>
-            <div class="txt">실전 스코어</div>
-            <div class="sub">타수 손실</div>
+          <div style="background: var(--red-bg); padding: 10px 4px; border-radius: 10px; border: 1px solid rgba(239,68,68,0.2);">
+            <div style="font-size: 11px; font-weight: 800; color: var(--red);">03 게임</div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--text); margin-top: 2px;">타수 손실</div>
           </div>
-        </div>
-
-        <div id="pipeline-desc" style="background: var(--surface-secondary); border-radius: 6px; padding: 12px; margin-top: 12px; font-size: 13px; color: var(--text-secondary); line-height: 1.45;">
-          관절의 회전 가동성과 정적 밸런스가 결핍되면, 신체를 보호하기 위해 본능적으로 스윙 궤도를 변형시킵니다. 신체 축을 바로잡는 것이 가장 빠른 타수 교정의 출발점입니다.
         </div>
       </div>
 
-      <!-- 3. 메뉴 행 -->
-      <div style="font-size: 14px; font-weight: 600; color: var(--text-primary); margin: 16px 0 8px 0;">퍼포먼스 진단 및 트레이닝</div>
+      <!-- 메뉴 바로가기 -->
+      <div style="font-size: 14px; font-weight: 800; color: var(--text); margin: 18px 0 8px 0;">조교의 추천 트레이닝 메뉴</div>
 
-      <div class="card" style="padding: 14px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;" onclick="navigateTo('report')">
+      <div class="card" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;" onclick="navigateTo('report')">
         <div>
-          <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">종합 분석 및 처방 리포트</div>
-          <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">신체/기술/게임 기여도 및 인과관계 진단서</div>
+          <div style="font-size: 14px; font-weight: 800; color: var(--text);">🏆 AI 종합 분석 & 골프 MBTI 처방전</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">원인 기여도 3분할 & 1줄 치트키 솔루션</div>
         </div>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        <span style="font-size: 18px; color: var(--text-muted);">👉</span>
       </div>
 
-      <div class="card" style="padding: 14px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;" onclick="navigateTo('screening')">
+      <div class="card" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;" onclick="navigateTo('screening')">
         <div>
-          <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">골프 신체검진 13항목</div>
-          <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">관절 가동성 및 조절력 측정 프로토콜</div>
+          <div style="font-size: 14px; font-weight: 800; color: var(--text);">🩺 골프 신체검진 13항목</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">대표 일러스트 및 친절한 음성 가이드</div>
         </div>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        <span style="font-size: 18px; color: var(--text-muted);">👉</span>
       </div>
 
-      <div class="card" style="padding: 14px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;" onclick="navigateTo('routine')">
+      <div class="card" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;" onclick="navigateTo('routine')">
         <div>
-          <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">처방 모빌리티 및 실전 드릴 루틴</div>
-          <div id="home-routine-sub" style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">좌우 세트 가이드 및 음성 안내 트레이닝</div>
+          <div style="font-size: 14px; font-weight: 800; color: var(--text);">💪 처방 모빌리티 및 실전 드릴 루틴</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">좌우 세트 가이드 & 음성 실행 트레이너</div>
         </div>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        <span style="font-size: 18px; color: var(--text-muted);">👉</span>
       </div>
     </section>
 
-    <!-- SCREEN 2: SURVEY -->
+    <!-- 2. SURVEY SCREEN -->
     <section id="screen-survey" class="screen">
-      <!-- 1. 핸디캡 -->
       <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div class="card-title">최근 5게임 평균 핸디캡</div>
-          <div id="survey-handicap-txt" style="font-size: 14px; font-weight: 600; color: var(--primary);">18 (평균 90타)</div>
+          <div style="font-size: 14px; font-weight: 800;">최근 5게임 평균 핸디캡</div>
+          <div id="survey-handicap-txt" style="font-size: 14px; font-weight: 800; color: var(--primary);">18 (평균 90타)</div>
         </div>
-        <input id="survey-handicap-slider" type="range" min="0" max="36" value="18" style="width: 100%; margin: 12px 0 6px 0; accent-color: var(--primary);" oninput="updateHandicap(this.value)">
-        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-tertiary);">
+        <input type="range" min="0" max="36" value="18" style="width: 100%; margin: 12px 0 6px 0; accent-color: var(--primary);" oninput="updateHandicap(this.value)">
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
           <span>싱글 (0~9)</span>
           <span>보기플레이 (18)</span>
           <span>초급 (28+)</span>
         </div>
       </div>
 
-      <!-- 2. 강점 / 불안 -->
       <div class="card">
-        <div class="card-title">가장 안정적인 샷 (자신감)</div>
+        <div style="font-size: 14px; font-weight: 800;">가장 자신 있는 샷 (강점)</div>
         <div class="chip-group" id="confidence-chips">
           <div class="chip active" onclick="selectStrongest(this, '드라이버 티샷')">드라이버 티샷</div>
           <div class="chip" onclick="selectStrongest(this, '아이언 온그린')">아이언 온그린</div>
@@ -629,95 +519,70 @@
           <div class="chip" onclick="selectStrongest(this, '퍼팅 거리감')">퍼팅 거리감</div>
         </div>
 
-        <div class="card-title mt-16">가장 불안정한 샷 (미스 다발)</div>
+        <div style="font-size: 14px; font-weight: 800; margin-top: 14px;">가장 불안한 샷 (미스 다발)</div>
         <div class="chip-group" id="anxiety-chips">
-          <div class="chip active-danger" onclick="selectWeakest(this, '아이언 타점 오차')">아이언 타점 오차</div>
+          <div class="chip active-red" onclick="selectWeakest(this, '아이언 타점 오차')">아이언 뒷땅/탑핑</div>
           <div class="chip" onclick="selectWeakest(this, '티샷 슬라이스 OB')">티샷 슬라이스 OB</div>
           <div class="chip" onclick="selectWeakest(this, '30m 쌩크')">30m 쌩크</div>
-          <div class="chip" onclick="selectWeakest(this, '퍼팅 쓰리펏')">퍼팅 쓰리펏</div>
+          <div class="chip" onclick="selectWeakest(this, '퍼팅 쓰리펏')">퍼팅 3펏</div>
         </div>
       </div>
 
-      <!-- 3. 실전 라운드 미스 항목 -->
       <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <div class="card-title">실전 라운드 미스 증상 (복수 선택)</div>
-          <span id="issues-count-badge" style="font-size: 12px; color: var(--text-tertiary);">3개 선택됨</span>
+          <div style="font-size: 14px; font-weight: 800;">실전 라운드 미스 증상 (복수 선택)</div>
+          <span id="issues-count-badge" class="badge badge-primary">3개 선택됨</span>
         </div>
-        <div id="round-issues-list">
-          <!-- Populated by JS -->
-        </div>
+        <div id="round-issues-list"></div>
       </div>
 
-      <!-- 4. 스윙 보상 동작 -->
       <div class="card">
-        <div class="card-title">체감되는 스윙 보상 동작</div>
-        <div id="swing-habits-list" class="mt-8">
-          <!-- Populated by JS -->
-        </div>
-
-        <div style="display: flex; gap: 8px; margin-top: 14px;">
-          <button class="btn btn-outline" style="font-size: 12px;" onclick="triggerVideoUpload()">영상 파일 등록</button>
-          <button class="btn btn-outline" style="font-size: 12px; color: var(--text-secondary);" onclick="setDemoVideo()">기준 영상 적용</button>
-        </div>
-        <input id="video-file-input" type="file" accept="video/*" style="display: none;" onchange="handleVideoFile(this)">
-        <p id="video-status-text" style="font-size: 12px; color: var(--primary); margin-top: 6px; display: none;">등록됨: 7번_아이언_정면스윙.mp4</p>
+        <div style="font-size: 14px; font-weight: 800;">체감되는 스윙 습관</div>
+        <div id="swing-habits-list" style="margin-top: 8px;"></div>
       </div>
 
       <button class="btn btn-primary" onclick="navigateTo('screening')">
-        다음: 13가지 신체검진 프로토콜
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        <span>다음: 13가지 신체검진으로 이동 👉</span>
       </button>
     </section>
 
-    <!-- SCREEN 3: SCREENING -->
+    <!-- 3. SCREENING SCREEN -->
     <section id="screen-screening" class="screen">
-      <!-- Index & Category -->
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span id="screening-index-txt" style="font-size: 13px; font-weight: 600; color: var(--primary);">검진 항목 1 / 13</span>
-        <span id="screening-category-badge" class="badge badge-neutral">골반 및 척추 코어</span>
+        <span id="screening-index-txt" style="font-size: 13px; font-weight: 800; color: var(--primary);">검진 항목 1 / 13</span>
+        <span id="screening-category-badge" class="badge badge-primary">골반 및 코어</span>
       </div>
 
-      <!-- Progress bar -->
-      <div style="height: 4px; background: var(--border); border-radius: 2px; margin: 8px 0 14px 0; overflow: hidden;">
-        <div id="screening-progress-bar" style="height: 100%; width: 7.7%; background: var(--primary); transition: width 0.2s ease;"></div>
+      <div class="progress-bar-bg">
+        <div id="screening-progress-bar" class="progress-bar-fill" style="width: 7.7%;"></div>
       </div>
 
-      <!-- 1~13 Tab Row -->
-      <div id="screening-tabs-row" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 12px;">
-        <!-- Tabs 1 to 13 populated by JS -->
-      </div>
+      <!-- 1~13 탭 -->
+      <div id="screening-tabs-row" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 12px;"></div>
 
-      <!-- Main Protocol Card -->
       <div class="card">
-        <h3 id="screening-title" style="font-size: 17px; font-weight: 600; color: var(--text-primary);">1. 골반 전후방 기울임 조절력</h3>
-        <p id="screening-sub" style="font-size: 12px; color: var(--text-tertiary); margin-top: 2px;">Pelvic Tilt Test</p>
+        <h3 id="screening-title" style="font-size: 17px; font-weight: 800; color: var(--text);">1. 골반 전후방 기울임 조절력</h3>
+        <p id="screening-sub" style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Pelvic Tilt Test</p>
 
-        <!-- Kinetic Vector Schematic Canvas -->
-        <div class="schematic-box">
-          <svg id="schematic-svg" width="180" height="110" viewBox="0 0 180 110">
-            <!-- Dynamic Vector Schematic Drawing -->
-          </svg>
+        <div style="height: 120px; background: #F3F4F6; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 12px 0;">
+          <svg id="schematic-svg" width="170" height="100" viewBox="0 0 170 100"></svg>
         </div>
 
-        <button id="tts-audio-btn" class="btn btn-outline" onclick="toggleTtsAudio()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-          측정 방법 전문 음성 안내
+        <button id="tts-audio-btn" class="btn btn-outline btn-sm" style="width: 100%;" onclick="toggleTtsAudio()">
+          <span>🔊 조교의 친절한 음성 안내 듣기</span>
         </button>
       </div>
 
-      <!-- Criteria Box -->
-      <div class="card" style="padding: 16px;">
-        <div style="font-size: 12px; font-weight: 600; color: var(--primary);">정상 판정 기준</div>
-        <p id="screening-criteria" style="font-size: 13.5px; color: var(--text-primary); line-height: 1.45; margin-top: 2px;">어드레스 자세에서 상체 흔들림 없이 골반을 전방/후방으로 부드럽게 틸트할 수 있음</p>
+      <div class="card">
+        <div style="font-size: 12px; font-weight: 800; color: var(--primary);">✅ 정상 판정 기준</div>
+        <p id="screening-criteria" style="font-size: 13.5px; color: var(--text); margin-top: 2px; line-height: 1.4;"></p>
 
-        <div style="font-size: 12px; font-weight: 600; color: var(--status-restricted); margin-top: 10px;">가동성 결핍 시 스윙 영향</div>
-        <p id="screening-impact" style="font-size: 13px; color: var(--text-secondary); line-height: 1.4; margin-top: 2px;">다운스윙 시 척추각이 무너져 얼리 익스텐션 및 타점 오차 유발</p>
+        <div style="font-size: 12px; font-weight: 800; color: var(--red); margin-top: 10px;">⚠️ 가동성 결핍 시 스윙 영향</div>
+        <p id="screening-impact" style="font-size: 13px; color: var(--text-muted); margin-top: 2px; line-height: 1.4;"></p>
       </div>
 
-      <!-- Grade Selection -->
-      <div style="font-size: 13.5px; font-weight: 600; color: var(--text-primary); margin-top: 12px;">자가 평가 결과 입력</div>
-      <div class="grade-btn-group">
+      <div style="font-size: 13.5px; font-weight: 800; margin-top: 10px;">자가 진단 결과 입력</div>
+      <div class="grade-btns">
         <div id="grade-pass-btn" class="grade-btn active-pass" onclick="setScreeningGrade('PASS')">
           <div class="title">정상</div>
           <div class="sub">Pass</div>
@@ -732,267 +597,159 @@
         </div>
       </div>
 
-      <!-- Navigation Row -->
-      <div style="display: flex; gap: 8px; margin-top: 18px;">
-        <button id="prev-screen-btn" class="btn btn-outline" style="flex: 1;" onclick="prevScreening()">이전</button>
-        <button id="next-screen-btn" class="btn btn-primary" style="flex: 1.4;" onclick="nextScreening()">다음</button>
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button class="btn btn-outline" style="flex: 1;" onclick="prevScreening()">이전</button>
+        <button class="btn btn-primary" style="flex: 1.4;" onclick="nextScreening()">다음</button>
       </div>
     </section>
 
-    <!-- SCREEN 4: REPORT -->
+    <!-- 4. REPORT SCREEN (골프 MBTI) -->
     <section id="screen-report" class="screen">
-      <!-- 1. 분류 헤더 -->
-      <div class="card">
+      <!-- 🏆 골프 MBTI 결과 카드 -->
+      <div class="card highlight">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span id="report-code-badge" class="badge badge-primary">TYPE-A (EE)</span>
-          <span class="badge badge-neutral">재검진 주기 4주</span>
+          <span class="badge badge-primary">GOLF BODY MBTI</span>
+          <span style="font-size: 12px; font-weight: 800; color: var(--primary);">타수 절감 목표: -3~5타</span>
         </div>
-        <h2 id="report-type-name" style="font-size: 19px; font-weight: 600; color: var(--text-primary); margin-top: 8px;">얼리 익스텐션 보상 유형</h2>
-        <p id="report-type-sub" style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">골반 틸트 & 발목 족배굴곡 제한군</p>
 
-        <div class="metric-strip">
-          <div class="metric-item">
-            <div class="metric-label">예상 타수 절감</div>
-            <div id="report-strokes-val" class="metric-value accent">-3 ~ 5타</div>
-          </div>
-          <div class="metric-item">
-            <div class="metric-label">모빌리티 운동</div>
-            <div id="report-exercises-count" class="metric-value">4개 처방</div>
-          </div>
-          <div class="metric-item">
-            <div class="metric-label">실전 드릴</div>
-            <div id="report-drills-count" class="metric-value">2개 처방</div>
+        <div style="display: flex; align-items: center; gap: 14px; margin-top: 12px;">
+          <div id="mbti-emoji" style="font-size: 46px;">🐯</div>
+          <div>
+            <h2 id="mbti-name" style="font-size: 20px; font-weight: 800; color: var(--text);">BSE-T 배치기 타이거</h2>
+            <p id="mbti-tagline" style="font-size: 13px; font-weight: 700; color: var(--primary); margin-top: 2px;">“폭발적인 파워, 그러나 임팩트 때 먼저 일어서는 호랑이!”</p>
           </div>
         </div>
 
-        <p id="report-summary-text" style="font-size: 13px; color: var(--text-secondary); line-height: 1.45; margin-top: 14px;">
-          다운스윙 임팩트 구간에서 척추각을 유지하지 못하고 골반이 공 방향으로 조기 전진하는 패턴입니다.
-        </p>
-
-        <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 6px;">
-          <div style="display: flex; align-items: flex-start; gap: 8px;">
-            <span class="badge badge-neutral" style="flex-shrink: 0;">신체 원인</span>
-            <span id="report-cause-text" style="font-size: 12.5px; color: var(--text-primary); line-height: 1.4;">발목 족배굴곡 가동성 저하 및 요추-골반 척추각 분리 조절력 결핍</span>
+        <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="badge badge-primary">슈퍼파워</span>
+            <span id="mbti-superpower" style="font-size: 12.5px; font-weight: 600;">강력한 상체 파워와 공격적인 비거리 잠재력</span>
           </div>
-          <div style="display: flex; align-items: flex-start; gap: 8px;">
-            <span class="badge badge-neutral" style="flex-shrink: 0;">교정 전략</span>
-            <span id="report-strategy-text" style="font-size: 12.5px; color: var(--text-primary); line-height: 1.4;">고관절 힌지 접지 유지 및 힙 턴 공간 확보 드릴</span>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="badge badge-red">신체원인</span>
+            <span id="mbti-bodycause" style="font-size: 12.5px; font-weight: 600;">골반 전후방 틸트 분리 조절력 결핍 & 발목 가동성 부족</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="badge badge-gold">1줄치트키</span>
+            <span id="mbti-quickfix" style="font-size: 12.5px; font-weight: 700; color: var(--gold);">다운스윙 때 엉덩이를 벽에 붙이고 1초 유지하기</span>
           </div>
         </div>
       </div>
 
-      <!-- 2. 인과관계 3단계 -->
+      <!-- 원인 기여도 3분할 -->
       <div class="card">
-        <div class="card-title">바디-스윙-게임 인과관계 메커니즘</div>
-        <div class="card-subtitle">신체 기능 결손이 실전 스윙 및 스코어로 전이되는 기전</div>
-
-        <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 8px;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="badge badge-primary">01 신체</span>
-            <span id="chain-body-text" style="font-size: 13px; font-weight: 500; color: var(--text-primary);">골반 틸트 조절력 결핍 및 발목 가동성 제한</span>
-          </div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="badge" style="background: rgba(37,99,235,0.12); color: #2563EB;">02 스윙</span>
-            <span id="chain-swing-text" style="font-size: 13px; font-weight: 500; color: var(--text-primary);">보상 기전: 임팩트 시 상체가 일어서며 얼리 익스텐션</span>
-          </div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="badge badge-restricted">03 게임</span>
-            <span id="chain-game-text" style="font-size: 13px; font-weight: 500; color: var(--text-primary);">실전 누수: 아이언 뒷땅/탑핑 및 드라이버 푸시 샷</span>
-          </div>
+        <div style="font-size: 14px; font-weight: 800;">원인 기여도 3분할 분석</div>
+        <div style="height: 12px; border-radius: 6px; overflow: hidden; display: flex; margin: 12px 0 10px 0;">
+          <div style="width: 45%; background: var(--primary);"></div>
+          <div style="width: 35%; background: var(--gold);"></div>
+          <div style="width: 20%; background: #3B82F6;"></div>
         </div>
-
-        <div id="chain-explanation-box" style="background: var(--surface-secondary); border-radius: 6px; padding: 12px; margin-top: 12px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.45;">
-          신체에서 골반 척추각 분리 가동성이 잠겨 있어 다운스윙 시 공간을 만들지 못해 상체를 일으켜 세웁니다.
+        <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700;">
+          <span style="color: var(--primary);">신체 45%</span>
+          <span style="color: var(--gold);">기술 35%</span>
+          <span style="color: #3B82F6;">게임·클럽 20%</span>
         </div>
       </div>
 
-      <!-- 3. 원인 기여도 분할 -->
+      <!-- 3단계 인과관계 체인 -->
       <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <div class="card-title">원인 기여도 분석</div>
-            <div class="card-subtitle">신체 역학 및 스윙 데이터 분석 가설</div>
-          </div>
-          <span class="badge badge-neutral">우선순위 모델</span>
-        </div>
-
-        <!-- 3-Segment Bar -->
-        <div style="height: 10px; border-radius: 4px; overflow: hidden; display: flex; margin: 16px 0 14px 0;">
-          <div id="bar-body" style="width: 45%; background: var(--primary);"></div>
-          <div id="bar-swing" style="width: 35%; background: #3B82F6;"></div>
-          <div id="bar-game" style="width: 20%; background: #64748B;"></div>
-        </div>
-
-        <div style="display: flex; justify-content: space-between;">
-          <div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <span style="width: 6px; height: 6px; background: var(--primary); border-radius: 1px;"></span>
-              <span style="font-size: 12px; color: var(--text-secondary);">신체 요인</span>
-            </div>
-            <div id="val-body-pct" style="font-size: 20px; font-weight: 600; color: var(--text-primary); margin-top: 2px;">45%</div>
-            <div style="font-size: 11px; color: var(--text-tertiary);">관절 가동성</div>
-          </div>
-
-          <div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <span style="width: 6px; height: 6px; background: #3B82F6; border-radius: 1px;"></span>
-              <span style="font-size: 12px; color: var(--text-secondary);">스윙 메커니즘</span>
-            </div>
-            <div id="val-swing-pct" style="font-size: 20px; font-weight: 600; color: var(--text-primary); margin-top: 2px;">35%</div>
-            <div style="font-size: 11px; color: var(--text-tertiary);">보상 궤도</div>
-          </div>
-
-          <div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <span style="width: 6px; height: 6px; background: #64748B; border-radius: 1px;"></span>
-              <span style="font-size: 12px; color: var(--text-secondary);">게임 매니지먼트</span>
-            </div>
-            <div id="val-game-pct" style="font-size: 20px; font-weight: 600; color: var(--text-primary); margin-top: 2px;">20%</div>
-            <div style="font-size: 11px; color: var(--text-tertiary);">클럽 선택</div>
-          </div>
+        <div style="font-size: 14px; font-weight: 800;">🔗 3단계 인과관계 체인</div>
+        <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 700;">
+          <div style="color: var(--primary);">1️⃣ 바디: 골반 틸트 조절력 결핍 & 발목 가동성 제한</div>
+          <div style="color: var(--gold);">2️⃣ 스윙: 보상으로 임팩트 시 상체가 일어서며 얼리 익스텐션</div>
+          <div style="color: var(--red);">3️⃣ 게임: 실전에서 아이언 뒷땅/탑핑 및 드라이버 푸시 샷 유발!</div>
         </div>
       </div>
 
-      <!-- 4. 처방 모빌리티 운동 목록 -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin: 18px 0 8px 0;">
-        <div>
-          <div style="font-size: 15px; font-weight: 600; color: var(--text-primary);">처방 신체 모빌리티 훈련</div>
-          <div style="font-size: 12px; color: var(--text-tertiary);">맞춤 관절 가동성 회복 운동</div>
-        </div>
-        <span style="font-size: 12px; font-weight: 500; color: var(--primary);">좌우 세트 가이드</span>
-      </div>
-      <div id="report-exercises-list">
-        <!-- Populated by JS -->
-      </div>
+      <!-- 맞춤 모빌리티 운동 처방 -->
+      <div style="font-size: 15px; font-weight: 800; margin: 16px 0 8px 0;">💪 맞춤 모빌리티 운동 (음성 코칭 포함)</div>
+      <div id="report-exercises-list"></div>
 
-      <!-- 5. 처방 실전 드릴 목록 -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 8px 0;">
-        <div>
-          <div style="font-size: 15px; font-weight: 600; color: var(--text-primary);">처방 골프 실전 드릴</div>
-          <div style="font-size: 12px; color: var(--text-tertiary);">필드 타수 누수 방지 원포인트</div>
-        </div>
-        <span style="font-size: 12px; font-weight: 500; color: var(--text-secondary);">클럽 권장 사양</span>
-      </div>
-      <div id="report-drills-list">
-        <!-- Populated by JS -->
-      </div>
+      <!-- 골프 연습장 실전 드릴 -->
+      <div style="font-size: 15px; font-weight: 800; margin: 18px 0 8px 0;">🏌️ 연습장 원포인트 드릴</div>
+      <div id="report-drills-list"></div>
 
-      <!-- Bottom CTAs -->
-      <button class="btn btn-primary mt-16" onclick="navigateTo('routine')">
-        오늘의 실천 루틴으로 이동
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      <button class="btn btn-primary" style="margin-top: 16px;" onclick="navigateTo('routine')">
+        <span>오늘의 실천 루틴으로 이동 🏃</span>
       </button>
-
-      <div style="display: flex; gap: 8px; margin-top: 8px;">
-        <button class="btn btn-outline" style="flex: 1;" onclick="resetRetest()">신체 재검진</button>
-        <button class="btn btn-outline" style="flex: 1;" onclick="navigateTo('home')">홈 대시보드</button>
-      </div>
     </section>
 
-    <!-- SCREEN 5: ROUTINE -->
+    <!-- 5. ROUTINE SCREEN -->
     <section id="screen-routine" class="screen">
-      <!-- 1. 달성 현황 -->
       <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div class="card-title">오늘의 루틴 달성률</div>
-          <span id="routine-status-badge" class="badge badge-neutral">0 / 6 완료</span>
+          <div style="font-size: 14px; font-weight: 800;">⚡ 오늘의 루틴 달성률</div>
+          <span id="routine-status-badge" class="badge badge-primary">0 / 6 완료</span>
         </div>
-        <div style="height: 6px; background: var(--border); border-radius: 3px; margin: 12px 0 10px 0; overflow: hidden;">
-          <div id="routine-progress-bar" style="height: 100%; width: 0%; background: var(--primary); transition: width 0.25s ease;"></div>
+        <div class="progress-bar-bg">
+          <div id="routine-progress-bar" class="progress-bar-fill" style="width: 0%;"></div>
         </div>
-        <p style="font-size: 12px; color: var(--text-tertiary);">조교의 음성 가이드와 안내에 맞춰 세트별로 따라 해보세요.</p>
+        <p style="font-size: 12px; color: var(--text-muted);">“음성 코칭 버튼을 누르고 조교의 구령에 맞춰 따라 해보세요!”</p>
       </div>
 
-      <!-- 2. 모빌리티 리스트 -->
-      <div style="font-size: 14.5px; font-weight: 600; color: var(--text-primary); margin: 16px 0 8px 0;">신체 모빌리티 회복 훈련</div>
-      <div id="routine-exercises-list">
-        <!-- Populated by JS -->
-      </div>
+      <div style="font-size: 14.5px; font-weight: 800; margin: 16px 0 8px 0;">💪 신체 모빌리티 회복 훈련</div>
+      <div id="routine-exercises-list"></div>
 
-      <!-- 3. 실전 드릴 리스트 -->
-      <div style="font-size: 14.5px; font-weight: 600; color: var(--text-primary); margin: 18px 0 8px 0;">골프 연습장 실전 드릴</div>
-      <div id="routine-drills-list">
-        <!-- Populated by JS -->
-      </div>
+      <div style="font-size: 14.5px; font-weight: 800; margin: 18px 0 8px 0;">🏌️ 골프 연습장 실전 드릴</div>
+      <div id="routine-drills-list"></div>
 
-      <button class="btn btn-outline mt-16" onclick="navigateTo('report')">종합 분석 리포트로 이동</button>
+      <button class="btn btn-outline" style="margin-top: 16px;" onclick="navigateTo('report')">
+        AI 분석 리포트로 돌아가기
+      </button>
     </section>
 
   </main>
 
-  <!-- Execution Coach Dialog Modal -->
+  <!-- Interactive Coach Modal -->
   <div id="coach-modal" class="modal-backdrop">
     <div class="modal-card">
       <div style="display: flex; justify-content: space-between; align-items: flex-start;">
         <div>
-          <h3 id="modal-title" style="font-size: 17px; font-weight: 600; color: var(--text-primary);">운동 명칭</h3>
-          <p id="modal-target" style="font-size: 13px; color: var(--primary); font-weight: 500; margin-top: 1px;">타겟 부위</p>
+          <h3 id="modal-title" style="font-size: 17px; font-weight: 800; color: var(--text);">운동 제목</h3>
+          <p id="modal-target" style="font-size: 12.5px; font-weight: 700; color: var(--primary); margin-top: 2px;">타겟 부위</p>
         </div>
-        <button onclick="closeModal()" style="background: none; border: none; cursor: pointer; color: var(--text-tertiary); padding: 4px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-        </button>
+        <button onclick="closeModal()" style="background: none; border: none; font-size: 18px; cursor: pointer;">✕</button>
       </div>
 
-      <div class="schematic-box" style="margin: 12px 0;">
-        <svg id="modal-schematic-svg" width="160" height="100" viewBox="0 0 160 100"></svg>
+      <div style="background: var(--primary-bg); border-radius: 10px; padding: 10px; margin: 12px 0;">
+        <span style="font-size: 11.5px; font-weight: 800; color: var(--primary);">📌 좌우 세트 가이드: </span>
+        <span id="modal-sets-reps" style="font-size: 12.5px; font-weight: 700; color: var(--text);"></span>
       </div>
 
-      <div style="background: #F8F9FA; border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-size: 12px; color: var(--text-secondary);">권장 세트 및 횟수</span>
-        <span id="modal-sets-reps" style="font-size: 13px; font-weight: 600; color: var(--text-primary);">좌우 12회씩 3세트</span>
-      </div>
-
-      <div id="modal-instructions" style="margin: 12px 0; font-size: 13px; color: var(--text-secondary); line-height: 1.45;">
-        <!-- Step by step -->
-      </div>
+      <div id="modal-instructions" style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px;"></div>
 
       <button id="modal-tts-btn" class="btn btn-outline" style="margin-bottom: 12px;" onclick="toggleModalTts()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-        전문 코칭 음성 가이드 듣기
+        <span>🔊 조교의 구령 음성 듣기</span>
       </button>
 
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span id="modal-set-progress" style="font-size: 13px; font-weight: 500; color: var(--text-primary);">진행: 1 / 3 세트</span>
+        <span id="modal-set-progress" style="font-size: 13px; font-weight: 800;">진행: 1 / 3 세트</span>
         <button id="modal-complete-set-btn" class="btn btn-primary btn-sm" onclick="advanceModalSet()">1세트 완료</button>
       </div>
     </div>
   </div>
 
-  <!-- Bottom Navigation Bar -->
+  <!-- Bottom Nav -->
   <nav>
-    <button class="nav-item active" onclick="navigateTo('home')">
-      <div class="icon-pill">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      </div>
+    <button class="nav-btn active" onclick="navigateTo('home')">
+      <span class="icon">🏠</span>
       <span>홈</span>
     </button>
-
-    <button class="nav-item" onclick="navigateTo('survey')">
-      <div class="icon-pill">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1Z"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
-      </div>
+    <button class="nav-btn" onclick="navigateTo('survey')">
+      <span class="icon">📝</span>
       <span>설문</span>
     </button>
-
-    <button class="nav-item" onclick="navigateTo('screening')">
-      <div class="icon-pill">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/></svg>
-      </div>
+    <button class="nav-btn" onclick="navigateTo('screening')">
+      <span class="icon">🩺</span>
       <span>신체검진</span>
     </button>
-
-    <button class="nav-item" onclick="navigateTo('report')">
-      <div class="icon-pill">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a8 8 0 0 0-8 8c0 3.3 2 6.1 5 7.4V20a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2.6c3-1.3 5-4.1 5-7.4a8 8 0 0 0-8-8Z"/><path d="M9 10h6"/></svg>
-      </div>
-      <span>리포트</span>
+    <button class="nav-btn" onclick="navigateTo('report')">
+      <span class="icon">🏆</span>
+      <span>AI분석</span>
     </button>
-
-    <button class="nav-item" onclick="navigateTo('routine')">
-      <div class="icon-pill">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      </div>
-      <span>루틴</span>
+    <button class="nav-btn" onclick="navigateTo('routine')">
+      <span class="icon">⏱️</span>
+      <span>트레이닝</span>
     </button>
   </nav>
 
@@ -1005,163 +762,33 @@ const state = {
   profile: {
     handicap: 18,
     strongestArea: '드라이버 티샷',
-    weakestArea: '아이언 타점 오차',
+    weakestArea: '아이언 뒷땅/탑핑',
     roundIssues: ['드라이버 슬라이스 및 푸시 샷', '아이언 뒷땅 및 탑핑 타점 오차', '후반 나인홀 체력 저하 및 샷 난조'],
-    selectedSwingHabit: '임팩트 시 골반 조기 전진 (얼리 익스텐션)',
-    videoName: null
+    selectedSwingHabit: '임팩트 시 골반 조기 전진 (얼리 익스텐션)'
   },
   currentScreeningIndex: 0,
   screeningGrades: {
-    1: 'RESTRICTED',
-    2: 'LIMITED',
-    3: 'PASS',
-    4: 'RESTRICTED',
-    5: 'PASS',
-    6: 'PASS',
-    7: 'PASS',
-    8: 'PASS',
-    9: 'PASS',
-    10: 'PASS',
-    11: 'PASS',
-    12: 'LIMITED',
-    13: 'PASS'
+    1: 'RESTRICTED', 2: 'LIMITED', 3: 'PASS', 4: 'RESTRICTED',
+    5: 'PASS', 6: 'PASS', 7: 'PASS', 8: 'PASS', 9: 'PASS',
+    10: 'PASS', 11: 'PASS', 12: 'LIMITED', 13: 'PASS'
   },
-  completedTasks: new Set(),
-  activePipelineStep: 'body'
+  completedTasks: new Set()
 };
 
-// 13 Screening Items Database
 const screeningItems = [
-  {
-    id: 1,
-    title: "골반 전후방 기울임 조절력",
-    sub: "Pelvic Tilt Test",
-    category: "골반 및 척추 코어",
-    criteria: "어드레스 자세에서 상체 고정 상태로 골반의 전방/후방 경사를 독립 제어할 수 있는가",
-    impact: "다운스윙 시 척추각이 무너져 얼리 익스텐션 및 타점 부정확 발생",
-    voice: "차렷 후 어드레스 자세를 취하세요. 가슴을 움직이지 말고 오직 골반과 허리만을 전방 및 후방으로 부드럽게 틸트해 봅니다.",
-    tech: "PELVIC_TILT"
-  },
-  {
-    id: 2,
-    title: "골반 수평 회전 분리 가동성",
-    sub: "Pelvic Rotation Disassociation",
-    category: "골반 및 고관절",
-    criteria: "상체를 견고히 고정한 채 골반만을 좌우로 30도 이상 독립 회전 가능한가",
-    impact: "백스윙 탑에서 골반이 회전하지 못하고 스웨이(밀림) 동작 발생",
-    voice: "양팔을 가슴에 교차하고 상체를 고정하세요. 어깨를 전혀 돌리지 않고 골반만을 좌우로 분리하여 비틀어 봅니다.",
-    tech: "PELVIC_ROTATION"
-  },
-  {
-    id: 3,
-    title: "흉추 상체 독립 회전 가동성",
-    sub: "Torso Rotation Disassociation",
-    category: "흉추 및 상체",
-    criteria: "하체를 완전히 고정한 상태에서 상체만을 좌우로 45도 이상 회전 가능한가",
-    impact: "상체 코일링 부족으로 엎어치는 궤도(Over the Top) 유발",
-    voice: "하체를 단단히 바닥에 접지하고 골반을 잠그세요. 하체 움직임 없이 상체 흉추만을 좌우로 힘차게 회전시킵니다.",
-    tech: "TORSO_ROTATION"
-  },
-  {
-    id: 4,
-    title: "오버헤드 딥 스쿼트 힌지",
-    sub: "Overhead Deep Squat Hinge",
-    category: "전신 가동성 & 힌지",
-    criteria: "골프채를 머리 위로 든 상태에서 발뒤꿈치 들림 없이 대퇴골이 수평 이하로 딥 스쿼트 가능한가",
-    impact: "다운스윙 시 고관절 힌지가 조기 풀려 배치기 및 뒷땅 발생",
-    voice: "클럽을 양손으로 넓게 잡고 머리 위로 듭니다. 발뒤꿈치를 땅에 붙인 채 무릎과 고관절을 깊게 굽혀 스쿼트합니다.",
-    tech: "OVERHEAD_SQUAT"
-  },
-  {
-    id: 5,
-    title: "편측 한 발 동적 밸런스",
-    sub: "Single Leg Dynamic Balance",
-    category: "신경근 안정성",
-    criteria: "한 발로 서서 눈을 감고 흔들림 없이 15초 이상 균형 유지 가능한가",
-    impact: "다운스윙 시 타깃 방향으로의 안정적인 체중 이동 붕괴",
-    voice: "오른발로 서서 반대쪽 무릎을 듭니다. 눈을 감고 중심을 유지해 보세요. 15초 이상 버틸 수 있는지 확인합니다.",
-    tech: "SINGLE_LEG_BALANCE"
-  },
-  {
-    id: 6,
-    title: "어깨 관절 외회전 가동 범위",
-    sub: "Shoulder External Rotation",
-    category: "상지 및 견관절",
-    criteria: "어깨와 팔꿈치를 90도로 벌린 상태에서 손등을 후방으로 90도 이상 젖힐 수 있는가",
-    impact: "백스윙 탑에서 팔꿈치가 들리는 플라잉 엘보(Flying Elbow) 발생",
-    voice: "팔꿈치를 어깨 높이로 들고 기역 자를 만듭니다. 팔꿈치 위치를 유지한 채 손등을 뒤쪽으로 넘겨 각도를 봅니다.",
-    tech: "SHOULDER_EXTERNAL"
-  },
-  {
-    id: 7,
-    title: "어깨 관절 내회전 가동 범위",
-    sub: "Shoulder Internal Rotation",
-    category: "상지 및 견관절",
-    criteria: "어깨와 팔꿈치를 90도로 유지하고 손바닥을 아래 방향으로 60도 이상 회전 가능한가",
-    impact: "팔로우스루 구간에서 치킨윙(Chicken Wing) 발생",
-    voice: "팔꿈치 90도 상태에서 손바닥을 바닥 쪽으로 천천히 회전시켜 어깨 앞쪽의 저항감을 체크하세요.",
-    tech: "SHOULDER_INTERNAL"
-  },
-  {
-    id: 8,
-    title: "견갑골 후인 및 흉곽 밀착력",
-    sub: "Lat & Scapular Flexibility",
-    category: "흉추 및 견갑골",
-    criteria: "벽에 등과 허리를 완전히 밀착한 상태에서 양팔을 머리 위로 들어 올려 벽에 닿을 수 있는가",
-    impact: "백스윙 아크 축소 및 보상적 척추 신전 유발",
-    voice: "벽에 등과 엉덩이를 붙이고 서세요. 허리가 뜨지 않게 유지하면서 양팔을 천장으로 곧게 뻗어 올립니다.",
-    tech: "LAT_FLEXIBILITY"
-  },
-  {
-    id: 9,
-    title: "리드 사이드 고관절 내회전",
-    sub: "Lead Hip Internal Rotation",
-    category: "고관절 및 하지",
-    criteria: "의자에 앉아 허벅지를 고정한 상태에서 한쪽 발을 바깥으로 40도 이상 벌릴 수 있는가",
-    impact: "다운스윙 시 좌측 힙 턴이 막히며 슬라이스 유발",
-    voice: "의자에 반듯하게 앉아 무릎을 모읍니다. 무릎은 붙인 채 왼쪽 발목만 바깥쪽으로 부드럽게 벌려줍니다.",
-    tech: "LEAD_HIP_ROTATION"
-  },
-  {
-    id: 10,
-    title: "트레일 사이드 고관절 외회전",
-    sub: "Trail Hip External Rotation",
-    category: "고관절 및 하지",
-    criteria: "의자에 앉아 한쪽 발을 안쪽으로 45도 이상 회전할 수 있는가",
-    impact: "백스윙 시 우측 힙에 체중이 실리지 못하고 리버스 피봇 발생",
-    voice: "의자에 앉아 이번에는 우측 발목을 안쪽으로 들어 올려 고관절의 회전 가동 범위를 점검합니다.",
-    tech: "TRAIL_HIP_ROTATION"
-  },
-  {
-    id: 11,
-    title: "손목 요측 및 척측 편위 가동성",
-    sub: "Wrist Radial / Ulnar Deviation",
-    category: "손목 및 팔꿈치",
-    criteria: "팔을 뻗고 주먹을 쥔 상태에서 손목 코킹 및 언코킹 각도가 정상 범위에 도달하는가",
-    impact: "코킹 조기 풀림(Casting) 및 스쿠핑 타점 오차 유발",
-    voice: "팔을 앞으로 뻗어 가볍게 주먹을 쥡니다. 팔꿈치는 고정한 채 손목을 위로 꺾고 아래로 내리며 각도를 봅니다.",
-    tech: "WRIST_DEVIATION"
-  },
-  {
-    id: 12,
-    title: "발목 족배굴곡 가동성",
-    sub: "Ankle Dorsiflexion Mobility",
-    category: "발목 및 족부",
-    criteria: "벽에서 발가락을 10cm 띄운 후 발뒤꿈치를 떼지 않고 무릎이 벽에 닿을 수 있는가",
-    impact: "다운스윙 체중 이동 시 발뒤꿈치 조기 들림 및 배치기 유발",
-    voice: "벽 앞에 한 발을 10센티미터 띄우고 서세요. 뒤꿈치를 바닥에 완전히 붙인 채 무릎을 앞으로 밀어 벽에 닿게 합니다.",
-    tech: "ANKLE_MOBILITY"
-  },
-  {
-    id: 13,
-    title: "경추 좌우 회전 가동 범위",
-    sub: "Cervical Spine Rotation",
-    category: "경추 및 시선 고정",
-    criteria: "어깨를 고정한 상태에서 턱이 쇄골 중앙선을 넘어 좌우 70도 이상 회전 가능한가",
-    impact: "스윙 중 시선과 헤드업 조기 발생 및 척추축 흔들림",
-    voice: "정면을 보고 어깨를 완전히 고정합니다. 천천히 고개를 좌우로 돌려 턱이 어깨 라인에 도달하는지 확인합니다.",
-    tech: "CERVICAL_ROTATION"
-  }
+  { id: 1, title: "골반 전후방 기울임 조절력", sub: "Pelvic Tilt Test", category: "골반 및 코어", criteria: "어드레스 자세에서 상체 흔들림 없이 골반을 부드럽게 틸트할 수 있음", impact: "다운스윙 시 척추각이 무너져 얼리 익스텐션 및 타점 오차 유발", voice: "차렷 후 어드레스 자세를 취하세요. 가슴을 고정하고 오직 골반과 허리만을 전방 및 후방으로 부드럽게 틸트해 봅니다." },
+  { id: 2, title: "골반 수평 회전 분리 가동성", sub: "Pelvic Rotation Disassociation", category: "골반 및 고관절", criteria: "상체를 고정한 채 골반만을 좌우로 30도 이상 독립 회전 가능한가", impact: "백스윙 시 골반 스웨이 및 파워 누수 유발", voice: "양팔을 가슴에 교차하고 상체를 고정하세요. 어깨를 돌리지 않고 골반만을 좌우로 회전합니다." },
+  { id: 3, title: "흉추 상체 독립 회전 가동성", sub: "Torso Rotation Disassociation", category: "흉추 및 상체", criteria: "하체를 고정한 채 상체만을 좌우로 45도 이상 회전 가능한가", impact: "상체 코일링 부족으로 엎어치는 궤도(오버 더 탑) 유발", voice: "하체를 단단히 바닥에 고정하세요. 하체 움직임 없이 상체만을 힘차게 좌우로 비틀어줍니다." },
+  { id: 4, title: "오버헤드 딥 스쿼트 힌지", sub: "Overhead Deep Squat Hinge", category: "전신 가동성 & 힌지", criteria: "클럽을 머리 위로 든 상태에서 뒤꿈치 들림 없이 수평 이하로 스쿼트 가능", impact: "다운스윙 시 고관절 힌지가 풀려 배치기 및 뒷땅 유발", voice: "클럽을 머리 위로 들고 서서 뒤꿈치를 땅에 붙인 채 깊게 앉았다 일어납니다." },
+  { id: 5, title: "편측 한 발 동적 밸런스", sub: "Single Leg Dynamic Balance", category: "신경근 안정성", criteria: "한 발로 서서 눈을 감고 15초 이상 균형 유지", impact: "체중 이동 붕괴 및 타점 불안정 유발", voice: "한 발로 서서 눈을 감고 중심을 유지해 보세요. 15초 이상 버틸 수 있는지 체크합니다." },
+  { id: 6, title: "어깨 관절 외회전 가동 범위", sub: "Shoulder External Rotation", category: "어깨 및 상지", criteria: "어깨 90도 굴곡 상태에서 손등을 후방으로 90도 젖힘 가능", impact: "백스윙 탑에서 플라잉 엘보 발생", voice: "팔꿈치를 90도로 들고 손등을 뒤쪽으로 넘겨 어깨 외회전 각도를 점검합니다." },
+  { id: 7, title: "어깨 관절 내회전 가동 범위", sub: "Shoulder Internal Rotation", category: "어깨 및 상지", criteria: "팔꿈치 90도에서 손바닥을 아래로 60도 이상 회전 가능", impact: "팔로우스루 치킨윙 유발", voice: "팔꿈치를 고정한 채 손바닥을 바닥 쪽으로 돌려 내회전 가동성을 봅니다." },
+  { id: 8, title: "광배근 및 견갑골 유연성", sub: "Lat & Scapular Flexibility", category: "등 및 견갑골", criteria: "벽에 허리를 붙인 채 양팔을 올려 벽에 닿을 수 있는가", impact: "백스윙 아크 축소 및 척추 펴짐 유발", voice: "벽에 등을 대고 서서 양팔을 위로 곧게 뻗어 벽에 닿는지 확인하세요." },
+  { id: 9, title: "리드 사이드 고관절 내회전", sub: "Lead Hip Internal Rotation", category: "고관절 및 하지", criteria: "의자에 앉아 한쪽 발을 바깥으로 40도 이상 벌림 가능", impact: "다운스윙 힙 턴이 막히며 슬라이스 유발", voice: "의자에 앉아 무릎을 모은 채 왼쪽 발목만 바깥쪽으로 부드럽게 벌려줍니다." },
+  { id: 10, title: "트레일 사이드 고관절 외회전", sub: "Trail Hip External Rotation", category: "고관절 및 하지", criteria: "의자에 앉아 한쪽 발을 안쪽으로 45도 이상 회전 가능", impact: "백스윙 체중 싣기 실패 및 리버스 피봇 유발", voice: "의자에 앉아 우측 발목을 안쪽으로 들어 올려 고관절 가동성을 봅니다." },
+  { id: 11, title: "손목 코킹 및 힌징 가동성", sub: "Wrist Radial / Ulnar Deviation", category: "손목 및 팔꿈치", criteria: "주먹 쥔 상태에서 손목 꺾임 및 풀림 각도 정상", impact: "캐스팅 및 스쿠핑 타점 오차 유발", voice: "팔을 뻗어 가볍게 주먹을 쥐고 위아래로 손목을 꺾어 각도를 확인합니다." },
+  { id: 12, title: "발목 족배굴곡 가동성", sub: "Ankle Dorsiflexion Mobility", category: "발목 및 하지", criteria: "벽에서 10cm 띄운 후 뒤꿈치 떼지 않고 무릎이 벽에 닿음", impact: "다운스윙 시 배치기 및 체중 이동 지연 유발", voice: "벽 앞에 한 발을 띄우고 서서 뒤꿈치를 붙인 채 무릎을 앞으로 밀어 벽에 닿게 합니다." },
+  { id: 13, title: "경추 좌우 회전 가동 범위", sub: "Cervical Spine Rotation", category: "목 및 척추", criteria: "어깨 고정 상태로 턱이 쇄골 중앙선을 넘어 70도 회전", impact: "헤드업 조기 발생 및 시선 흔들림", voice: "정면을 보고 어깨를 고정한 채 고개를 좌우로 천천히 돌려봅니다." }
 ];
 
 const allRoundIssues = [
@@ -1183,193 +810,110 @@ const swingHabits = [
   "다운스윙 손목 조기 풀림 (캐스팅)"
 ];
 
-// Prescriptions Catalog
-const prescriptionsDatabase = {
-  ee: {
-    code: "TYPE-A (EE)",
-    name: "얼리 익스텐션 보상 유형",
-    category: "골반 틸트 & 발목 족배굴곡 제한군",
-    summary: "다운스윙 임팩트 구간에서 척추각을 유지하지 못하고 골반이 공 방향으로 조기 전진하는 패턴입니다.",
-    cause: "발목 족배굴곡 가동성 저하 및 요추-골반 척추각 분리 조절력 결핍",
-    strategy: "고관절 힌지 접지 유지 및 힙 턴 공간 확보 드릴",
-    chain: {
-      body: "골반 틸트 조절력 결핍 및 발목 가동성 제한",
-      swing: "임팩트 시 척추각이 일어서며 골반 조기 전진",
-      game: "아이언 뒷땅/탑핑 타점 오차 및 드라이버 푸시 슬라이스",
-      desc: "신체에서 골반 척추각 분리 가동성이 잠겨 있어 다운스윙 시 공간을 만들지 못해 상체를 일으켜 세웁니다."
+const prescriptions = {
+  exercises: [
+    {
+      title: "벽 발목 족배굴곡 모빌리티",
+      target: "발목 관절 & 아킬레스건",
+      detail: "좌우 각 15회씩 3세트",
+      checkpoint: "얼리 익스텐션을 방지하는 발목 지면 반력 접지력 강화",
+      script: "벽 앞에 서서 뒤꿈치를 바닥에 견고하게 밀착합니다. 무릎을 천천히 벽 방향으로 밀어줍니다. 하나, 둘, 셋. 뒤꿈치가 뜨면 안 됩니다. 교대하여 반대측도 동일하게 수행합니다.",
+      instructions: ["벽에서 10cm 거리에 앞발을 두고 뒤꿈치를 완전히 밀착합니다.", "무릎을 벽 방향으로 천천히 전방 굴곡하여 3초간 유지합니다.", "좌우 15회씩 3세트 실시합니다."]
     },
-    exercises: [
-      {
-        title: "하프 닐링 발목 족배굴곡 밴드 모빌리티",
-        target: "가자미근 및 족관절 전방 관절낭",
-        detail: "좌우 각 12회씩 3세트",
-        checkpoint: "뒤꿈치 접지를 유지하며 무릎을 발끝 전방 10cm로 밀기",
-        script: "한쪽 무릎을 꿇고 반대 발을 앞에 놓으세요. 뒤꿈치를 바닥에 고정한 채 무릎을 앞으로 지그시 밀어 발목 앞쪽을 스트레칭합니다.",
-        tech: "ANKLE_MOBILITY",
-        instructions: ["한쪽 무릎을 바닥에 대고 런지 자세를 잡습니다.", "앞발 뒤꿈치가 뜨지 않도록 손으로 지그시 누릅니다.", "무릎을 발끝 방향으로 3초간 천천히 밀었다가 돌아옵니다."]
-      },
-      {
-        title: "골반 전후방 틸트 분리 조절 훈련",
-        target: "요추-골반 코어 분리 조절력",
-        detail: "일 15회씩 3세트",
-        checkpoint: "상체 흉곽 흔들림 0% 유지하며 골반만 독립 롤링",
-        script: "어드레스 자세에서 가슴을 완전히 멈추세요. 꼬리뼈를 말아 넣었다가 뒤로 오리궁둥이를 만들며 골반만을 롤링합니다.",
-        tech: "PELVIC_TILT",
-        instructions: ["어드레스 자세를 취하고 양손을 골반뼈 위에 얹습니다.", "가슴은 고정한 채 복부에 힘을 주어 골반을 후방으로 말아 넣습니다.", "반대로 허리를 아치형으로 만들며 전방 틸트합니다."]
-      },
-      {
-        title: "힙 힌지 월 탭 버트 백 트레이닝",
-        target: "둔근 신장성 조절 & 척추각 유지",
-        detail: "일 12회씩 3세트",
-        checkpoint: "체중을 발뒤꿈치에 싣고 엉덩이로 벽 터치 유지",
-        script: "벽에서 한 뼘 떨어져 어드레스 자세를 잡습니다. 무릎을 과하게 굽히지 않고 엉덩이를 뒤로 밀어 벽에 가볍게 닿게 하세요.",
-        tech: "OVERHEAD_SQUAT",
-        instructions: ["벽에서 15cm 앞에 서서 골프 어드레스 자세를 취합니다.", "골반 고관절을 접으며 엉덩이를 뒤로 밀어 벽을 가볍게 터치합니다.", "상체 각도를 45도로 유지하며 2초간 멈춥니다."]
-      },
-      {
-        title: "싱글 레그 고관절 외회전 에어로플레인",
-        target: "중둔근 및 편측 체중 지지 안정성",
-        detail: "좌우 각 8회씩 3세트",
-        checkpoint: "지지하는 무릎이 안으로 무너지지 않도록 외회전 텐션 유지",
-        script: "한 발로 서서 상체를 숙이고 비행기 날개 자세를 만듭니다. 지지발 엉덩이에 힘을 주고 골반을 열었다 닫아보세요.",
-        tech: "SINGLE_LEG_BALANCE",
-        instructions: ["한 발로 서서 반대쪽 다리를 뒤로 곧게 뻗습니다.", "양팔을 벌리고 골반을 바깥쪽으로 열었다가 수평으로 닫습니다.", "지지하는 발의 엄지발가락과 뒤꿈치 접지를 견고히 유지합니다."]
-      }
-    ],
-    drills: [
-      {
-        title: "얼라인먼트 스틱 임팩트 힙 클리어 드릴",
-        club: "7번 아이언",
-        detail: "볼 20개 타격 x 2세트",
-        feelVsReal: "배치기 대신 엉덩이를 뒤로 밀어 넣는 느낌",
-        checkpoint: "임팩트 시 왼쪽 엉덩이가 스틱 가이드를 밀지 않아야 함",
-        script: "왼쪽 엉덩이 뒤 5센티미터에 얼라인먼트 스틱을 꽂으세요. 다운스윙 시 스틱을 쓰러뜨리지 않고 엉덩이 접촉을 유지하며 회전합니다.",
-        tech: "PELVIC_ROTATION",
-        instructions: ["타깃 라인 후방 왼쪽 엉덩이 뒤에 클럽이나 스틱을 세웁니다.", "하프 스윙으로 다운스윙 시 왼쪽 힙이 스틱에서 떨어지지 않게 턴합니다.", "공을 치고 나서도 척추 각도가 세워지지 않는지 체크합니다."]
-      },
-      {
-        title: "뒤꿈치 웨지 페달링 릴리스 드릴",
-        club: "8번 아이언 또는 9번 아이언",
-        detail: "볼 15개 타격 x 2세트",
-        feelVsReal: "공을 향해 달려들지 않고 지면을 누르는 반력",
-        checkpoint: "임팩트 직후까지 양 발뒤꿈치 접지감 유지",
-        script: "양발 뒤꿈치 아래에 작은 수건이나 티를 밟고 섭니다. 임팩트 순간까지 뒤꿈치가 일찍 들리지 않도록 발바닥을 눌러주세요.",
-        tech: "ANKLE_MOBILITY",
-        instructions: ["양 발뒤꿈치 아래에 티를 깔고 어드레스합니다.", "다운스윙 시 발가락 쪽으로 체중이 쏠려 티가 빠지지 않게 지면을 누릅니다.", "임팩트 통과 후 자연스럽게 피니시로 연결합니다."]
-      }
-    ]
-  }
+    {
+      title: "어드레스 골반 전후방 틸트 제어",
+      target: "요추-골반 분리 조절력",
+      detail: "전후 각 20회씩 3세트",
+      checkpoint: "상체 척추각을 유지한 채 골반만 독립적으로 움직이기",
+      script: "어드레스 자세를 잡으세요. 가슴은 고정하고 골반을 말아 넣었다가 오리궁둥이를 만들며 골반만을 롤링합니다.",
+      instructions: ["어드레스 자세를 취하고 손을 골반에 얹습니다.", "상체는 멈춘 채 복부에 힘을 주어 골반을 후방으로 맙니다.", "이어서 오리궁둥이 모양으로 전방 틸트합니다."]
+    },
+    {
+      title: "스쿼트 힌지 둔근 활성화 트레이닝",
+      target: "둔근 신장성 파워 & 척추각 유지",
+      detail: "일 12회씩 3세트",
+      checkpoint: "임팩트 시 배치기 방지 및 하체 회전 공간 확보",
+      script: "어드레스 자세에서 엉덩이를 뒤로 밀며 힌지를 잡습니다. 발바닥 전체로 지면을 누르며 일어납니다.",
+      instructions: ["골반 고관절을 접으며 엉덩이를 뒤로 뺍니다.", "무릎이 앞으로 쏠리지 않게 척추각 45도를 유지합니다.", "둔근의 텐션을 느끼며 12회 반복합니다."]
+    }
+  ],
+  drills: [
+    {
+      title: "얼라인먼트 스틱 임팩트 힙 클리어 드릴",
+      club: "7번 아이언",
+      detail: "볼 20개 타격 x 2세트",
+      feelVsReal: "배치기 대신 엉덩이를 뒤로 밀어 넣는 느낌",
+      checkpoint: "임팩트 시 왼쪽 엉덩이가 스틱 가이드를 밀지 않아야 함",
+      script: "왼쪽 엉덩이 뒤에 스틱을 세우세요. 다운스윙 시 스틱에서 엉덩이가 떨어지지 않게 힙 턴을 해줍니다.",
+      instructions: ["왼쪽 엉덩이 뒤 5cm에 스틱을 꽂습니다.", "하프 스윙으로 회전하며 엉덩이 접촉을 유지합니다.", "볼 20개를 가볍게 쳐봅니다."]
+    },
+    {
+      title: "뒤꿈치 페달링 접지 릴리스 드릴",
+      club: "8번 아이언",
+      detail: "볼 15개 타격 x 2세트",
+      feelVsReal: "공을 향해 상체가 덤비지 않고 지면을 누르는 감각",
+      checkpoint: "임팩트 순간까지 뒤꿈치 들림 억제",
+      script: "양발 뒤꿈치 아래에 티를 깔고 섭니다. 임팩트 직후까지 뒤꿈치가 일찍 들리지 않도록 지면을 밟아주세요.",
+      instructions: ["양 뒤꿈치 아래에 작은 티를 밟고 섭니다.", "다운스윙 시 뒤꿈치가 먼저 뜨지 않게 유지합니다.", "볼 15개를 타격합니다."]
+    }
+  ]
 };
 
-// --- Initialization ---
 function init() {
   renderRoundIssuesList();
   renderSwingHabitsList();
   renderScreeningTabs();
   loadScreeningItem(state.currentScreeningIndex);
-  updateHomeUI();
-  updateReportUI();
-  updateRoutineUI();
+  renderReportLists();
+  renderRoutineLists();
 }
 
-// Navigation
 function navigateTo(screenId) {
   state.currentScreen = screenId;
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(`screen-${screenId}`).classList.add('active');
 
-  // Update nav bar active state
-  const screens = ['home', 'survey', 'screening', 'report', 'routine'];
-  const navItems = document.querySelectorAll('nav .nav-item');
-  navItems.forEach((btn, idx) => {
-    btn.classList.toggle('active', screens[idx] === screenId);
+  const navs = ['home', 'survey', 'screening', 'report', 'routine'];
+  document.querySelectorAll('nav .nav-btn').forEach((b, i) => {
+    b.classList.toggle('active', navs[i] === screenId);
   });
 
-  // Topbar titles
-  const titles = {
-    home: { title: "골프레인저", sub: "골프 기능 해부학 & 스윙 메커니즘 랩", back: false },
-    survey: { title: "골퍼 프로필 및 실전 문진", sub: "기능 해부학 분석 기초 자료 수집", back: true },
-    screening: { title: `신체검진 (${state.currentScreeningIndex + 1}/13)`, sub: "기능 해부학적 가동성 및 조절력 측정", back: true },
-    report: { title: "신체-스윙 종합 진단 리포트", sub: "생체역학적 기능 결손 및 맞춤 처방 솔루션", back: true },
-    routine: { title: "오늘의 실천 루틴", sub: "처방 모빌리티 및 실전 드릴 트레이닝", back: true }
-  };
-
-  const t = titles[screenId] || titles.home;
-  document.getElementById('topbar-title').innerText = t.title;
-  document.getElementById('topbar-subtitle').innerText = t.sub;
-  document.getElementById('back-btn').style.display = t.back ? 'flex' : 'none';
-
+  document.getElementById('back-btn').style.display = screenId === 'home' ? 'none' : 'block';
   window.scrollTo(0, 0);
   stopSpeech();
 }
 
 function goBack() {
-  const map = {
-    survey: 'home',
-    screening: 'survey',
-    report: 'home',
-    routine: 'report'
-  };
+  const map = { survey: 'home', screening: 'survey', report: 'home', routine: 'report' };
   navigateTo(map[state.currentScreen] || 'home');
 }
 
-// --- Home Screen Logic ---
-function updateHomeUI() {
-  const restrictedCount = Object.values(state.screeningGrades).filter(g => g === 'RESTRICTED').length;
-  const cautionCount = Object.values(state.screeningGrades).filter(g => g === 'LIMITED').length;
-
-  document.getElementById('home-handicap-val').innerText = state.profile.handicap;
-  document.getElementById('home-restricted-val').innerText = `${restrictedCount + cautionCount}개 항목`;
+function updateHandicap(v) {
+  state.profile.handicap = parseInt(v);
+  document.getElementById('survey-handicap-txt').innerText = `${v} (평균 ${72 + parseInt(v)}타)`;
+  document.getElementById('home-handicap-val').innerText = v;
 }
 
-function setPipelineStep(step) {
-  state.activePipelineStep = step;
-  const steps = document.querySelectorAll('.pipeline-step');
-  steps.forEach(el => el.classList.remove('active'));
-
-  const desc = document.getElementById('pipeline-desc');
-  if (step === 'body') {
-    steps[0].classList.add('active');
-    desc.innerText = "관절의 회전 가동성과 정적 밸런스가 결핍되면, 신체를 보호하기 위해 본능적으로 스윙 궤도를 변형시킵니다. 신체 축을 바로잡는 것이 가장 빠른 타수 교정의 출발점입니다.";
-  } else if (step === 'swing') {
-    steps[1].classList.add('active');
-    desc.innerText = "잠긴 관절 가동 범위를 보상하기 위해 임팩트 시 상체를 일으켜 세우거나(얼리 익스텐션), 상체로 덮어치는(오버 더 탑) 인위적인 보상 동작이 발생합니다.";
-  } else {
-    steps[2].classList.add('active');
-    desc.innerText = "스윙 폼의 보상 동작은 실전 필드의 긴 클럽(드라이버/롱아이언)이나 후반 홀 체력 감쇄 시 타점 오차(OB/뒷땅)로 이어져 홀당 1~2타의 불필요한 누수를 발생시킵니다.";
-  }
-}
-
-// --- Survey Screen Logic ---
-function updateHandicap(val) {
-  state.profile.handicap = parseInt(val);
-  const total = 72 + state.profile.handicap;
-  document.getElementById('survey-handicap-txt').innerText = `${val} (평균 ${total}타)`;
-  updateHomeUI();
-}
-
-function selectStrongest(el, area) {
+function selectStrongest(el, a) {
   document.querySelectorAll('#confidence-chips .chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
-  state.profile.strongestArea = area;
+  state.profile.strongestArea = a;
 }
 
-function selectWeakest(el, area) {
-  document.querySelectorAll('#anxiety-chips .chip').forEach(c => c.classList.remove('active-danger'));
-  el.classList.add('active-danger');
-  state.profile.weakestArea = area;
+function selectWeakest(el, a) {
+  document.querySelectorAll('#anxiety-chips .chip').forEach(c => c.classList.remove('active-red'));
+  el.classList.add('active-red');
+  state.profile.weakestArea = a;
 }
 
 function renderRoundIssuesList() {
-  const container = document.getElementById('round-issues-list');
-  container.innerHTML = allRoundIssues.map(issue => {
+  const c = document.getElementById('round-issues-list');
+  c.innerHTML = allRoundIssues.map(issue => {
     const isChecked = state.profile.roundIssues.includes(issue);
     return `
       <div class="check-row ${isChecked ? 'checked' : ''}" onclick="toggleRoundIssue('${issue}')">
-        <div class="check-box">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <span style="font-size: 13.5px; color: ${isChecked ? 'var(--primary)' : 'var(--text-primary)'}; font-weight: ${isChecked ? '600' : '400'};">${issue}</span>
+        <div class="check-box">${isChecked ? '✓' : ''}</div>
+        <span style="font-size: 13px; font-weight: ${isChecked ? '700' : '500'};">${issue}</span>
       </div>
     `;
   }).join('');
@@ -1378,67 +922,35 @@ function renderRoundIssuesList() {
 
 function toggleRoundIssue(issue) {
   const idx = state.profile.roundIssues.indexOf(issue);
-  if (idx > -1) {
-    state.profile.roundIssues.splice(idx, 1);
-  } else {
-    state.profile.roundIssues.push(issue);
-  }
+  if (idx > -1) state.profile.roundIssues.splice(idx, 1);
+  else state.profile.roundIssues.push(issue);
   renderRoundIssuesList();
 }
 
 function renderSwingHabitsList() {
-  const container = document.getElementById('swing-habits-list');
-  container.innerHTML = swingHabits.map(habit => {
-    const isSelected = state.profile.selectedSwingHabit === habit;
+  const c = document.getElementById('swing-habits-list');
+  c.innerHTML = swingHabits.map(h => {
+    const isSel = state.profile.selectedSwingHabit === h;
     return `
-      <div style="display: flex; align-items: center; padding: 6px 4px; cursor: pointer;" onclick="selectSwingHabit('${habit}')">
-        <div style="width: 16px; height: 16px; border: 1.5px solid ${isSelected ? 'var(--primary)' : 'var(--border)'}; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
-          ${isSelected ? '<div style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary);"></div>' : ''}
-        </div>
-        <span style="font-size: 13.5px; color: ${isSelected ? 'var(--primary)' : 'var(--text-secondary)'}; font-weight: ${isSelected ? '600' : '400'};">${habit}</span>
+      <div style="display: flex; align-items: center; gap: 8px; padding: 6px 0; cursor: pointer;" onclick="selectHabit('${h}')">
+        <input type="radio" name="habit" ${isSel ? 'checked' : ''} style="accent-color: var(--primary);">
+        <span style="font-size: 13px; font-weight: ${isSel ? '700' : '500'}; color: ${isSel ? 'var(--primary)' : 'var(--text)'};">${h}</span>
       </div>
     `;
   }).join('');
 }
 
-function selectSwingHabit(habit) {
-  state.profile.selectedSwingHabit = habit;
+function selectHabit(h) {
+  state.profile.selectedSwingHabit = h;
   renderSwingHabitsList();
 }
 
-function triggerVideoUpload() {
-  document.getElementById('video-file-input').click();
-}
-
-function handleVideoFile(input) {
-  if (input.files && input.files[0]) {
-    state.profile.videoName = input.files[0].name;
-    const txt = document.getElementById('video-status-text');
-    txt.style.display = 'block';
-    txt.innerText = `등록됨: ${state.profile.videoName}`;
-  }
-}
-
-function setDemoVideo() {
-  state.profile.videoName = "기준_7번_아이언_정면스윙.mp4";
-  const txt = document.getElementById('video-status-text');
-  txt.style.display = 'block';
-  txt.innerText = `등록됨: ${state.profile.videoName}`;
-}
-
-// --- Screening Screen Logic ---
 function renderScreeningTabs() {
-  const container = document.getElementById('screening-tabs-row');
-  container.innerHTML = screeningItems.map((item, idx) => {
-    const grade = state.screeningGrades[item.id] || 'PASS';
-    const isCurrent = idx === state.currentScreeningIndex;
-
-    let border = isCurrent ? 'var(--primary)' : 'var(--border)';
-    let bg = isCurrent ? 'var(--primary-container)' : '#FFFFFF';
-    let color = isCurrent ? 'var(--primary)' : 'var(--text-secondary)';
-
+  const c = document.getElementById('screening-tabs-row');
+  c.innerHTML = screeningItems.map((item, idx) => {
+    const isCur = idx === state.currentScreeningIndex;
     return `
-      <div onclick="selectScreeningIndex(${idx})" style="min-width: 34px; height: 34px; border: 1px solid ${border}; background: ${bg}; color: ${color}; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: ${isCurrent ? '600' : '400'}; cursor: pointer;">
+      <div onclick="selectScreeningIndex(${idx})" style="min-width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid ${isCur ? 'var(--primary)' : 'var(--border)'}; background: ${isCur ? 'var(--primary-bg)' : '#fff'}; color: ${isCur ? 'var(--primary)' : 'var(--text)'}; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; cursor: pointer;">
         ${idx + 1}
       </div>
     `;
@@ -1460,365 +972,295 @@ function loadScreeningItem(idx) {
   document.getElementById('screening-criteria').innerText = item.criteria;
   document.getElementById('screening-impact').innerText = item.impact;
 
-  // Progress Bar
-  const pct = ((idx + 1) / 13) * 100;
-  document.getElementById('screening-progress-bar').style.width = `${pct}%`;
+  document.getElementById('screening-progress-bar').style.width = `${((idx + 1) / 13) * 100}%`;
 
-  // Draw Kinetic Vector Schematic
-  drawSchematic(document.getElementById('schematic-svg'), item.tech);
-
-  // Set Grade Button State
   const grade = state.screeningGrades[item.id] || 'PASS';
-  updateGradeButtonsUI(grade);
-
+  updateGradeUI(grade);
   renderScreeningTabs();
+  drawSchematic(item.id);
 }
 
-function updateGradeButtonsUI(grade) {
-  const passBtn = document.getElementById('grade-pass-btn');
-  const cautionBtn = document.getElementById('grade-caution-btn');
-  const restBtn = document.getElementById('grade-restricted-btn');
-
-  passBtn.className = `grade-btn ${grade === 'PASS' ? 'active-pass' : ''}`;
-  cautionBtn.className = `grade-btn ${grade === 'LIMITED' ? 'active-caution' : ''}`;
-  restBtn.className = `grade-btn ${grade === 'RESTRICTED' ? 'active-restricted' : ''}`;
+function updateGradeUI(grade) {
+  document.getElementById('grade-pass-btn').className = `grade-btn ${grade === 'PASS' ? 'active-pass' : ''}`;
+  document.getElementById('grade-caution-btn').className = `grade-btn ${grade === 'LIMITED' ? 'active-caution' : ''}`;
+  document.getElementById('grade-restricted-btn').className = `grade-btn ${grade === 'RESTRICTED' ? 'active-restricted' : ''}`;
 }
 
-function setScreeningGrade(grade) {
-  const currentItem = screeningItems[state.currentScreeningIndex];
-  state.screeningGrades[currentItem.id] = grade;
-  updateGradeButtonsUI(grade);
+function setScreeningGrade(g) {
+  const item = screeningItems[state.currentScreeningIndex];
+  state.screeningGrades[item.id] = g;
+  updateGradeUI(g);
   renderScreeningTabs();
-  updateHomeUI();
+
+  const restCount = Object.values(state.screeningGrades).filter(v => v === 'RESTRICTED').length;
+  document.getElementById('home-restricted-val').innerText = `${restCount}개 항목`;
 }
 
 function prevScreening() {
-  if (state.currentScreeningIndex > 0) {
-    selectScreeningIndex(state.currentScreeningIndex - 1);
-  }
+  if (state.currentScreeningIndex > 0) selectScreeningIndex(state.currentScreeningIndex - 1);
 }
 
 function nextScreening() {
-  if (state.currentScreeningIndex < 12) {
-    selectScreeningIndex(state.currentScreeningIndex + 1);
-  } else {
-    navigateTo('report');
+  if (state.currentScreeningIndex < 12) selectScreeningIndex(state.currentScreeningIndex + 1);
+  else navigateTo('report');
+}
+
+function drawSchematic(id) {
+  const svg = document.getElementById('schematic-svg');
+  // Mat base
+  const baseMat = '<polygon points="15,88 155,88 165,96 5,96" fill="#CBD5E1" />';
+  
+  switch(id) {
+    case 1: // 골반 틸트 (Pelvic Tilt)
+      svg.innerHTML = baseMat + `
+        <circle cx="55" cy="32" r="9" fill="#FFD1A4" stroke="#1E7E34" stroke-width="2" />
+        <path d="M 58 40 L 80 62 L 72 65 L 52 42 Z" fill="#1E7E34" />
+        <rect x="74" y="60" width="18" height="12" rx="4" fill="#1E293B" />
+        <line x1="82" y1="72" x2="78" y2="82" stroke="#1E293B" stroke-width="7" stroke-linecap="round" />
+        <line x1="78" y1="82" x2="80" y2="90" stroke="#1E293B" stroke-width="7" stroke-linecap="round" />
+        <rect x="72" y="88" width="16" height="6" rx="2" fill="#F8FAFC" />
+        <path d="M 98 56 Q 112 66 98 76" fill="none" stroke="#D97706" stroke-width="4" stroke-linecap="round" />
+        <polygon points="98,54 104,50 103,58" fill="#D97706" />
+        <polygon points="98,78 103,74 104,82" fill="#D97706" />
+      `;
+      break;
+    case 2: // 골반 회전 (Pelvic Rotation)
+      svg.innerHTML = baseMat + `
+        <circle cx="85" cy="28" r="10" fill="#FFD1A4" stroke="#1E7E34" stroke-width="2" />
+        <path d="M 70 38 L 100 38 L 95 56 L 75 56 Z" fill="#1E7E34" />
+        <line x1="72" y1="46" x2="98" y2="46" stroke="#34D399" stroke-width="4" stroke-linecap="round" />
+        <ellipse cx="85" cy="62" rx="20" ry="8" fill="#1E293B" />
+        <line x1="75" y1="64" x2="70" y2="88" stroke="#1E293B" stroke-width="7" stroke-linecap="round" />
+        <line x1="95" y1="64" x2="100" y2="88" stroke="#1E293B" stroke-width="7" stroke-linecap="round" />
+        <rect x="64" y="86" width="14" height="6" rx="2" fill="#F8FAFC" />
+        <rect x="96" y="86" width="14" height="6" rx="2" fill="#F8FAFC" />
+        <path d="M 60 62 Q 85 76 110 62" fill="none" stroke="#D97706" stroke-width="4" stroke-linecap="round" />
+        <polygon points="110,62 104,56 108,66" fill="#D97706" />
+      `;
+      break;
+    case 3: // 흉추 상체 회전 (Torso Rotation)
+      svg.innerHTML = baseMat + `
+        <circle cx="88" cy="26" r="9" fill="#FFD1A4" stroke="#1E7E34" stroke-width="2" />
+        <path d="M 65 36 L 105 32 L 95 56 L 75 56 Z" fill="#1E7E34" />
+        <line x1="55" y1="40" x2="115" y2="28" stroke="#94A3B8" stroke-width="3.5" stroke-linecap="round" />
+        <rect x="68" y="60" width="34" height="8" rx="3" fill="#64748B" />
+        <line x1="78" y1="68" x2="78" y2="88" stroke="#1E293B" stroke-width="7" stroke-linecap="round" />
+        <line x1="92" y1="68" x2="92" y2="88" stroke="#1E293B" stroke-width="7" stroke-linecap="round" />
+        <path d="M 58 22 Q 85 10 112 22" fill="none" stroke="#D97706" stroke-width="3.5" stroke-linecap="round" />
+        <polygon points="112,22 108,16 106,25" fill="#D97706" />
+      `;
+      break;
+    case 4: // 오버헤드 딥 스쿼트 (Overhead Squat)
+      svg.innerHTML = baseMat + `
+        <line x1="45" y1="16" x2="125" y2="16" stroke="#94A3B8" stroke-width="4" stroke-linecap="round" />
+        <line x1="55" y1="16" x2="75" y2="30" stroke="#FFD1A4" stroke-width="5" stroke-linecap="round" />
+        <line x1="115" y1="16" x2="95" y2="30" stroke="#FFD1A4" stroke-width="5" stroke-linecap="round" />
+        <circle cx="85" cy="28" r="8" fill="#FFD1A4" />
+        <rect x="76" y="34" width="18" height="20" rx="4" fill="#1E7E34" />
+        <path d="M 76 50 L 58 62 L 60 84" fill="none" stroke="#1E293B" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M 94 50 L 112 62 L 110 84" fill="none" stroke="#1E293B" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+        <rect x="52" y="83" width="16" height="6" rx="2" fill="#F8FAFC" />
+        <rect x="104" y="83" width="16" height="6" rx="2" fill="#F8FAFC" />
+      `;
+      break;
+    case 12: // 발목 족배굴곡 (Ankle Mobility)
+      svg.innerHTML = baseMat + `
+        <rect x="125" y="18" width="12" height="72" rx="2" fill="#94A3B8" />
+        <line x1="60" y1="45" x2="105" y2="68" stroke="#1E293B" stroke-width="8" stroke-linecap="round" />
+        <line x1="105" y1="68" x2="75" y2="88" stroke="#1E293B" stroke-width="8" stroke-linecap="round" />
+        <rect x="70" y="86" width="34" height="8" rx="3" fill="#F8FAFC" />
+        <circle cx="74" cy="88" r="4" fill="#1E7E34" />
+        <line x1="95" y1="65" x2="118" y2="65" stroke="#D97706" stroke-width="4" stroke-linecap="round" />
+        <polygon points="120,65 114,60 114,70" fill="#D97706" />
+      `;
+      break;
+    default: // 일반 가동성 & 밸런스 자세
+      svg.innerHTML = baseMat + `
+        <circle cx="85" cy="24" r="9" fill="#FFD1A4" stroke="#1E7E34" stroke-width="2" />
+        <rect x="74" y="34" width="22" height="26" rx="5" fill="#1E7E34" />
+        <line x1="74" y1="38" x2="55" y2="52" stroke="#FFD1A4" stroke-width="5" stroke-linecap="round" />
+        <line x1="96" y1="38" x2="115" y2="52" stroke="#FFD1A4" stroke-width="5" stroke-linecap="round" />
+        <line x1="80" y1="60" x2="76" y2="88" stroke="#1E293B" stroke-width="7" stroke-linecap="round" />
+        <line x1="90" y1="60" x2="94" y2="88" stroke="#1E293B" stroke-width="7" stroke-linecap="round" />
+        <rect x="68" y="86" width="14" height="6" rx="2" fill="#F8FAFC" />
+        <rect x="92" y="86" width="14" height="6" rx="2" fill="#F8FAFC" />
+        <circle cx="85" cy="60" r="14" fill="none" stroke="#D97706" stroke-width="2.5" stroke-dasharray="3,3" />
+      `;
+      break;
   }
 }
 
-// Kinetic Vector Schematic Renderer (Clean Technical Gauges)
-function drawSchematic(svg, tech) {
-  let content = `
-    <!-- Baseline Reference Axis -->
-    <line x1="20" y1="95" x2="160" y2="95" stroke="#E5E7EB" stroke-width="1.5" />
-  `;
-
-  if (tech === "PELVIC_TILT") {
-    content += `
-      <line x1="90" y1="20" x2="90" y2="95" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="3 3"/>
-      <line x1="55" y1="70" x2="125" y2="50" stroke="#1B4332" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="90" cy="60" r="4.5" fill="#1B4332"/>
-      <path d="M 75 55 A 25 25 0 0 1 105 55" fill="none" stroke="#1B4332" stroke-width="1.5"/>
-    `;
-  } else if (tech === "PELVIC_ROTATION") {
-    content += `
-      <line x1="35" y1="55" x2="145" y2="55" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="3 3"/>
-      <line x1="50" y1="72" x2="130" y2="38" stroke="#1B4332" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="90" cy="55" r="4.5" fill="#1B4332"/>
-      <path d="M 75 42 A 20 20 0 0 1 105 42" fill="none" stroke="#1B4332" stroke-width="1.5"/>
-    `;
-  } else if (tech === "TORSO_ROTATION") {
-    content += `
-      <line x1="55" y1="85" x2="125" y2="85" stroke="#9CA3AF" stroke-width="2.5"/>
-      <line x1="45" y1="45" x2="135" y2="25" stroke="#1B4332" stroke-width="3" stroke-linecap="round"/>
-      <line x1="90" y1="35" x2="90" y2="85" stroke="#9CA3AF" stroke-width="1.5"/>
-      <circle cx="90" cy="35" r="4.5" fill="#1B4332"/>
-    `;
-  } else {
-    // Default Clean Biomechanical Hinge Axis
-    content += `
-      <circle cx="90" cy="30" r="12" fill="none" stroke="#1B4332" stroke-width="2.5"/>
-      <line x1="90" y1="42" x2="90" y2="75" stroke="#1B4332" stroke-width="3"/>
-      <line x1="90" y1="75" x2="65" y2="95" stroke="#1B4332" stroke-width="3" stroke-linecap="round"/>
-      <line x1="90" y1="75" x2="115" y2="95" stroke="#1B4332" stroke-width="3" stroke-linecap="round"/>
-    `;
-  }
-
-  svg.innerHTML = content;
-}
-
-// --- Speech Synthesis (Web Speech API) ---
-let synth = window.speechSynthesis;
+// Speech
 let isSpeaking = false;
-
 function toggleTtsAudio() {
   if (isSpeaking) {
     stopSpeech();
+    document.getElementById('tts-audio-btn').innerText = "🔊 조교의 친절한 음성 안내 듣기";
   } else {
     const item = screeningItems[state.currentScreeningIndex];
     speakText(item.voice, () => {
-      document.getElementById('tts-audio-btn').innerHTML = `
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-        측정 방법 전문 음성 안내
-      `;
+      document.getElementById('tts-audio-btn').innerText = "🔊 조교의 친절한 음성 안내 듣기";
     });
-    document.getElementById('tts-audio-btn').innerHTML = `
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="5" y="5" rx="2"/></svg>
-      음성 안내 일시중지
-    `;
+    document.getElementById('tts-audio-btn').innerText = "⏹️ 음성 안내 멈추기";
   }
 }
 
-function speakText(text, onEnd) {
+function speakText(txt, onEnd) {
   if (!('speechSynthesis' in window)) return;
   stopSpeech();
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = 'ko-KR';
-  utter.rate = 1.0;
-  utter.onend = () => {
-    isSpeaking = false;
-    if (onEnd) onEnd();
-  };
-  synth.speak(utter);
+  const u = new SpeechSynthesisUtterance(txt);
+  u.lang = 'ko-KR';
+  u.rate = 1.0;
+  u.onend = () => { isSpeaking = false; if (onEnd) onEnd(); };
+  window.speechSynthesis.speak(u);
   isSpeaking = true;
 }
 
 function stopSpeech() {
-  if ('speechSynthesis' in window) {
-    synth.cancel();
-  }
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   isSpeaking = false;
 }
 
-// --- Report & Routine Logic ---
-function updateReportUI() {
-  const p = prescriptionsDatabase.ee;
-  document.getElementById('report-code-badge').innerText = p.code;
-  document.getElementById('report-type-name').innerText = p.name;
-  document.getElementById('report-type-sub').innerText = p.category;
-  document.getElementById('report-summary-text').innerText = p.summary;
-  document.getElementById('report-cause-text').innerText = p.cause;
-  document.getElementById('report-strategy-text').innerText = p.strategy;
-
-  document.getElementById('chain-body-text').innerText = p.chain.body;
-  document.getElementById('chain-swing-text').innerText = `보상 기전: ${p.chain.swing}`;
-  document.getElementById('chain-game-text').innerText = `실전 누수: ${p.chain.game}`;
-  document.getElementById('chain-explanation-box').innerText = p.chain.desc;
-
-  // Exercises List
-  const exContainer = document.getElementById('report-exercises-list');
-  exContainer.innerHTML = p.exercises.map((ex, idx) => {
+// Report
+function renderReportLists() {
+  // Exercises
+  document.getElementById('report-exercises-list').innerHTML = prescriptions.exercises.map((ex, i) => {
     const isDone = state.completedTasks.has(ex.title);
     return `
-      <div class="card" style="padding: 14px; margin-bottom: 8px; border-color: ${isDone ? 'var(--primary)' : 'var(--border)'};">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <div class="card" style="margin-bottom: 8px; border-color: ${isDone ? 'var(--primary)' : 'var(--border)'}; background: ${isDone ? '#F0FDF4' : '#fff'};">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
           <div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <span style="font-size: 14.5px; font-weight: 600; color: var(--text-primary);">${idx + 1}. ${ex.title}</span>
-              ${isDone ? '<span class="badge badge-pass">완료</span>' : ''}
-            </div>
-            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 2px;">타겟: ${ex.target}</div>
+            <div style="font-size: 14px; font-weight: 800; color: var(--text);">${i + 1}. ${ex.title}</div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 1px;">타겟: ${ex.target}</div>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="openExerciseModal(${idx})">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-            실행
+          <button class="btn btn-primary btn-sm" onclick="openExerciseModal(${i})">
+            <span>🔊 운동 실행</span>
           </button>
         </div>
-        <div style="background: var(--surface-secondary); border-radius: 4px; padding: 6px 10px; margin-top: 8px; font-size: 12px; color: var(--text-secondary); font-weight: 500;">
-          ${ex.detail}
+        <div style="background: var(--primary-bg); border-radius: 6px; padding: 6px 10px; margin-top: 8px; font-size: 12px; font-weight: 700; color: var(--primary);">
+          📌 ${ex.detail}
         </div>
-        <div style="font-size: 12px; color: var(--primary); margin-top: 6px; line-height: 1.4;">
-          체크포인트: ${ex.checkpoint}
+        <div style="font-size: 11.5px; color: var(--primary); margin-top: 4px;">
+          💡 ${ex.checkpoint}
         </div>
       </div>
     `;
   }).join('');
 
-  // Drills List
-  const drillContainer = document.getElementById('report-drills-list');
-  drillContainer.innerHTML = p.drills.map((drill, idx) => {
-    const isDone = state.completedTasks.has(drill.title);
+  // Drills
+  document.getElementById('report-drills-list').innerHTML = prescriptions.drills.map((d, i) => {
+    const isDone = state.completedTasks.has(d.title);
     return `
-      <div class="card" style="padding: 14px; margin-bottom: 8px; border-color: ${isDone ? 'var(--primary)' : 'var(--border)'};">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <div class="card" style="margin-bottom: 8px; border-color: ${isDone ? 'var(--primary)' : 'var(--border)'}; background: ${isDone ? '#F0FDF4' : '#fff'};">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
           <div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <span style="font-size: 14.5px; font-weight: 600; color: var(--text-primary);">${idx + 1}. ${drill.title}</span>
-              ${isDone ? '<span class="badge badge-pass">완료</span>' : ''}
-            </div>
-            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 2px;">권장 클럽: ${drill.club}</div>
+            <div style="font-size: 14px; font-weight: 800; color: var(--text);">${i + 1}. ${d.title}</div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 1px;">추천 클럽: ${d.club}</div>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="openDrillModal(${idx})">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-            실행
+          <button class="btn btn-gold btn-sm" onclick="openDrillModal(${i})">
+            <span>🔊 드릴 실행</span>
           </button>
         </div>
-        <div style="background: var(--surface-secondary); border-radius: 4px; padding: 6px 10px; margin-top: 8px; font-size: 12px; color: var(--text-secondary); font-weight: 500;">
-          ${drill.detail}
+        <div style="background: var(--gold-bg); border-radius: 6px; padding: 6px 10px; margin-top: 8px; font-size: 12px; font-weight: 700; color: var(--gold);">
+          🎯 ${d.detail}
         </div>
-        <div style="font-size: 12px; color: var(--primary); margin-top: 6px; line-height: 1.4;">
-          ${drill.feelVsReal}
+        <div style="font-size: 11.5px; color: var(--primary); margin-top: 4px;">
+          ${d.feelVsReal}
         </div>
       </div>
     `;
   }).join('');
 }
 
-function updateRoutineUI() {
-  const p = prescriptionsDatabase.ee;
-  const allTasks = [...p.exercises.map(e => e.title), ...p.drills.map(d => d.title)];
-  const total = allTasks.length;
+// Routine
+function renderRoutineLists() {
+  const allTasks = [...prescriptions.exercises.map(e => e.title), ...prescriptions.drills.map(d => d.title)];
   const done = state.completedTasks.size;
+  const total = allTasks.length;
   const pct = total > 0 ? (done / total) * 100 : 0;
 
   document.getElementById('routine-status-badge').innerText = `${done} / ${total} 완료`;
-  document.getElementById('routine-status-badge').className = `badge ${done === total && total > 0 ? 'badge-pass' : 'badge-neutral'}`;
   document.getElementById('routine-progress-bar').style.width = `${pct}%`;
 
-  // Exercises
-  document.getElementById('routine-exercises-list').innerHTML = p.exercises.map(ex => {
+  document.getElementById('routine-exercises-list').innerHTML = prescriptions.exercises.map(ex => {
     const isDone = state.completedTasks.has(ex.title);
     return `
-      <div class="card" style="padding: 12px 14px; margin-bottom: 6px; display: flex; align-items: center; border-color: ${isDone ? 'var(--primary)' : 'var(--border)'};">
-        <div onclick="toggleTask('${ex.title}')" style="width: 20px; height: 20px; border-radius: 4px; border: 1px solid ${isDone ? 'var(--primary)' : 'var(--border)'}; background: ${isDone ? 'var(--primary)' : '#FFFFFF'}; display: flex; align-items: center; justify-content: center; margin-right: 12px; cursor: pointer;">
-          ${isDone ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
-        </div>
-        <div style="flex: 1;" onclick="toggleTask('${ex.title}')">
-          <div style="font-size: 13.5px; font-weight: 600; color: ${isDone ? 'var(--primary)' : 'var(--text-primary)'};">${ex.title}</div>
-          <div style="font-size: 11.5px; color: var(--text-tertiary);">${ex.detail}</div>
+      <div class="card" style="padding: 12px; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; background: ${isDone ? '#F0FDF4' : '#fff'};">
+        <div style="display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="toggleTask('${ex.title}')">
+          <div style="width: 22px; height: 22px; border-radius: 50%; background: ${isDone ? 'var(--primary)' : '#E5E7EB'}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px;">
+            ${isDone ? '✓' : ''}
+          </div>
+          <div>
+            <div style="font-size: 13.5px; font-weight: 700; color: ${isDone ? 'var(--primary)' : 'var(--text)'};">${ex.title}</div>
+            <div style="font-size: 11px; color: var(--text-muted);">📌 ${ex.detail}</div>
+          </div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="openExerciseModalByTitle('${ex.title}')">실행</button>
       </div>
     `;
   }).join('');
 
-  // Drills
-  document.getElementById('routine-drills-list').innerHTML = p.drills.map(drill => {
-    const isDone = state.completedTasks.has(drill.title);
+  document.getElementById('routine-drills-list').innerHTML = prescriptions.drills.map(d => {
+    const isDone = state.completedTasks.has(d.title);
     return `
-      <div class="card" style="padding: 12px 14px; margin-bottom: 6px; display: flex; align-items: center; border-color: ${isDone ? 'var(--primary)' : 'var(--border)'};">
-        <div onclick="toggleTask('${drill.title}')" style="width: 20px; height: 20px; border-radius: 4px; border: 1px solid ${isDone ? 'var(--primary)' : 'var(--border)'}; background: ${isDone ? 'var(--primary)' : '#FFFFFF'}; display: flex; align-items: center; justify-content: center; margin-right: 12px; cursor: pointer;">
-          ${isDone ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+      <div class="card" style="padding: 12px; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; background: ${isDone ? '#F0FDF4' : '#fff'};">
+        <div style="display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="toggleTask('${d.title}')">
+          <div style="width: 22px; height: 22px; border-radius: 50%; background: ${isDone ? 'var(--primary)' : '#E5E7EB'}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px;">
+            ${isDone ? '✓' : ''}
+          </div>
+          <div>
+            <div style="font-size: 13.5px; font-weight: 700; color: ${isDone ? 'var(--primary)' : 'var(--text)'};">${d.title}</div>
+            <div style="font-size: 11px; color: var(--text-muted);">🎯 ${d.detail}</div>
+          </div>
         </div>
-        <div style="flex: 1;" onclick="toggleTask('${drill.title}')">
-          <div style="font-size: 13.5px; font-weight: 600; color: ${isDone ? 'var(--primary)' : 'var(--text-primary)'};">${drill.title}</div>
-          <div style="font-size: 11.5px; color: var(--text-tertiary);">${drill.club} · ${drill.detail}</div>
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="openDrillModalByTitle('${drill.title}')">실행</button>
+        <button class="btn btn-gold btn-sm" onclick="openDrillModalByTitle('${d.title}')">실행</button>
       </div>
     `;
   }).join('');
 }
 
-function toggleTask(title) {
-  if (state.completedTasks.has(title)) {
-    state.completedTasks.delete(title);
-  } else {
-    state.completedTasks.add(title);
-  }
-  updateRoutineUI();
-  updateReportUI();
+function toggleTask(t) {
+  if (state.completedTasks.has(t)) state.completedTasks.delete(t);
+  else state.completedTasks.add(t);
+  renderRoutineLists();
+  renderReportLists();
 }
 
-function resetRetest() {
-  navigateTo('screening');
-  selectScreeningIndex(0);
-}
-
-// --- Execution Modal Logic ---
+// Modal Coach
 let activeModalData = null;
 let currentModalSet = 1;
 const maxModalSets = 3;
 
-function openExerciseModal(idx) {
-  const ex = prescriptionsDatabase.ee.exercises[idx];
-  setupModal({
-    title: ex.title,
-    target: `타겟: ${ex.target}`,
-    setsReps: ex.detail,
-    instructions: ex.instructions,
-    script: ex.script,
-    tech: ex.tech
-  });
-}
-
-function openExerciseModalByTitle(title) {
-  const ex = prescriptionsDatabase.ee.exercises.find(e => e.title === title);
-  if (ex) {
-    setupModal({
-      title: ex.title,
-      target: `타겟: ${ex.target}`,
-      setsReps: ex.detail,
-      instructions: ex.instructions,
-      script: ex.script,
-      tech: ex.tech
-    });
-  }
-}
-
-function openDrillModal(idx) {
-  const drill = prescriptionsDatabase.ee.drills[idx];
-  setupModal({
-    title: drill.title,
-    target: `권장 클럽: ${drill.club}`,
-    setsReps: drill.detail,
-    instructions: drill.instructions,
-    script: drill.script,
-    tech: drill.tech
-  });
-}
-
-function openDrillModalByTitle(title) {
-  const drill = prescriptionsDatabase.ee.drills.find(d => d.title === title);
-  if (drill) {
-    setupModal({
-      title: drill.title,
-      target: `권장 클럽: ${drill.club}`,
-      setsReps: drill.detail,
-      instructions: drill.instructions,
-      script: drill.script,
-      tech: drill.tech
-    });
-  }
-}
+function openExerciseModal(i) { setupModal(prescriptions.exercises[i]); }
+function openExerciseModalByTitle(title) { setupModal(prescriptions.exercises.find(e => e.title === title)); }
+function openDrillModal(i) { setupModal(prescriptions.drills[i]); }
+function openDrillModalByTitle(title) { setupModal(prescriptions.drills.find(d => d.title === title)); }
 
 function setupModal(data) {
+  if (!data) return;
   activeModalData = data;
   currentModalSet = 1;
   document.getElementById('modal-title').innerText = data.title;
-  document.getElementById('modal-target').innerText = data.target;
-  document.getElementById('modal-sets-reps').innerText = data.setsReps;
-
-  document.getElementById('modal-instructions').innerHTML = data.instructions.map((inst, i) => `
-    <div style="display: flex; gap: 6px; margin-bottom: 4px;">
-      <span style="color: var(--primary); font-weight: 600;">${i + 1}.</span>
-      <span>${inst}</span>
-    </div>
-  `).join('');
-
-  drawSchematic(document.getElementById('modal-schematic-svg'), data.tech);
-
-  updateModalSetUI();
+  document.getElementById('modal-target').innerText = data.target || `추천 클럽: ${data.club}`;
+  document.getElementById('modal-sets-reps').innerText = data.detail;
+  document.getElementById('modal-instructions').innerHTML = data.instructions.map((ins, i) => `<div>${i + 1}. ${ins}</div>`).join('');
+  document.getElementById('modal-set-progress').innerText = `진행: 1 / 3 세트`;
+  document.getElementById('modal-complete-set-btn').innerText = "1세트 완료";
   document.getElementById('coach-modal').classList.add('active');
 
-  // Auto speak guidance
   speakText(data.script);
-}
-
-function updateModalSetUI() {
-  document.getElementById('modal-set-progress').innerText = `진행: ${currentModalSet} / ${maxModalSets} 세트`;
-  document.getElementById('modal-complete-set-btn').innerText = currentModalSet < maxModalSets ? `${currentModalSet}세트 완료` : "전체 세트 완료";
 }
 
 function advanceModalSet() {
   if (currentModalSet < maxModalSets) {
     currentModalSet++;
-    updateModalSetUI();
+    document.getElementById('modal-set-progress').innerText = `진행: ${currentModalSet} / ${maxModalSets} 세트`;
+    document.getElementById('modal-complete-set-btn').innerText = currentModalSet < maxModalSets ? `${currentModalSet}세트 완료` : "전체 세트 완료!";
   } else {
     if (activeModalData) {
       state.completedTasks.add(activeModalData.title);
-      updateRoutineUI();
-      updateReportUI();
+      renderRoutineLists();
+      renderReportLists();
     }
     closeModal();
   }
@@ -1831,14 +1273,10 @@ function closeModal() {
 }
 
 function toggleModalTts() {
-  if (isSpeaking) {
-    stopSpeech();
-  } else if (activeModalData) {
-    speakText(activeModalData.script);
-  }
+  if (isSpeaking) stopSpeech();
+  else if (activeModalData) speakText(activeModalData.script);
 }
 
-// Start
 window.addEventListener('DOMContentLoaded', init);
 </script>
 
