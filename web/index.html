@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>골프레인저 - 골프 바디 MBTI & 스윙 조교</title>
+  <meta name="description" content="아마추어 골퍼를 위한 골프 바디 MBTI 진단 및 스윙 보상 동작 해결 솔루션">
+  <!-- Pretendard Font -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    :root {
+      --primary: #147A40;
+      --primary-light: #22C55E;
+      --primary-bg: #E8F7ED;
+      --gold: #F59E0B;
+      --gold-bg: #FEF3C7;
+      --red: #EF4444;
+      --red-bg: #FEE2E2;
+      --bg: #F8FAF9;
+      --surface: #FFFFFF;
+      --text: #111827;
+      --text-muted: #4B5563;
+      --border: #E5E7EB;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    #app-container {
+      width: 100%;
+      max-width: 480px;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 0 24px rgba(0,0,0,0.06);
+    }
+
+    /* Top Bar */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--primary-bg);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .brand-text h1 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .brand-text p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Tab Content */
+    main {
+      flex: 1;
+      padding: 16px;
+      padding-bottom: 90px;
+      overflow-y: auto;
+    }
+
+    .screen {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .card.highlight {
+      border: 1.5px solid var(--primary);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: var(--primary-bg);
+      color: var(--primary);
+    }
+
+    .badge.amber {
+      background: var(--gold-bg);
+      color: #92400E;
+    }
+
+    .badge.red {
+      background: var(--red-bg);
+      color: #991B1B;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+      gap: 6px;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      background: #F3F4F6;
+      color: var(--text);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    /* Bottom Navigation */
+    nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      max-width: 480px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 4px;
+      z-index: 100;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      flex: 1;
+      padding: 4px;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .nav-icon {
+      font-size: 19px;
+    }
+
+    /* Chips */
+    .chips-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .chip {
+      padding: 7px 12px;
+      background: #F3F4F6;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+      border: 1px solid transparent;
+    }
+
+    .chip.selected {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* Canvas */
+    .pose-canvas-box {
+      width: 100%;
+      height: 140px;
+      background: #F9FAFB;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px 0;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    /* Radio rating */
+    .rating-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .rating-btn {
+      padding: 12px 6px;
+      text-align: center;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .rating-btn.selected-pass {
+      background: #DCFCE7;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .rating-btn.selected-limited {
+      background: #FEF3C7;
+      border-color: var(--gold);
+      color: #92400E;
+    }
+
+    .rating-btn.selected-restricted {
+      background: #FEE2E2;
+      border-color: var(--red);
+      color: #991B1B;
+    }
+
+    /* Slider */
+    .slider-box {
+      margin-top: 10px;
+    }
+
+    input[type=range] {
+      width: 100%;
+      accent-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <div id="app-container">
+    <header>
+      <div class="brand">
+        <div class="brand-icon">⛳</div>
+        <div class="brand-text">
+          <h1>골프레인저</h1>
+          <p>골프 바디 MBTI & 스윙 조교</p>
+        </div>
+      </div>
+      <span class="badge amber">2주 D-14</span>
+    </header>
+
+    <main>
+      <!-- 1. 홈 화면 -->
+      <section id="screen-home" class="screen active">
+        <div class="card highlight">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="badge">나의 골프 바디 MBTI</span>
+            <span style="font-size:12px; font-weight:700; color:var(--primary);">예상 -3~5타 절감</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:14px; margin-top:12px;">
+            <span style="font-size:42px;" id="home-mbti-emoji">🐯</span>
+            <div>
+              <h2 style="font-size:19px; font-weight:800;" id="home-mbti-title">BSE-T 배치기 타이거형</h2>
+              <p style="font-size:12.5px; color:var(--primary); font-weight:600;" id="home-mbti-tagline">“마음은 싱글! 임팩트는 벌떡 일어나는 파워 골퍼”</p>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; margin-top:12px;">
+            <span class="badge" style="background:#F3F4F6; color:var(--text);" id="home-handicap-badge">평균 18핸디</span>
+            <span class="badge red" id="home-blocker-badge">몸 브레이크 2개</span>
+            <span class="badge">라베 달성 로드맵</span>
+          </div>
+        </div>
+
+        <button class="btn" onclick="navigateTo('survey')">
+          🚀 내 골프 MBTI & 신체검진 시작하기 →
+        </button>
+
+        <div style="margin-top:16px;"></div>
+
+        <!-- 사이클 카드 -->
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h3 style="font-size:14px; font-weight:700;">🎯 Body → Swing → Game 사이클</h3>
+            <span class="badge">인과관계</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; text-align:center; padding:6px 0;">
+            <div>
+              <div style="font-size:24px;">🧘</div>
+              <div style="font-size:12px; font-weight:700;">신체</div>
+              <div style="font-size:10px; color:var(--primary); font-weight:700;">가동성 잠김</div>
+            </div>
+            <div style="align-self:center; color:#ccc;">→</div>
+            <div>
+              <div style="font-size:24px;">🏌️</div>
+              <div style="font-size:12px; font-weight:700;">스윙</div>
+              <div style="font-size:10px; color:var(--gold); font-weight:700;">보상 동작</div>
+            </div>
+            <div style="align-self:center; color:#ccc;">→</div>
+            <div>
+              <div style="font-size:24px;">⛳</div>
+              <div style="font-size:12px; font-weight:700;">게임</div>
+              <div style="font-size:10px; color:var(--red); font-weight:700;">타수 낭비</div>
+            </div>
+          </div>
+          <p style="font-size:11.5px; color:var(--text-muted); background:#F9FAFB; padding:8px; border-radius:8px; margin-top:8px;">
+            💡 억지로 스윙 폼만 고치면 부상이 옵니다. 신체 브레이크를 풀어야 실전 타수가 저절로 줄어듭니다!
+          </p>
+        </div>
+
+        <div class="card" onclick="navigateTo('report')" style="cursor:pointer; display:flex; align-items:center; gap:12px;">
+          <div style="font-size:28px;">📊</div>
+          <div style="flex:1;">
+            <div style="font-size:14px; font-weight:700;">AI 종합 분석 & 처방 리포트</div>
+            <div style="font-size:11.5px; color:var(--text-muted);">원인 3분할 기여도 및 1줄 치트키</div>
+          </div>
+          <div style="color:#aaa;">→</div>
+        </div>
+
+        <div class="card" onclick="navigateTo('screening')" style="cursor:pointer; display:flex; align-items:center; gap:12px;">
+          <div style="font-size:28px;">🤸</div>
+          <div style="flex:1;">
+            <div style="font-size:14px; font-weight:700;">골프 신체검진 13항목 바로가기</div>
+            <div style="font-size:11.5px; color:var(--text-muted);">그림과 음성으로 10초 셀프 체크</div>
+          </div>
+          <div style="color:#aaa;">→</div>
+        </div>
+      </section>
+
+      <!-- 2. 설문 화면 -->
+      <section id="screen-survey" class="screen">
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="font-size:14px; font-weight:700;">🏌️ 평균 핸디캡</h3>
+            <span class="badge" id="survey-handicap-val">18핸디 (평균 90타)</span>
+          </div>
+          <div class="slider-box">
+            <input type="range" id="handicap-range" min="0" max="36" value="18" oninput="updateHandicap(this.value)">
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted); margin-top:4px;">
+              <span>싱글 (0~9)</span>
+              <span>보기플레이 (18)</span>
+              <span>백돌이 (28+)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size:14px; font-weight:700;">👍 가장 자신 있는 샷</h3>
+          <div class="chips-group" id="strength-chips">
+            <div class="chip selected" onclick="selectSingleChip(this, 'strength')">드라이버 티샷</div>
+            <div class="chip" onclick="selectSingleChip(this, 'strength')">아이언 온그린</div>
+            <div class="chip" onclick="selectSingleChip(this, 'strength')">숏게임 어프로치</div>
+            <div class="chip" onclick="selectSingleChip(this, 'strength')">원펏 거리감</div>
+          </div>
+
+          <h3 style="font-size:14px; font-weight:700; margin-top:14px;">⚠️ 가장 불안한 샷</h3>
+          <div class="chips-group" id="weakness-chips">
+            <div class="chip selected" onclick="selectSingleChip(this, 'weakness')">아이언 뒷땅/탑핑</div>
+            <div class="chip" onclick="selectSingleChip(this, 'weakness')">티샷 슬라이스 OB</div>
+            <div class="chip" onclick="selectSingleChip(this, 'weakness')">30m 쌩크</div>
+            <div class="chip" onclick="selectSingleChip(this, 'weakness')">후반 체력 고갈</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size:14px; font-weight:700;">💣 최근 라운드 미스 (복수 선택)</h3>
+          <div class="chips-group" id="issues-chips">
+            <div class="chip selected" onclick="toggleMultiChip(this)">드라이버 슬라이스</div>
+            <div class="chip selected" onclick="toggleMultiChip(this)">아이언 뒷땅/탑핑</div>
+            <div class="chip" onclick="toggleMultiChip(this)">비거리 부족</div>
+            <div class="chip" onclick="toggleMultiChip(this)">후반에 무너짐</div>
+            <div class="chip" onclick="toggleMultiChip(this)">3퍼트 빈번</div>
+            <div class="chip" onclick="toggleMultiChip(this)">필드-연습장 갭</div>
+            <div class="chip" onclick="toggleMultiChip(this)">라운드 후 통증</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size:14px; font-weight:700;">🎬 체감되는 스윙 보상 습관</h3>
+          <div class="chips-group" id="habit-chips">
+            <div class="chip selected" onclick="selectSingleChip(this, 'habit')">임팩트 시 배치기 (얼리익스텐션)</div>
+            <div class="chip" onclick="selectSingleChip(this, 'habit')">백스윙 엎어치기 (오버더탑)</div>
+            <div class="chip" onclick="selectSingleChip(this, 'habit')">임팩트 후 치킨윙</div>
+            <div class="chip" onclick="selectSingleChip(this, 'habit')">손목 일찍 풀림 (캐스팅)</div>
+          </div>
+        </div>
+
+        <button class="btn" onclick="navigateTo('screening')">
+          다음: 13가지 신체검진 시작 →
+        </button>
+      </section>
+
+      <!-- 3. 신체검진 화면 -->
+      <section id="screen-screening" class="screen">
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="badge" id="screen-num-badge">1 / 13 항목</span>
+            <span class="badge amber" id="screen-cat-badge">골반 & 척추 제어</span>
+          </div>
+
+          <h2 style="font-size:17px; font-weight:800; margin-top:10px;" id="screen-title">골반 전후방 기울임 조절력</h2>
+          <p style="font-size:11.5px; color:var(--text-muted);" id="screen-subtitle">Pelvic Tilt Mobility</p>
+
+          <div class="pose-canvas-box">
+            <canvas id="screening-canvas" width="260" height="130"></canvas>
+          </div>
+
+          <button class="btn btn-secondary" style="margin-bottom:10px; font-size:13px;" onclick="speakGuide()">
+            🔊 조교 음성 가이드 듣기
+          </button>
+
+          <div style="font-size:12px; background:#F9FAFB; padding:10px; border-radius:8px; line-height:1.5;">
+            <div><strong>📋 통과 기준:</strong> <span id="screen-pass-criteria">상체 고정 후 골반만 앞뒤 틸트 가능</span></div>
+            <div style="color:var(--red); margin-top:3px;"><strong>⚠️ 미통과 시:</strong> <span id="screen-impact">배치기 및 허리 통증 1순위 원인</span></div>
+          </div>
+
+          <div style="margin-top:14px;">
+            <div style="font-size:13px; font-weight:700; margin-bottom:6px;">골퍼 본인의 수행 결과는?</div>
+            <div class="rating-row">
+              <button class="rating-btn selected-limited" id="btn-pass" onclick="rateCurrentItem('PASS')">통과 🟢</button>
+              <button class="rating-btn" id="btn-limited" onclick="rateCurrentItem('LIMITED')">뻐근 🟡</button>
+              <button class="rating-btn" id="btn-restricted" onclick="rateCurrentItem('RESTRICTED')">불가 🔴</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-outline" style="flex:1;" onclick="prevScreeningItem()">← 이전</button>
+          <button class="btn" style="flex:1.5;" onclick="nextScreeningItem()">다음 항목 →</button>
+        </div>
+      </section>
+
+      <!-- 4. AI 리포트 화면 -->
+      <section id="screen-report" class="screen">
+        <div class="card highlight">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="badge">GOLF BODY MBTI 진단서</span>
+            <span style="font-size:12px; font-weight:700; color:var(--primary);" id="report-strokes-goal">-3.5 ~ -5타 절감</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:14px; margin-top:12px;">
+            <span style="font-size:46px;" id="report-mbti-emoji">🐯</span>
+            <div>
+              <h2 style="font-size:20px; font-weight:800;" id="report-mbti-title">BSE-T 배치기 타이거형</h2>
+              <p style="font-size:13px; color:var(--primary); font-weight:700;" id="report-mbti-tagline">“마음은 싱글, 임팩트는 벌떡!”</p>
+            </div>
+          </div>
+          <div style="margin-top:12px; font-size:12px; line-height:1.6;">
+            <div>⚡ <strong>슈퍼파워:</strong> <span id="report-superpower">폭발적인 상체 파워와 헤드스피드</span></div>
+            <div>🛑 <strong>신체원인:</strong> <span id="report-bodycause">발목 접지력 및 골반 틸트 잠김</span></div>
+            <div>💡 <strong>1줄치트키:</strong> <span id="report-quickfix" style="font-weight:700; color:var(--primary);">엉덩이 벽 터치 1초 정지 드릴</span></div>
+          </div>
+        </div>
+
+        <!-- 3분할 기여도 카드 -->
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h3 style="font-size:14px; font-weight:700;">⚡ 원인 기여도 3분할</h3>
+            <span class="badge">AI 코칭 가설</span>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; text-align:center;">
+            <div style="background:#E8F7ED; padding:10px; border-radius:8px;">
+              <div style="font-size:11px; color:var(--text-muted);">바디 (신체)</div>
+              <div style="font-size:19px; font-weight:800; color:var(--primary);" id="report-pct-body">40%</div>
+            </div>
+            <div style="background:#FEF3C7; padding:10px; border-radius:8px;">
+              <div style="font-size:11px; color:var(--text-muted);">스윙 (기술)</div>
+              <div style="font-size:19px; font-weight:800; color:var(--gold);" id="report-pct-swing">40%</div>
+            </div>
+            <div style="background:#E0F2FE; padding:10px; border-radius:8px;">
+              <div style="font-size:11px; color:var(--text-muted);">게임 (클럽)</div>
+              <div style="font-size:19px; font-weight:800; color:#0284C7;" id="report-pct-game">20%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 처방 운동 목록 -->
+        <div class="card">
+          <h3 style="font-size:14px; font-weight:700; margin-bottom:8px;">💪 하루 3분 맞춤 모빌리티</h3>
+          <div id="report-exercise-list" style="font-size:12.5px; line-height:1.8;">
+            <!-- Dynamic inject -->
+          </div>
+        </div>
+
+        <!-- 골프 드릴 -->
+        <div class="card">
+          <h3 style="font-size:14px; font-weight:700; margin-bottom:8px;">🏌️ 연습장 원포인트 드릴</h3>
+          <div id="report-drill-list" style="font-size:12.5px; line-height:1.8;">
+            <!-- Dynamic inject -->
+          </div>
+        </div>
+
+        <button class="btn" onclick="navigateTo('home')">
+          홈으로 돌아가기
+        </button>
+      </section>
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav>
+      <button class="nav-item active" onclick="navigateTo('home')">
+        <span class="nav-icon">🏠</span>
+        <span>홈</span>
+      </button>
+      <button class="nav-item" onclick="navigateTo('survey')">
+        <span class="nav-icon">📝</span>
+        <span>설문</span>
+      </button>
+      <button class="nav-item" onclick="navigateTo('screening')">
+        <span class="nav-icon">🤸</span>
+        <span>신체검진</span>
+      </button>
+      <button class="nav-item" onclick="navigateTo('report')">
+        <span class="nav-icon">📊</span>
+        <span>AI처방</span>
+      </button>
+    </nav>
+  </div>
+
+  <script>
+    // 13대 신체 검진 데이터
+    const screeningItems = [
+      { id: 1, title: "골반 전후방 기울임 조절력", sub: "Pelvic Tilt Mobility", cat: "골반 & 척추", pass: "상체 고정 후 골반만 앞뒤 틸트 가능", impact: "배치기 및 허리 통증 1차 원인", voice: "어드레스 자세를 잡고 가슴을 고정하십시오. 골반만 앞뒤로 부드럽게 틸트합니다." },
+      { id: 2, title: "골반 분리 회전 검사", sub: "Pelvic Rotation Disassociation", cat: "하체 리드", pass: "어깨 고정 후 골반만 좌우 30도 회전", impact: "하체 선행 불가로 엎어치기 슬라이스 유발", voice: "어깨는 정면입니다. 상체를 움직이지 말고 골반만 좌우로 회전하십시오." },
+      { id: 3, title: "흉추 상체 분리 회전 검사", sub: "Torso Rotation Disassociation", cat: "흉추 코일링", pass: "골반 고정 후 가슴만 좌우 60도 회전", impact: "백스윙 꼬임 부족 및 스웨이 유발", voice: "골반이 돌아가지 않게 묶어두고 가슴과 어깨만 좌우로 회전하십시오." },
+      { id: 4, title: "딥 오버헤드 스쿼트", sub: "Deep Overhead Squat", cat: "전신 가동성", pass: "뒤꿈치 붙이고 팔 든 채 깊게 앉기", impact: "스윙 중 일어서며 심한 뒷땅/탑핑", voice: "클럽을 머리 위로 뻗고 깊게 앉습니다. 발뒤꿈치가 뜨면 안 됩니다." },
+      { id: 5, title: "단일 하지 지탱 밸런스", sub: "Single Leg Balance", cat: "피니시 밸런스", pass: "한 발로 15초 이상 안정 유지", impact: "임팩트 타점 분산 및 피니시 무너짐", voice: "한 발로 서서 15초간 피니시 자세의 안정성을 증명하십시오." },
+      { id: 6, title: "어깨 외회전 가동성", sub: "Shoulder External Rotation", cat: "어깨 샬로윙", pass: "팔꿈치 90도에서 전완 90도 뒤로 넘김", impact: "가파른 다운스윙과 엎어치기 궤도", voice: "팔꿈치를 90도로 꺾어 들고 손등을 뒤로 넘기십시오." },
+      { id: 7, title: "어깨 내회전 가동성", sub: "Shoulder Internal Rotation", cat: "릴리스 & 팔로우", pass: "손바닥을 아래로 60도 이상 회전", impact: "임팩트 후 치킨윙 발생", voice: "팔꿈치를 고정하고 손바닥을 아래 방향으로 회전하십시오." },
+      { id: 8, title: "후면 사슬 발끝 닿기", sub: "Toe Touch Flexibility", cat: "고관절 힌지", pass: "무릎 편 채 손끝이 발끝 터치", impact: "어드레스 C자세 척추 말림", voice: "무릎을 완전히 펴고 상체를 숙여 발가락을 터치하십시오." },
+      { id: 9, title: "착석 고관절 회전 검사", sub: "Seated Hip Rotation", cat: "힙턴 회전", pass: "의자 착석 후 고관절 45도 회전", impact: "임팩트 구간 골반 막힘 현상", voice: "의자에 앉아 무릎을 고정한 채 발목을 회전하십시오." },
+      { id: 10, title: "척추 측면 굴곡 유연성", sub: "Spine Lateral Flexion", cat: "사이드 벤딩", pass: "손끝이 무릎 바깥선 도달", impact: "임팩트 시 척추각 기립 및 쌩크", voice: "몸을 순수하게 옆으로 기울이십시오." },
+      { id: 11, title: "손목 힌지 및 코킹 검사", sub: "Wrist Hinge Mobility", cat: "래깅 & 압축", pass: "손목 70도 이상 힌지 및 코킹", impact: "캐스팅 및 스쿠핑 탑핑 유발", voice: "손목의 코킹과 힌지 가동성을 부드럽게 체크합니다." },
+      { id: 12, title: "발목 족배굴곡 벽 검사", sub: "Ankle Dorsiflexion Wall Test", cat: "지면 반력", pass: "뒤꿈치 붙인 채 무릎이 벽에 닿음", impact: "얼리 익스텐션(배치기)의 1순위 원인", voice: "발뒤꿈치를 바닥에 붙이고 무릎을 벽 쪽으로 굽히십시오." },
+      { id: 13, title: "브릿지 코어 안정성", sub: "Single Leg Glute Bridge", cat: "둔근 파워", pass: "한 다리 뻗고 골반 수평 10초 유지", impact: "하체 밀림(슬라이드) 및 비거리 누수", voice: "엉덩이를 들고 한 다리를 뻗어 10초간 버티십시오." }
+    ];
+
+    let currentScreen = "home";
+    let screeningIndex = 0;
+    let golferHandicap = 18;
+    let ratings = {};
+    screeningItems.forEach(i => ratings[i.id] = (i.id === 4 || i.id === 12) ? "RESTRICTED" : "PASS");
+
+    function navigateTo(screenId) {
+      currentScreen = screenId;
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById("screen-" + screenId).classList.add("active");
+
+      document.querySelectorAll(".nav-item").forEach(btn => btn.classList.remove("active"));
+      const navIndices = { home: 0, survey: 1, screening: 2, report: 3 };
+      if (document.querySelectorAll(".nav-item")[navIndices[screenId]]) {
+        document.querySelectorAll(".nav-item")[navIndices[screenId]].classList.add("active");
+      }
+
+      window.scrollTo(0, 0);
+      if (screenId === "screening") {
+        renderScreeningItem();
+      } else if (screenId === "report" || screenId === "home") {
+        computeMbtiAndRefresh();
+      }
+    }
+
+    function updateHandicap(val) {
+      golferHandicap = parseInt(val);
+      document.getElementById("survey-handicap-val").innerText = val + "핸디 (평균 " + (72 + golferHandicap) + "타)";
+      document.getElementById("home-handicap-badge").innerText = "평균 " + val + "핸디";
+    }
+
+    function selectSingleChip(el, group) {
+      el.parentElement.querySelectorAll(".chip").forEach(c => c.classList.remove("selected"));
+      el.classList.add("selected");
+    }
+
+    function toggleMultiChip(el) {
+      el.classList.toggle("selected");
+    }
+
+    function renderScreeningItem() {
+      const item = screeningItems[screeningIndex];
+      document.getElementById("screen-num-badge").innerText = (screeningIndex + 1) + " / " + screeningItems.length + " 항목";
+      document.getElementById("screen-cat-badge").innerText = item.cat;
+      document.getElementById("screen-title").innerText = item.title;
+      document.getElementById("screen-subtitle").innerText = item.sub;
+      document.getElementById("screen-pass-criteria").innerText = item.pass;
+      document.getElementById("screen-impact").innerText = item.impact;
+
+      const currentRating = ratings[item.id] || "PASS";
+      document.getElementById("btn-pass").className = "rating-btn" + (currentRating === "PASS" ? " selected-pass" : "");
+      document.getElementById("btn-limited").className = "rating-btn" + (currentRating === "LIMITED" ? " selected-limited" : "");
+      document.getElementById("btn-restricted").className = "rating-btn" + (currentRating === "RESTRICTED" ? " selected-restricted" : "");
+
+      drawPose(item.id);
+    }
+
+    function rateCurrentItem(grade) {
+      const item = screeningItems[screeningIndex];
+      ratings[item.id] = grade;
+      renderScreeningItem();
+    }
+
+    function nextScreeningItem() {
+      if (screeningIndex < screeningItems.length - 1) {
+        screeningIndex++;
+        renderScreeningItem();
+      } else {
+        navigateTo("report");
+      }
+    }
+
+    function prevScreeningItem() {
+      if (screeningIndex > 0) {
+        screeningIndex--;
+        renderScreeningItem();
+      }
+    }
+
+    function speakGuide() {
+      const text = screeningItems[screeningIndex].voice;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'ko-KR';
+        u.rate = 0.95;
+        window.speechSynthesis.speak(u);
+      } else {
+        alert(text);
+      }
+    }
+
+    function drawPose(id) {
+      const cv = document.getElementById("screening-canvas");
+      if (!cv) return;
+      const ctx = cv.getContext("2d");
+      const w = cv.width, h = cv.height;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = "#147A40";
+      ctx.fillStyle = "#147A40";
+      ctx.lineWidth = 6;
+      ctx.lineCap = "round";
+
+      // Draw dynamic sports stick figure based on id
+      ctx.beginPath();
+      ctx.arc(w * 0.5, h * 0.28, 11, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(w * 0.5, h * 0.38);
+      ctx.lineTo(w * 0.5, h * 0.65);
+      ctx.stroke();
+
+      if (id === 4) { // Squat
+        ctx.beginPath();
+        ctx.moveTo(w * 0.5, h * 0.65);
+        ctx.lineTo(w * 0.35, h * 0.7);
+        ctx.lineTo(w * 0.35, h * 0.9);
+        ctx.moveTo(w * 0.5, h * 0.65);
+        ctx.lineTo(w * 0.65, h * 0.7);
+        ctx.lineTo(w * 0.65, h * 0.9);
+        ctx.stroke();
+      } else { // Standard athletic
+        ctx.beginPath();
+        ctx.moveTo(w * 0.5, h * 0.65);
+        ctx.lineTo(w * 0.42, h * 0.9);
+        ctx.moveTo(w * 0.5, h * 0.65);
+        ctx.lineTo(w * 0.58, h * 0.9);
+        ctx.stroke();
+      }
+
+      // Ground
+      ctx.strokeStyle = "#E5E7EB";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(w * 0.1, h * 0.92);
+      ctx.lineTo(w * 0.9, h * 0.92);
+      ctx.stroke();
+    }
+
+    function computeMbtiAndRefresh() {
+      const hasSquat = ratings[4] === "RESTRICTED";
+      const hasAnkle = ratings[12] === "RESTRICTED";
+      const hasTorso = ratings[3] !== "PASS";
+
+      let mbti = {
+        code: "BSE-T",
+        name: "배치기 타이거형",
+        emoji: "🐯",
+        tagline: "마음은 싱글, 임팩트는 벌떡!",
+        superpower: "폭발적인 상체 파워와 헤드스피드",
+        bodycause: "발목 접지력 및 골반 전후방 틸트 잠김",
+        quickfix: "엉덩이 벽 터치 1초 정지 드릴",
+        bodyPct: 45, swingPct: 35, gamePct: 20
+      };
+
+      if (hasTorso) {
+        mbti = {
+          code: "OSD-D",
+          name: "엎어치기 드래곤형",
+          emoji: "🐲",
+          tagline: "상체로 덤비는 열정! 슬라이스 바람의 전사",
+          superpower: "정확한 컨택을 노리는 높은 집중력",
+          bodycause: "흉추 상체 독립 회전 가동성 잠김",
+          quickfix: "오픈북 흉추 가동성 & 스텝 다운스윙",
+          bodyPct: 35, swingPct: 45, gamePct: 20
+        };
+      }
+
+      // Update Home
+      document.getElementById("home-mbti-emoji").innerText = mbti.emoji;
+      document.getElementById("home-mbti-title").innerText = mbti.code + " " + mbti.name;
+      document.getElementById("home-mbti-tagline").innerText = "“" + mbti.tagline + "”";
+
+      // Update Report
+      document.getElementById("report-mbti-emoji").innerText = mbti.emoji;
+      document.getElementById("report-mbti-title").innerText = mbti.code + " " + mbti.name;
+      document.getElementById("report-mbti-tagline").innerText = "“" + mbti.tagline + "”";
+      document.getElementById("report-superpower").innerText = mbti.superpower;
+      document.getElementById("report-bodycause").innerText = mbti.bodycause;
+      document.getElementById("report-quickfix").innerText = mbti.quickfix;
+
+      document.getElementById("report-pct-body").innerText = mbti.bodyPct + "%";
+      document.getElementById("report-pct-swing").innerText = mbti.swingPct + "%";
+      document.getElementById("report-pct-game").innerText = mbti.gamePct + "%";
+
+      document.getElementById("report-exercise-list").innerHTML = `
+        <div>1. <strong>발목 벽 밀기 스트레칭</strong> (좌우 15회) • 배치기 방지 접지력</div>
+        <div>2. <strong>골반 틸트 꼬리뼈 운동</strong> (20회 반복) • 어드레스 척추각 유지</div>
+        <div>3. <strong>오픈북 흉추 가동성</strong> (좌우 12회) • 엎어치기 방지 백스윙 코일링</div>
+      `;
+
+      document.getElementById("report-drill-list").innerHTML = `
+        <div>1. <strong>` + mbti.quickfix + `</strong> (7번 아이언) • 엉덩이 백 터치 감각</div>
+        <div>2. <strong>티 1cm 스치기 최저점 정타 드릴</strong> (피칭 웨지) • 뒷땅 없는 깔끔한 디봇</div>
+      `;
+    }
+
+    // Initialize
+    window.addEventListener("DOMContentLoaded", () => {
+      computeMbtiAndRefresh();
+    });
+  </script>
+</body>
+</html>

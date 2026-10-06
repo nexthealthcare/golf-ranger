@@ -1,0 +1,6 @@
+{
+  "name": "골프레인저",
+  "description": "아마추어 골퍼를 위한 바디-스윙-게임 통합 분석 및 맞춤 코칭 조교 솔루션",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
