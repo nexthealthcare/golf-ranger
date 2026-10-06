@@ -45,6 +45,9 @@ import com.example.ui.screens.ReportScreen
 import com.example.ui.screens.RoutineScreen
 import com.example.ui.screens.ScreeningScreen
 import com.example.ui.screens.SurveyScreen
+import androidx.compose.foundation.border
+import com.example.ui.theme.GolfCourseBackground
+import com.example.ui.theme.GolfGrassBorder
 import com.example.ui.theme.PerformanceGreenContainer
 import com.example.ui.theme.PerformanceGreenPrimary
 import com.example.ui.theme.TextTertiary
@@ -91,8 +94,9 @@ fun GolfRangerApp(viewModel: GolfRangerViewModel) {
       NavigationBar(
         modifier = Modifier
           .windowInsetsPadding(WindowInsets.navigationBars)
+          .border(0.5.dp, GolfGrassBorder)
           .testTag("main_bottom_nav"),
-        containerColor = Color.White,
+        containerColor = GolfCourseBackground,
         contentColor = PerformanceGreenPrimary
       ) {
         val navColors = NavigationBarItemDefaults.colors(

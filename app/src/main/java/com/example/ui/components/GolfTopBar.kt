@@ -25,8 +25,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ui.theme.GolfCourseBackground
+import com.example.ui.theme.GolfGrassBorder
 import com.example.ui.theme.PerformanceGreenPrimary
-import com.example.ui.theme.SurfaceBorder
 import com.example.ui.theme.TextPrimary
 import com.example.ui.theme.TextTertiary
 
@@ -81,11 +82,11 @@ fun GolfTopBar(
     },
     actions = { actionContent() },
     colors = TopAppBarDefaults.topAppBarColors(
-      containerColor = Color.White,
+      containerColor = GolfCourseBackground,
       titleContentColor = TextPrimary
     ),
     modifier = Modifier
       .fillMaxWidth()
-      .border(0.5.dp, SurfaceBorder)
+      .border(0.5.dp, GolfGrassBorder)
   )
 }

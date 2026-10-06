@@ -56,6 +56,7 @@ import com.example.ui.components.ScreeningPoseVisualizer
 import com.example.ui.theme.CleanWhiteBorder
 import com.example.ui.theme.EnergeticGold
 import com.example.ui.theme.FairwayGreenPrimary
+import com.example.ui.theme.GolfFairwayCardSurface
 import com.example.ui.theme.TagAmberBg
 import com.example.ui.theme.TagAmberText
 import com.example.ui.theme.TagMintBg
@@ -112,7 +113,7 @@ fun ReportScreen(
       Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = GolfFairwayCardSurface),
         border = androidx.compose.foundation.BorderStroke(2.dp, FairwayGreenPrimary),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
       ) {
@@ -189,7 +190,7 @@ fun ReportScreen(
       Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = GolfFairwayCardSurface),
         border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
       ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -257,7 +258,7 @@ fun ReportScreen(
             .padding(vertical = 4.dp),
           shape = RoundedCornerShape(14.dp),
           colors = CardDefaults.cardColors(
-            containerColor = if (isDone) Color(0xFFF0FDF4) else Color.White
+            containerColor = if (isDone) Color(0xFFE8F5E9) else GolfFairwayCardSurface
           ),
           border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
         ) {
@@ -343,7 +344,7 @@ fun ReportScreen(
             .padding(vertical = 4.dp),
           shape = RoundedCornerShape(14.dp),
           colors = CardDefaults.cardColors(
-            containerColor = if (isDone) Color(0xFFF0FDF4) else Color.White
+            containerColor = if (isDone) Color(0xFFE8F5E9) else GolfFairwayCardSurface
           ),
           border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
         ) {

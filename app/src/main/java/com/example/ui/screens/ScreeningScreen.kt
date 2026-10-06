@@ -53,6 +53,7 @@ import com.example.data.ScreeningDataSource
 import com.example.model.ScreeningGrade
 import com.example.ui.components.GolfTopBar
 import com.example.ui.components.ScreeningPoseVisualizer
+import com.example.ui.theme.GolfFairwayCardSurface
 import com.example.ui.theme.PerformanceGreenPrimary
 import com.example.ui.theme.PerformanceGreenContainer
 import com.example.ui.theme.StatusCaution
@@ -212,7 +213,7 @@ fun ScreeningScreen(
       Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = GolfFairwayCardSurface),
         border = androidx.compose.foundation.BorderStroke(1.dp, SurfaceBorder),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
       ) {
@@ -292,7 +293,7 @@ fun ScreeningScreen(
       Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = GolfFairwayCardSurface),
         border = androidx.compose.foundation.BorderStroke(1.dp, SurfaceBorder),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
       ) {

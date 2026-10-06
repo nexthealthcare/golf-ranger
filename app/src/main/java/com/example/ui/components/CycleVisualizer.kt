@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ui.theme.GolfFairwayCardSurface
 import com.example.ui.theme.PerformanceGreenPrimary
 import com.example.ui.theme.PerformanceGreenContainer
 import com.example.ui.theme.SurfaceBorder
@@ -54,7 +55,7 @@ fun CycleVisualizer(
   Card(
     modifier = modifier.fillMaxWidth(),
     shape = RoundedCornerShape(10.dp),
-    colors = CardDefaults.cardColors(containerColor = Color.White),
+    colors = CardDefaults.cardColors(containerColor = GolfFairwayCardSurface),
     border = androidx.compose.foundation.BorderStroke(1.dp, SurfaceBorder),
     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
   ) {

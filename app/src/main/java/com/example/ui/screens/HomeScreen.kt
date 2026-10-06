@@ -46,6 +46,9 @@ import androidx.compose.ui.unit.sp
 import com.example.model.ScreeningGrade
 import com.example.ui.components.CycleVisualizer
 import com.example.ui.components.GolfTopBar
+import com.example.ui.theme.GolfCourseBackground
+import com.example.ui.theme.GolfFairwayCardSurface
+import com.example.ui.theme.GolfGrassBorder
 import com.example.ui.theme.PerformanceGreenPrimary
 import com.example.ui.theme.PerformanceGreenContainer
 import com.example.ui.theme.StatusCaution
@@ -103,8 +106,8 @@ fun HomeScreen(
       Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = androidx.compose.foundation.BorderStroke(1.5.dp, PerformanceGreenPrimary),
+        colors = CardDefaults.cardColors(containerColor = GolfFairwayCardSurface),
+        border = androidx.compose.foundation.BorderStroke(1.5.dp, FairwayGreenPrimary),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
       ) {
         Column(modifier = Modifier.padding(18.dp)) {
@@ -299,8 +302,8 @@ private fun PerformanceMenuRow(
       .clickable { onClick() }
       .testTag(tag),
     shape = RoundedCornerShape(8.dp),
-    colors = CardDefaults.cardColors(containerColor = Color.White),
-    border = androidx.compose.foundation.BorderStroke(1.dp, SurfaceBorder),
+    colors = CardDefaults.cardColors(containerColor = GolfFairwayCardSurface),
+    border = androidx.compose.foundation.BorderStroke(1.dp, GolfGrassBorder),
     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
   ) {
     Row(

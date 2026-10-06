@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ui.theme.GolfFairwayCardSurface
 import com.example.ui.theme.PerformanceGreenPrimary
 import com.example.ui.theme.SurfaceBorder
 import com.example.ui.theme.SurfaceCardSecondary
@@ -84,7 +85,7 @@ fun ExecutionCoachDialog(
       onDismiss()
     },
     shape = RoundedCornerShape(12.dp),
-    containerColor = Color.White,
+    containerColor = GolfFairwayCardSurface,
     title = {
       Row(
         modifier = Modifier.fillMaxWidth(),

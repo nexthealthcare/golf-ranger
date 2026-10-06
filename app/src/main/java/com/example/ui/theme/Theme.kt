@@ -2,12 +2,12 @@ package com.example.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val LightColorScheme = lightColorScheme(
+// 골프장 잔디의 싱그러움이 감도는 프리미엄 페어웨이 테마
+private val GolfCourseColorScheme = lightColorScheme(
   primary = FairwayGreenPrimary,
   onPrimary = Color.White,
   primaryContainer = FairwayGreenContainer,
@@ -15,31 +15,13 @@ private val LightColorScheme = lightColorScheme(
   secondary = EnergeticGold,
   onSecondary = Color.White,
   tertiary = FairwayGreenLight,
-  background = CleanWhiteBackground,
+  background = GolfCourseBackground,
   onBackground = TextMainDark,
-  surface = CleanWhiteSurface,
+  surface = GolfFairwayCardSurface,
   onSurface = TextMainDark,
-  surfaceVariant = CleanWhiteSurfaceVariant,
+  surfaceVariant = GolfCourseBackgroundDeep,
   onSurfaceVariant = TextMuted,
-  outline = CleanWhiteBorder
-)
-
-private val DarkColorScheme = lightColorScheme(
-  // Maintain a clean, bright, visible white/green appearance as requested
-  primary = FairwayGreenPrimary,
-  onPrimary = Color.White,
-  primaryContainer = FairwayGreenContainer,
-  onPrimaryContainer = OnFairwayGreenContainer,
-  secondary = EnergeticGold,
-  onSecondary = Color.White,
-  tertiary = FairwayGreenLight,
-  background = CleanWhiteBackground,
-  onBackground = TextMainDark,
-  surface = CleanWhiteSurface,
-  onSurface = TextMainDark,
-  surfaceVariant = CleanWhiteSurfaceVariant,
-  onSurfaceVariant = TextMuted,
-  outline = CleanWhiteBorder
+  outline = GolfGrassBorder
 )
 
 @Composable
@@ -49,7 +31,7 @@ fun MyApplicationTheme(
   content: @Composable () -> Unit
 ) {
   MaterialTheme(
-    colorScheme = LightColorScheme, // Keep bright white and fresh golf green
+    colorScheme = GolfCourseColorScheme,
     typography = Typography,
     content = content
   )

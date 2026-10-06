@@ -6,18 +6,23 @@ package com.example.model
 data class GolferProfile(
   val handicap: Int = 18,
   val strongestArea: String = "드라이버 티샷",
+  val strongestAreas: Set<String> = setOf("드라이버 티샷"),
   val weakestArea: String = "아이언 정타율",
+  val weakestAreas: Set<String> = setOf("아이언 정타율", "티샷 슬라이스 OB"),
   val memorableMistake: String = "세컨샷 깊은 뒷땅으로 해저드",
+  val memorableMistakes: Set<String> = setOf("세컨샷 깊은 뒷땅으로 해저드"),
   val shortTermGoal: String = "80대 후반 안정 진입 (라베 달성)",
   val longTermGoal: String = "보기플레이어 탈피 및 안정 싱글",
+  val targetGoals: Set<String> = setOf("80대 후반 안정 진입", "비거리 15m 증가"),
   val roundIssues: Set<String> = setOf(
-    "드라이버 슬라이스 / 푸시",
-    "아이언 뒷땅 / 탑핑이 잦음",
-    "후반 홀 체력 저하와 샷 난조"
+    "드라이버 슬라이스 및 푸시 샷",
+    "아이언 뒷땅 및 탑핑 타점 오차",
+    "후반 나인홀 체력 저하 및 샷 난조"
   ),
   val swingVideoUri: String? = null,
   val swingVideoFileName: String? = null,
-  val selectedSwingHabit: String = "임팩트 시 골반 조기 전진 (얼리 익스텐션)"
+  val selectedSwingHabit: String = "임팩트 시 골반 조기 전진 (얼리 익스텐션)",
+  val selectedSwingHabits: Set<String> = setOf("임팩트 시 골반 조기 전진 (얼리 익스텐션)")
 )
 
 /**

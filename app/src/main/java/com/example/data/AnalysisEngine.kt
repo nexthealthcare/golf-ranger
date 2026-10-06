@@ -40,9 +40,14 @@ object AnalysisEngine {
     val hasWristIssue = screeningResults[11] != ScreeningGrade.PASS
     val hasAnkleIssue = screeningResults[12] != ScreeningGrade.PASS
 
+    val hasEEHabit = profile.selectedSwingHabits.any { it.contains("얼리 익스텐션") || it.contains("배치기") }
+    val hasOTTHabit = profile.selectedSwingHabits.any { it.contains("오버 더 탑") || it.contains("덮어") }
+    val hasCWHabit = profile.selectedSwingHabits.any { it.contains("치킨윙") }
+    val hasCastHabit = profile.selectedSwingHabits.any { it.contains("캐스팅") || it.contains("스쿠핑") }
+
     // 전문 스포츠 퍼포먼스 체형/스윙 분류
     val bodyType = when {
-      hasSquatIssue || hasAnkleIssue || hasPelvicTiltIssue -> GolfBodyType(
+      (hasSquatIssue || hasAnkleIssue || hasPelvicTiltIssue || hasEEHabit) && (hasEEHabit || hasAnkleIssue || hasSquatIssue) -> GolfBodyType(
         code = "TYPE-A (EE)",
         name = "얼리 익스텐션 보상 유형",
         categoryTitle = "골반 틸트 & 발목 족배굴곡 제한군",
@@ -53,7 +58,7 @@ object AnalysisEngine {
         correctiveStrategy = "고관절 힌지 접지 유지 및 힙 턴 공간 확보 드릴"
       )
 
-      hasTorsoRotationIssue || hasPelvicRotationIssue -> GolfBodyType(
+      hasTorsoRotationIssue || hasPelvicRotationIssue || hasOTTHabit -> GolfBodyType(
         code = "TYPE-B (OTT)",
         name = "오버 더 탑 궤도 보상 유형",
         categoryTitle = "흉추 상체 독립 회전 결핍군",
@@ -64,7 +69,7 @@ object AnalysisEngine {
         correctiveStrategy = "흉추 모빌리티 확장 및 하체 선행 시퀀스 드릴"
       )
 
-      hasShoulderIssue -> GolfBodyType(
+      hasShoulderIssue || hasCWHabit -> GolfBodyType(
         code = "TYPE-C (CW)",
         name = "치킨윙 릴리스 보상 유형",
         categoryTitle = "견관절 회전근개 가동성 제한군",
@@ -75,7 +80,7 @@ object AnalysisEngine {
         correctiveStrategy = "견관절 회전 가동성 회복 및 대칭 릴리스 드릴"
       )
 
-      hasWristIssue -> GolfBodyType(
+      hasWristIssue || hasCastHabit -> GolfBodyType(
         code = "TYPE-D (SCP)",
         name = "스쿠핑 캐스팅 보상 유형",
         categoryTitle = "수근관절 힌지 및 코킹 제어 결핍군",

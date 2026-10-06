@@ -50,6 +50,7 @@ import com.example.ui.components.GolfTopBar
 import com.example.ui.theme.CleanWhiteBorder
 import com.example.ui.theme.EnergeticGold
 import com.example.ui.theme.FairwayGreenPrimary
+import com.example.ui.theme.GolfFairwayCardSurface
 import com.example.ui.theme.TagAmberBg
 import com.example.ui.theme.TagAmberText
 import com.example.ui.theme.TagMintBg
@@ -99,7 +100,7 @@ fun RoutineScreen(
       Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = GolfFairwayCardSurface),
         border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
       ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -170,7 +171,7 @@ fun RoutineScreen(
             .padding(vertical = 3.dp),
           shape = RoundedCornerShape(12.dp),
           colors = CardDefaults.cardColors(
-            containerColor = if (isDone) Color(0xFFF0FDF4) else Color.White
+            containerColor = if (isDone) Color(0xFFE8F5E9) else GolfFairwayCardSurface
           ),
           border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
         ) {
@@ -241,7 +242,7 @@ fun RoutineScreen(
             .padding(vertical = 3.dp),
           shape = RoundedCornerShape(12.dp),
           colors = CardDefaults.cardColors(
-            containerColor = if (isDone) Color(0xFFF0FDF4) else Color.White
+            containerColor = if (isDone) Color(0xFFE8F5E9) else GolfFairwayCardSurface
           ),
           border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
         ) {

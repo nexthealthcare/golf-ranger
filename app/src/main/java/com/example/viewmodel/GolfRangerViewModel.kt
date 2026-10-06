@@ -70,12 +70,87 @@ class GolfRangerViewModel : ViewModel() {
     _golferProfile.update { it.copy(handicap = value) }
   }
 
+  fun toggleStrongestArea(area: String) {
+    _golferProfile.update {
+      val current = it.strongestAreas.toMutableSet()
+      if (current.contains(area)) {
+        if (current.size > 1) current.remove(area)
+      } else {
+        current.add(area)
+      }
+      it.copy(
+        strongestAreas = current,
+        strongestArea = current.firstOrNull() ?: area
+      )
+    }
+  }
+
+  fun toggleWeakestArea(area: String) {
+    _golferProfile.update {
+      val current = it.weakestAreas.toMutableSet()
+      if (current.contains(area)) {
+        if (current.size > 1) current.remove(area)
+      } else {
+        current.add(area)
+      }
+      it.copy(
+        weakestAreas = current,
+        weakestArea = current.firstOrNull() ?: area
+      )
+    }
+  }
+
+  fun toggleSwingHabit(habit: String) {
+    _golferProfile.update {
+      val current = it.selectedSwingHabits.toMutableSet()
+      if (current.contains(habit)) {
+        if (current.size > 1) current.remove(habit)
+      } else {
+        current.add(habit)
+      }
+      it.copy(
+        selectedSwingHabits = current,
+        selectedSwingHabit = current.firstOrNull() ?: habit
+      )
+    }
+  }
+
+  fun toggleMemorableMistake(mistake: String) {
+    _golferProfile.update {
+      val current = it.memorableMistakes.toMutableSet()
+      if (current.contains(mistake)) {
+        if (current.size > 1) current.remove(mistake)
+      } else {
+        current.add(mistake)
+      }
+      it.copy(
+        memorableMistakes = current,
+        memorableMistake = current.firstOrNull() ?: mistake
+      )
+    }
+  }
+
+  fun toggleTargetGoal(goal: String) {
+    _golferProfile.update {
+      val current = it.targetGoals.toMutableSet()
+      if (current.contains(goal)) {
+        if (current.size > 1) current.remove(goal)
+      } else {
+        current.add(goal)
+      }
+      it.copy(
+        targetGoals = current,
+        shortTermGoal = current.firstOrNull() ?: goal
+      )
+    }
+  }
+
   fun updateStrongestArea(value: String) {
-    _golferProfile.update { it.copy(strongestArea = value) }
+    toggleStrongestArea(value)
   }
 
   fun updateWeakestArea(value: String) {
-    _golferProfile.update { it.copy(weakestArea = value) }
+    toggleWeakestArea(value)
   }
 
   fun updateMemorableMistake(value: String) {
@@ -109,9 +184,7 @@ class GolfRangerViewModel : ViewModel() {
   }
 
   fun setSwingHabit(habit: String) {
-    _golferProfile.update {
-      it.copy(selectedSwingHabit = habit)
-    }
+    toggleSwingHabit(habit)
   }
 
   fun setScreeningGrade(itemId: Int, grade: ScreeningGrade) {
