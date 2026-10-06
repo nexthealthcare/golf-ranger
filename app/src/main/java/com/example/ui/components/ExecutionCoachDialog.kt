@@ -12,26 +12,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -46,18 +40,18 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.ui.theme.CleanWhiteBorder
-import com.example.ui.theme.EnergeticGold
-import com.example.ui.theme.FairwayGreenPrimary
-import com.example.ui.theme.TagAmberBg
-import com.example.ui.theme.TagAmberText
-import com.example.ui.theme.TagMintBg
-import com.example.ui.theme.TagMintText
-import com.example.ui.theme.TextMainDark
-import com.example.ui.theme.TextMuted
+import com.example.ui.theme.PerformanceGreenPrimary
+import com.example.ui.theme.SurfaceBorder
+import com.example.ui.theme.SurfaceCardSecondary
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.TextTertiary
 import com.example.util.TtsManager
-import kotlinx.coroutines.delay
 
+/**
+ * Clinical Performance Execution Dialog (Garmin / WHOOP clinical athletic style)
+ * Clean, restrained, high-legibility interface with voice guidance and set tracking.
+ */
 @Composable
 fun ExecutionCoachDialog(
   title: String,
@@ -77,7 +71,6 @@ fun ExecutionCoachDialog(
   val maxSets = 3
 
   DisposableEffect(Unit) {
-    // 다이얼로그 열릴 때 조교 음성 자동 안내 시작
     ttsManager.speak(voiceScript)
     isSpeaking = true
     onDispose {
@@ -90,7 +83,7 @@ fun ExecutionCoachDialog(
       ttsManager.stop()
       onDismiss()
     },
-    shape = RoundedCornerShape(20.dp),
+    shape = RoundedCornerShape(12.dp),
     containerColor = Color.White,
     title = {
       Row(
@@ -102,14 +95,14 @@ fun ExecutionCoachDialog(
           Text(
             text = title,
             fontSize = 17.sp,
-            fontWeight = FontWeight.Bold,
-            color = TextMainDark
+            fontWeight = FontWeight.SemiBold,
+            color = TextPrimary
           )
           Text(
             text = targetOrClub,
-            fontSize = 12.sp,
-            color = FairwayGreenPrimary,
-            fontWeight = FontWeight.SemiBold
+            fontSize = 13.sp,
+            color = PerformanceGreenPrimary,
+            fontWeight = FontWeight.Medium
           )
         }
         IconButton(
@@ -118,60 +111,87 @@ fun ExecutionCoachDialog(
             onDismiss()
           }
         ) {
-          Icon(Icons.Default.Close, contentDescription = "닫기", tint = TextMuted)
+          Icon(Icons.Default.Close, contentDescription = "닫기", tint = TextTertiary, modifier = Modifier.size(20.dp))
         }
       }
     },
     text = {
       Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxWidth()
       ) {
-        // 3D 입체 일러스트 자세 시각화
+        // Biomechanical kinetic visualizer
         Box(
           modifier = Modifier
             .fillMaxWidth()
-            .height(130.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color(0xFFF9FAFB)),
+            .height(110.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(SurfaceCardSecondary),
           contentAlignment = Alignment.Center
         ) {
           ScreeningPoseVisualizer(
             iconType = visualType,
-            modifier = Modifier.size(160.dp, 120.dp)
+            modifier = Modifier.size(160.dp, 100.dp)
           )
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-        // 좌우 몇 회 몇 세트 상세 안내 태그
+        // Set / repetition specifications
         Box(
           modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .background(TagMintBg)
-            .padding(horizontal = 10.dp, vertical = 6.dp)
+            .clip(RoundedCornerShape(6.dp))
+            .border(1.dp, SurfaceBorder, RoundedCornerShape(6.dp))
+            .background(Color(0xFFF8F9FA))
+            .padding(horizontal = 12.dp, vertical = 8.dp)
         ) {
-          Column {
+          Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+          ) {
             Text(
-              text = "📌 추천 횟수 및 세트",
-              fontSize = 11.sp,
-              fontWeight = FontWeight.Bold,
-              color = TagMintText
+              text = "권장 세트 및 횟수",
+              fontSize = 12.sp,
+              fontWeight = FontWeight.Medium,
+              color = TextSecondary
             )
             Text(
               text = setsAndReps,
-              fontSize = 12.5.sp,
-              fontWeight = FontWeight.Bold,
-              color = FairwayGreenPrimary
+              fontSize = 13.sp,
+              fontWeight = FontWeight.SemiBold,
+              color = TextPrimary
             )
           }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
-        // 조교 음성 가이드 버튼 (토글)
-        Button(
+        // Step by step list
+        instructions.forEachIndexed { idx, inst ->
+          Row(
+            modifier = Modifier.padding(vertical = 2.dp),
+            verticalAlignment = Alignment.Top
+          ) {
+            Text(
+              text = "${idx + 1}. ",
+              fontSize = 13.sp,
+              fontWeight = FontWeight.SemiBold,
+              color = PerformanceGreenPrimary
+            )
+            Text(
+              text = inst,
+              fontSize = 13.sp,
+              color = TextSecondary,
+              lineHeight = 18.sp
+            )
+          }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Audio Coach Toggle
+        OutlinedButton(
           onClick = {
             if (isSpeaking) {
               ttsManager.stop()
@@ -181,40 +201,40 @@ fun ExecutionCoachDialog(
               isSpeaking = true
             }
           },
-          colors = ButtonDefaults.buttonColors(
-            containerColor = if (isSpeaking) Color(0xFFEF4444) else FairwayGreenPrimary
-          ),
           shape = RoundedCornerShape(8.dp),
-          modifier = Modifier.fillMaxWidth().testTag("coach_voice_button")
+          modifier = Modifier
+            .fillMaxWidth()
+            .height(44.dp)
+            .testTag("coach_voice_button")
         ) {
           Icon(
             imageVector = if (isSpeaking) Icons.Default.Stop else Icons.AutoMirrored.Filled.VolumeUp,
             contentDescription = null,
-            tint = Color.White,
+            tint = TextPrimary,
             modifier = Modifier.size(16.dp)
           )
           Spacer(modifier = Modifier.width(6.dp))
           Text(
-            text = if (isSpeaking) "음성 코칭 정지" else "📢 조교 음성 코칭 다시 듣기",
-            fontSize = 12.5.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White
+            text = if (isSpeaking) "음성 가이드 일시중지" else "전문 코칭 음성 가이드 듣기",
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium,
+            color = TextPrimary
           )
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-        // 세트 완료 트래커 (1세트, 2세트, 3세트)
+        // Set Completion Progress
         Row(
           modifier = Modifier.fillMaxWidth(),
           horizontalArrangement = Arrangement.SpaceBetween,
           verticalAlignment = Alignment.CenterVertically
         ) {
           Text(
-            text = "현재 진행: ${currentSet} / ${maxSets}세트",
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Bold,
-            color = TextMainDark
+            text = "진행 상태: ${currentSet} / ${maxSets} 세트",
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium,
+            color = TextPrimary
           )
 
           Button(
@@ -227,36 +247,16 @@ fun ExecutionCoachDialog(
                 onDismiss()
               }
             },
-            colors = ButtonDefaults.buttonColors(containerColor = FairwayGreenPrimary),
+            colors = ButtonDefaults.buttonColors(containerColor = PerformanceGreenPrimary),
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.testTag("complete_set_button")
           ) {
-            Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(14.dp))
-            Spacer(modifier = Modifier.width(4.dp))
             Text(
-              text = if (currentSet < maxSets) "${currentSet}세트 완료" else "전체 완료 🏆",
-              fontSize = 12.sp,
-              fontWeight = FontWeight.Bold
+              text = if (currentSet < maxSets) "${currentSet}세트 완료" else "전체 세트 완료",
+              fontSize = 13.sp,
+              fontWeight = FontWeight.SemiBold
             )
           }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // 원포인트 조교 팁
-        Box(
-          modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .background(TagAmberBg)
-            .padding(8.dp)
-        ) {
-          Text(
-            text = "💡 $coachingKey",
-            fontSize = 11.5.sp,
-            color = TagAmberText,
-            fontWeight = FontWeight.SemiBold
-          )
         }
       }
     },

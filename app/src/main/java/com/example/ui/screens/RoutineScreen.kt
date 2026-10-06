@@ -1,6 +1,7 @@
 package com.example.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,18 +48,22 @@ import com.example.model.BodyExercise
 import com.example.model.GolfDrill
 import com.example.ui.components.ExecutionCoachDialog
 import com.example.ui.components.GolfTopBar
-import com.example.ui.theme.CleanWhiteBorder
-import com.example.ui.theme.EnergeticGold
-import com.example.ui.theme.FairwayGreenPrimary
-import com.example.ui.theme.TagAmberBg
-import com.example.ui.theme.TagAmberText
-import com.example.ui.theme.TagMintBg
-import com.example.ui.theme.TagMintText
-import com.example.ui.theme.TextMainDark
-import com.example.ui.theme.TextMuted
+import com.example.ui.theme.PerformanceGreenPrimary
+import com.example.ui.theme.PerformanceGreenContainer
+import com.example.ui.theme.StatusPass
+import com.example.ui.theme.StatusPassBg
+import com.example.ui.theme.SurfaceBorder
+import com.example.ui.theme.SurfaceCardSecondary
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.TextTertiary
 import com.example.viewmodel.GolfRangerViewModel
 import com.example.viewmodel.GolfScreen
 
+/**
+ * 2026 Professional Routine Screen (Garmin / WHOOP / Apple Health aesthetic)
+ * Clean, restrained, zero emojis, precise checkboxes and audio coaching integration.
+ */
 @Composable
 fun RoutineScreen(
   viewModel: GolfRangerViewModel,
@@ -80,7 +85,7 @@ fun RoutineScreen(
     topBar = {
       GolfTopBar(
         title = "오늘의 실천 루틴",
-        subtitle = "음성 코칭과 함께 따라하기",
+        subtitle = "처방 모빌리티 및 실전 드릴 트레이닝",
         canNavigateBack = true,
         onBackClick = { viewModel.navigateTo(GolfScreen.HOME) }
       )
@@ -93,74 +98,76 @@ fun RoutineScreen(
         .fillMaxSize()
         .padding(innerPadding)
         .verticalScroll(rememberScrollState())
-        .padding(horizontal = 16.dp, vertical = 12.dp)
+        .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
-      // 상단 달성률 카드
+      // 1. 오늘의 루틴 달성 현황 카드 (WHOOP / Garmin Style)
       Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
+        border = androidx.compose.foundation.BorderStroke(1.dp, SurfaceBorder),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
       ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(18.dp)) {
           Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
           ) {
             Text(
-              text = "⚡ 오늘의 루틴 달성률",
+              text = "오늘의 루틴 달성률",
               fontSize = 14.sp,
-              fontWeight = FontWeight.Bold,
-              color = TextMainDark
+              fontWeight = FontWeight.SemiBold,
+              color = TextPrimary
             )
             Box(
               modifier = Modifier
-                .clip(RoundedCornerShape(6.dp))
-                .background(TagMintBg)
+                .clip(RoundedCornerShape(4.dp))
+                .background(if (completedCount == totalTasks && totalTasks > 0) StatusPassBg else Color(0xFFF1F3F5))
                 .padding(horizontal = 8.dp, vertical = 3.dp)
             ) {
               Text(
                 text = "$completedCount / $totalTasks 완료",
-                fontSize = 11.5.sp,
-                fontWeight = FontWeight.Bold,
-                color = TagMintText
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = if (completedCount == totalTasks && totalTasks > 0) StatusPass else TextSecondary
               )
             }
           }
 
-          Spacer(modifier = Modifier.height(10.dp))
+          Spacer(modifier = Modifier.height(12.dp))
 
           LinearProgressIndicator(
             progress = { progress },
             modifier = Modifier
               .fillMaxWidth()
-              .height(8.dp)
-              .clip(RoundedCornerShape(4.dp)),
-            color = FairwayGreenPrimary,
-            trackColor = Color(0xFFE5E7EB)
+              .height(6.dp)
+              .clip(RoundedCornerShape(3.dp)),
+            color = PerformanceGreenPrimary,
+            trackColor = SurfaceBorder
           )
 
-          Spacer(modifier = Modifier.height(8.dp))
+          Spacer(modifier = Modifier.height(10.dp))
 
           Text(
-            text = "“음성 코칭 버튼을 누르고 조교의 구령에 맞춰 따라 해보세요!”",
+            text = "조교의 음성 가이드와 안내에 맞춰 세트별로 따라 해보세요.",
             fontSize = 12.sp,
-            color = TextMuted
+            color = TextTertiary
           )
         }
       }
 
-      Spacer(modifier = Modifier.height(14.dp))
+      Spacer(modifier = Modifier.height(16.dp))
 
+      // 2. 신체 모빌리티 회복 훈련 섹션
       Text(
-        text = "💪 신체 모빌리티 회복 훈련",
-        fontSize = 14.sp,
-        fontWeight = FontWeight.Bold,
-        color = TextMainDark
+        text = "신체 모빌리티 회복 훈련",
+        fontSize = 14.5.sp,
+        fontWeight = FontWeight.SemiBold,
+        color = TextPrimary
       )
 
-      Spacer(modifier = Modifier.height(6.dp))
+      Spacer(modifier = Modifier.height(8.dp))
 
       exercises.forEach { ex ->
         val isDone = completedExercises.contains(ex.title)
@@ -168,28 +175,29 @@ fun RoutineScreen(
           modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 3.dp),
-          shape = RoundedCornerShape(12.dp),
-          colors = CardDefaults.cardColors(
-            containerColor = if (isDone) Color(0xFFF0FDF4) else Color.White
-          ),
-          border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
+          shape = RoundedCornerShape(8.dp),
+          colors = CardDefaults.cardColors(containerColor = Color.White),
+          border = androidx.compose.foundation.BorderStroke(1.dp, if (isDone) PerformanceGreenPrimary else SurfaceBorder),
+          elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
           Row(
             modifier = Modifier
               .fillMaxWidth()
-              .padding(12.dp),
+              .padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
           ) {
+            // Checkbox indicator
             Box(
               modifier = Modifier
-                .size(24.dp)
-                .clip(CircleShape)
-                .background(if (isDone) FairwayGreenPrimary else Color(0xFFE5E7EB))
+                .size(20.dp)
+                .clip(RoundedCornerShape(4.dp))
+                .border(1.dp, if (isDone) PerformanceGreenPrimary else SurfaceBorder, RoundedCornerShape(4.dp))
+                .background(if (isDone) PerformanceGreenPrimary else Color.White)
                 .clickable { viewModel.toggleExerciseComplete(ex.title) },
               contentAlignment = Alignment.Center
             ) {
               if (isDone) {
-                Icon(Icons.Default.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
+                Icon(Icons.Default.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
               }
             }
 
@@ -199,39 +207,41 @@ fun RoutineScreen(
               Text(
                 text = ex.title,
                 fontSize = 13.5.sp,
-                fontWeight = FontWeight.Bold,
-                color = if (isDone) FairwayGreenPrimary else TextMainDark
+                fontWeight = FontWeight.SemiBold,
+                color = if (isDone) PerformanceGreenPrimary else TextPrimary
               )
               Text(
-                text = "📌 ${ex.leftRightDetail}",
-                fontSize = 11.sp,
-                color = TextMuted
+                text = ex.leftRightDetail,
+                fontSize = 11.5.sp,
+                color = TextTertiary
               )
             }
 
             Button(
               onClick = { selectedExercise = ex },
-              colors = ButtonDefaults.buttonColors(containerColor = FairwayGreenPrimary),
-              shape = RoundedCornerShape(8.dp)
+              shape = RoundedCornerShape(6.dp),
+              colors = ButtonDefaults.buttonColors(containerColor = PerformanceGreenPrimary),
+              modifier = Modifier.height(34.dp)
             ) {
-              Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = null, modifier = Modifier.size(14.dp))
-              Spacer(modifier = Modifier.width(3.dp))
-              Text("실행", fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
+              Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = null, modifier = Modifier.size(13.dp))
+              Spacer(modifier = Modifier.width(4.dp))
+              Text("실행", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
             }
           }
         }
       }
 
-      Spacer(modifier = Modifier.height(14.dp))
+      Spacer(modifier = Modifier.height(16.dp))
 
+      // 3. 골프 실전 드릴 섹션
       Text(
-        text = "🏌️ 골프 연습장 실전 드릴",
-        fontSize = 14.sp,
-        fontWeight = FontWeight.Bold,
-        color = TextMainDark
+        text = "골프 연습장 실전 드릴",
+        fontSize = 14.5.sp,
+        fontWeight = FontWeight.SemiBold,
+        color = TextPrimary
       )
 
-      Spacer(modifier = Modifier.height(6.dp))
+      Spacer(modifier = Modifier.height(8.dp))
 
       drills.forEach { drill ->
         val isDone = completedExercises.contains(drill.title)
@@ -239,28 +249,28 @@ fun RoutineScreen(
           modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 3.dp),
-          shape = RoundedCornerShape(12.dp),
-          colors = CardDefaults.cardColors(
-            containerColor = if (isDone) Color(0xFFF0FDF4) else Color.White
-          ),
-          border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
+          shape = RoundedCornerShape(8.dp),
+          colors = CardDefaults.cardColors(containerColor = Color.White),
+          border = androidx.compose.foundation.BorderStroke(1.dp, if (isDone) PerformanceGreenPrimary else SurfaceBorder),
+          elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
           Row(
             modifier = Modifier
               .fillMaxWidth()
-              .padding(12.dp),
+              .padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
           ) {
             Box(
               modifier = Modifier
-                .size(24.dp)
-                .clip(CircleShape)
-                .background(if (isDone) FairwayGreenPrimary else Color(0xFFE5E7EB))
+                .size(20.dp)
+                .clip(RoundedCornerShape(4.dp))
+                .border(1.dp, if (isDone) PerformanceGreenPrimary else SurfaceBorder, RoundedCornerShape(4.dp))
+                .background(if (isDone) PerformanceGreenPrimary else Color.White)
                 .clickable { viewModel.toggleExerciseComplete(drill.title) },
               contentAlignment = Alignment.Center
             ) {
               if (isDone) {
-                Icon(Icons.Default.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
+                Icon(Icons.Default.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
               }
             }
 
@@ -270,24 +280,25 @@ fun RoutineScreen(
               Text(
                 text = drill.title,
                 fontSize = 13.5.sp,
-                fontWeight = FontWeight.Bold,
-                color = if (isDone) FairwayGreenPrimary else TextMainDark
+                fontWeight = FontWeight.SemiBold,
+                color = if (isDone) PerformanceGreenPrimary else TextPrimary
               )
               Text(
-                text = "🎯 ${drill.setAndReps}",
-                fontSize = 11.sp,
-                color = TextMuted
+                text = "${drill.recommendedClub} · ${drill.setAndReps}",
+                fontSize = 11.5.sp,
+                color = TextTertiary
               )
             }
 
             Button(
               onClick = { selectedDrill = drill },
-              colors = ButtonDefaults.buttonColors(containerColor = EnergeticGold),
-              shape = RoundedCornerShape(8.dp)
+              shape = RoundedCornerShape(6.dp),
+              colors = ButtonDefaults.buttonColors(containerColor = PerformanceGreenPrimary),
+              modifier = Modifier.height(34.dp)
             ) {
-              Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
-              Spacer(modifier = Modifier.width(3.dp))
-              Text("실행", fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = Color.White)
+              Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = null, modifier = Modifier.size(13.dp))
+              Spacer(modifier = Modifier.width(4.dp))
+              Text("실행", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
             }
           }
         }
@@ -297,18 +308,20 @@ fun RoutineScreen(
 
       OutlinedButton(
         onClick = { viewModel.navigateTo(GolfScreen.REPORT) },
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
         modifier = Modifier
           .fillMaxWidth()
-          .height(48.dp)
+          .height(46.dp)
+          .testTag("back_to_report_button")
       ) {
-        Text("AI 분석 리포트로 돌아가기", fontSize = 13.sp)
+        Text("종합 분석 리포트로 이동", fontSize = 13.sp, color = TextPrimary)
       }
 
       Spacer(modifier = Modifier.height(24.dp))
     }
   }
 
+  // 모빌리티 운동 코칭 다이얼로그
   selectedExercise?.let { ex ->
     ExecutionCoachDialog(
       title = ex.title,
@@ -316,13 +329,14 @@ fun RoutineScreen(
       setsAndReps = ex.leftRightDetail,
       coachingKey = ex.coachingKey,
       voiceScript = ex.voiceCoachScript,
-      visualType = ex.visualType,
+      visualType = ex.technicalId,
       instructions = ex.instructions,
       onDismiss = { selectedExercise = null },
       onCompleted = { viewModel.toggleExerciseComplete(ex.title) }
     )
   }
 
+  // 드릴 코칭 다이얼로그
   selectedDrill?.let { drill ->
     ExecutionCoachDialog(
       title = drill.title,
@@ -330,7 +344,7 @@ fun RoutineScreen(
       setsAndReps = drill.setAndReps,
       coachingKey = drill.feelVsReal,
       voiceScript = drill.voiceCoachScript,
-      visualType = drill.visualType,
+      visualType = drill.technicalId,
       instructions = drill.howToPractice,
       onDismiss = { selectedDrill = null },
       onCompleted = { viewModel.toggleExerciseComplete(drill.title) }

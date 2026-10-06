@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Assignment
@@ -36,15 +37,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.screens.HomeScreen
 import com.example.ui.screens.ReportScreen
 import com.example.ui.screens.RoutineScreen
 import com.example.ui.screens.ScreeningScreen
 import com.example.ui.screens.SurveyScreen
-import com.example.ui.theme.AccentGold
+import com.example.ui.theme.PerformanceGreenContainer
+import com.example.ui.theme.PerformanceGreenPrimary
+import com.example.ui.theme.TextTertiary
 import com.example.ui.theme.MyApplicationTheme
-import com.example.ui.theme.PineGreenPrimary
 import com.example.viewmodel.GolfRangerViewModel
 import com.example.viewmodel.GolfScreen
 
@@ -88,45 +92,41 @@ fun GolfRangerApp(viewModel: GolfRangerViewModel) {
         modifier = Modifier
           .windowInsetsPadding(WindowInsets.navigationBars)
           .testTag("main_bottom_nav"),
-        containerColor = MaterialTheme.colorScheme.surface,
-        contentColor = PineGreenPrimary
+        containerColor = Color.White,
+        contentColor = PerformanceGreenPrimary
       ) {
+        val navColors = NavigationBarItemDefaults.colors(
+          selectedIconColor = PerformanceGreenPrimary,
+          selectedTextColor = PerformanceGreenPrimary,
+          indicatorColor = PerformanceGreenContainer,
+          unselectedIconColor = TextTertiary,
+          unselectedTextColor = TextTertiary
+        )
+
         NavigationBarItem(
           selected = currentScreen == GolfScreen.HOME,
           onClick = { viewModel.navigateTo(GolfScreen.HOME) },
-          icon = { Icon(Icons.Default.Home, contentDescription = "홈") },
-          label = { Text("홈", fontSize = 11.sp) },
-          colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = Color.White,
-            selectedTextColor = PineGreenPrimary,
-            indicatorColor = PineGreenPrimary
-          ),
+          icon = { Icon(Icons.Default.Home, contentDescription = "홈", modifier = Modifier.size(20.dp)) },
+          label = { Text("홈", fontSize = 11.sp, fontWeight = if (currentScreen == GolfScreen.HOME) FontWeight.SemiBold else FontWeight.Normal) },
+          colors = navColors,
           modifier = Modifier.testTag("nav_item_home")
         )
 
         NavigationBarItem(
           selected = currentScreen == GolfScreen.SURVEY,
           onClick = { viewModel.navigateTo(GolfScreen.SURVEY) },
-          icon = { Icon(Icons.Default.Assignment, contentDescription = "설문") },
-          label = { Text("설문", fontSize = 11.sp) },
-          colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = Color.White,
-            selectedTextColor = PineGreenPrimary,
-            indicatorColor = PineGreenPrimary
-          ),
+          icon = { Icon(Icons.Default.Assignment, contentDescription = "설문", modifier = Modifier.size(20.dp)) },
+          label = { Text("설문", fontSize = 11.sp, fontWeight = if (currentScreen == GolfScreen.SURVEY) FontWeight.SemiBold else FontWeight.Normal) },
+          colors = navColors,
           modifier = Modifier.testTag("nav_item_survey")
         )
 
         NavigationBarItem(
           selected = currentScreen == GolfScreen.SCREENING,
           onClick = { viewModel.navigateTo(GolfScreen.SCREENING) },
-          icon = { Icon(Icons.Default.FitnessCenter, contentDescription = "신체검진") },
-          label = { Text("신체검진", fontSize = 11.sp) },
-          colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = Color.White,
-            selectedTextColor = PineGreenPrimary,
-            indicatorColor = PineGreenPrimary
-          ),
+          icon = { Icon(Icons.Default.FitnessCenter, contentDescription = "신체검진", modifier = Modifier.size(20.dp)) },
+          label = { Text("신체검진", fontSize = 11.sp, fontWeight = if (currentScreen == GolfScreen.SCREENING) FontWeight.SemiBold else FontWeight.Normal) },
+          colors = navColors,
           modifier = Modifier.testTag("nav_item_screening")
         )
 
@@ -136,26 +136,18 @@ fun GolfRangerApp(viewModel: GolfRangerViewModel) {
             viewModel.refreshAnalysis()
             viewModel.navigateTo(GolfScreen.REPORT)
           },
-          icon = { Icon(Icons.Default.Psychology, contentDescription = "AI분석") },
-          label = { Text("AI분석", fontSize = 11.sp) },
-          colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = Color.White,
-            selectedTextColor = PineGreenPrimary,
-            indicatorColor = PineGreenPrimary
-          ),
+          icon = { Icon(Icons.Default.Psychology, contentDescription = "진단리포트", modifier = Modifier.size(20.dp)) },
+          label = { Text("리포트", fontSize = 11.sp, fontWeight = if (currentScreen == GolfScreen.REPORT) FontWeight.SemiBold else FontWeight.Normal) },
+          colors = navColors,
           modifier = Modifier.testTag("nav_item_report")
         )
 
         NavigationBarItem(
           selected = currentScreen == GolfScreen.ROUTINE,
           onClick = { viewModel.navigateTo(GolfScreen.ROUTINE) },
-          icon = { Icon(Icons.Default.Timer, contentDescription = "트레이닝") },
-          label = { Text("루틴", fontSize = 11.sp) },
-          colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = Color.White,
-            selectedTextColor = PineGreenPrimary,
-            indicatorColor = PineGreenPrimary
-          ),
+          icon = { Icon(Icons.Default.Timer, contentDescription = "루틴", modifier = Modifier.size(20.dp)) },
+          label = { Text("루틴", fontSize = 11.sp, fontWeight = if (currentScreen == GolfScreen.ROUTINE) FontWeight.SemiBold else FontWeight.Normal) },
+          colors = navColors,
           modifier = Modifier.testTag("nav_item_routine")
         )
       }

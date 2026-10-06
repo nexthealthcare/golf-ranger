@@ -13,18 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.FitnessCenter
-import androidx.compose.material.icons.filled.GolfCourse
-import androidx.compose.material.icons.filled.SportsGolf
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,15 +29,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.ui.theme.EnergeticGold
-import com.example.ui.theme.FairwayGreenPrimary
-import com.example.ui.theme.TextMainDark
-import com.example.ui.theme.TextMuted
+import com.example.ui.theme.PerformanceGreenPrimary
+import com.example.ui.theme.PerformanceGreenContainer
+import com.example.ui.theme.SurfaceBorder
+import com.example.ui.theme.SurfaceCardSecondary
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.TextTertiary
 
+/**
+ * Professional Performance Cycle (Body -> Swing -> Game)
+ * Formatted like a sports biomechanics pipeline (Garmin / WHOOP style).
+ */
 @Composable
 fun CycleVisualizer(
   modifier: Modifier = Modifier,
@@ -53,15 +53,15 @@ fun CycleVisualizer(
 
   Card(
     modifier = modifier.fillMaxWidth(),
-    shape = RoundedCornerShape(16.dp),
+    shape = RoundedCornerShape(10.dp),
     colors = CardDefaults.cardColors(containerColor = Color.White),
-    border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    border = androidx.compose.foundation.BorderStroke(1.dp, SurfaceBorder),
+    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
   ) {
     Column(
       modifier = Modifier
         .fillMaxWidth()
-        .padding(16.dp)
+        .padding(18.dp)
     ) {
       Row(
         modifier = Modifier.fillMaxWidth(),
@@ -69,68 +69,73 @@ fun CycleVisualizer(
         verticalAlignment = Alignment.CenterVertically
       ) {
         Text(
-          text = "🎯 골프레인저 인과관계 사이클",
+          text = "바디-스윙-게임 인과관계 분석",
           fontSize = 15.sp,
-          fontWeight = FontWeight.Bold,
-          color = TextMainDark
+          fontWeight = FontWeight.SemiBold,
+          color = TextPrimary
         )
-        Box(
-          modifier = Modifier
-            .clip(RoundedCornerShape(6.dp))
-            .background(FairwayGreenPrimary.copy(alpha = 0.1f))
-            .padding(horizontal = 8.dp, vertical = 3.dp)
-        ) {
-          Text(
-            text = "Body → Swing → Game",
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Bold,
-            color = FairwayGreenPrimary
-          )
-        }
+
+        Text(
+          text = "Body → Swing → Game",
+          fontSize = 11.5.sp,
+          fontWeight = FontWeight.Medium,
+          color = PerformanceGreenPrimary
+        )
       }
 
-      Spacer(modifier = Modifier.height(12.dp))
+      Spacer(modifier = Modifier.height(14.dp))
 
+      // 3-Stage Pipeline (Clean, high-legibility blocks)
       Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
       ) {
-        CycleStepNode(
-          title = "바디 (신체)",
-          badge = "브레이크",
-          icon = Icons.Default.FitnessCenter,
+        PipelineStep(
+          stepNumber = "01",
+          title = "신체 가동성",
+          subtitle = "원인 발생",
           isSelected = selectedTab == "BODY",
           onClick = { selectedTab = "BODY" }
         )
 
-        Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = Color.LightGray, modifier = Modifier.size(16.dp))
+        Icon(
+          imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+          contentDescription = null,
+          tint = TextTertiary.copy(alpha = 0.4f),
+          modifier = Modifier.size(14.dp)
+        )
 
-        CycleStepNode(
-          title = "스윙 (기술)",
-          badge = "보상동작",
-          icon = Icons.Default.SportsGolf,
+        PipelineStep(
+          stepNumber = "02",
+          title = "스윙 메커니즘",
+          subtitle = "보상 동작",
           isSelected = selectedTab == "SWING",
           onClick = { selectedTab = "SWING" }
         )
 
-        Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = Color.LightGray, modifier = Modifier.size(16.dp))
+        Icon(
+          imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+          contentDescription = null,
+          tint = TextTertiary.copy(alpha = 0.4f),
+          modifier = Modifier.size(14.dp)
+        )
 
-        CycleStepNode(
-          title = "게임 (결과)",
-          badge = "타수낭비",
-          icon = Icons.Default.GolfCourse,
+        PipelineStep(
+          stepNumber = "03",
+          title = "실전 스코어",
+          subtitle = "타수 손실",
           isSelected = selectedTab == "GAME",
           onClick = { selectedTab = "GAME" }
         )
       }
 
-      Spacer(modifier = Modifier.height(10.dp))
+      Spacer(modifier = Modifier.height(14.dp))
 
-      val tipText = when (selectedTab) {
-        "BODY" -> "💡 관절이 굳어있으면 뇌가 몸을 보호하려 무의식적으로 스윙 궤도를 비틉니다."
-        "SWING" -> "💡 부족한 유연성을 메우려 배치기나 엎어치기 등 보상 동작이 튀어나옵니다."
-        "GAME" -> "💡 결국 긴 클럽이나 후반 홀에서 낭비타가 발생합니다. 원인을 잡아야 타수가 줄어듭니다!"
+      val detailText = when (selectedTab) {
+        "BODY" -> "관절의 회전 가동성과 정적 밸런스가 결핍되면, 뇌는 신체를 보호하기 위해 본능적으로 스윙 궤도를 변형시킵니다. 신체 축을 바로잡는 것이 가장 빠른 타수 교정의 출발점입니다."
+        "SWING" -> "잠긴 관절 가동 범위를 보상하기 위해 임팩트 시 상체를 일으켜 세우거나(얼리 익스텐션), 상체로 덮어치는(오버 더 탑) 인위적인 보상 동작이 발생합니다."
+        "GAME" -> "스윙 폼의 보상 동작은 실전 필드의 긴 클럽(드라이버/롱아이언)이나 후반 홀 체력 감쇄 시 타점 오차(OB/뒷땅)로 이어져 홀당 1~2타의 불필요한 누수를 발생시킵니다."
         else -> ""
       }
 
@@ -138,14 +143,14 @@ fun CycleVisualizer(
         modifier = Modifier
           .fillMaxWidth()
           .clip(RoundedCornerShape(8.dp))
-          .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f))
-          .padding(10.dp)
+          .background(SurfaceCardSecondary)
+          .padding(12.dp)
       ) {
         Text(
-          text = tipText,
-          fontSize = 12.sp,
-          color = TextMuted,
-          lineHeight = 16.sp
+          text = detailText,
+          fontSize = 13.sp,
+          color = TextSecondary,
+          lineHeight = 19.sp
         )
       }
     }
@@ -153,49 +158,42 @@ fun CycleVisualizer(
 }
 
 @Composable
-private fun CycleStepNode(
+private fun PipelineStep(
+  stepNumber: String,
   title: String,
-  badge: String,
-  icon: ImageVector,
+  subtitle: String,
   isSelected: Boolean,
   onClick: () -> Unit
 ) {
-  val bgColor by animateColorAsState(
-    if (isSelected) FairwayGreenPrimary else MaterialTheme.colorScheme.surfaceVariant,
-    label = "bg"
-  )
-  val iconColor by animateColorAsState(
-    if (isSelected) Color.White else TextMuted,
-    label = "icon"
-  )
+  val borderCol = if (isSelected) PerformanceGreenPrimary else SurfaceBorder
+  val bgCol = if (isSelected) PerformanceGreenContainer else Color.White
 
   Column(
-    horizontalAlignment = Alignment.CenterHorizontally,
     modifier = Modifier
+      .clip(RoundedCornerShape(8.dp))
+      .border(1.dp, borderCol, RoundedCornerShape(8.dp))
+      .background(bgCol)
       .clickable { onClick() }
-      .padding(4.dp)
+      .padding(horizontal = 12.dp, vertical = 10.dp),
+    horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    Box(
-      modifier = Modifier
-        .size(42.dp)
-        .clip(CircleShape)
-        .background(bgColor),
-      contentAlignment = Alignment.Center
-    ) {
-      Icon(icon, contentDescription = title, tint = iconColor, modifier = Modifier.size(20.dp))
-    }
-    Spacer(modifier = Modifier.height(4.dp))
+    Text(
+      text = stepNumber,
+      fontSize = 11.sp,
+      fontWeight = FontWeight.Bold,
+      color = if (isSelected) PerformanceGreenPrimary else TextTertiary
+    )
+    Spacer(modifier = Modifier.height(2.dp))
     Text(
       text = title,
-      fontSize = 12.sp,
-      fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-      color = if (isSelected) FairwayGreenPrimary else TextMainDark
+      fontSize = 13.sp,
+      fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
+      color = TextPrimary
     )
     Text(
-      text = badge,
-      fontSize = 10.sp,
-      color = if (isSelected) EnergeticGold else TextMuted,
-      fontWeight = FontWeight.Bold
+      text = subtitle,
+      fontSize = 11.sp,
+      color = TextTertiary
     )
   }
 }

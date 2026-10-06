@@ -19,14 +19,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Movie
-import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -35,6 +32,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -53,18 +51,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.components.GolfTopBar
-import com.example.ui.theme.CleanWhiteBorder
-import com.example.ui.theme.EnergeticGold
-import com.example.ui.theme.FairwayGreenPrimary
-import com.example.ui.theme.TagAmberBg
-import com.example.ui.theme.TagAmberText
-import com.example.ui.theme.TagMintBg
-import com.example.ui.theme.TagMintText
-import com.example.ui.theme.TextMainDark
-import com.example.ui.theme.TextMuted
+import com.example.ui.theme.PerformanceGreenPrimary
+import com.example.ui.theme.PerformanceGreenContainer
+import com.example.ui.theme.SurfaceBorder
+import com.example.ui.theme.SurfaceCardSecondary
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.TextTertiary
 import com.example.viewmodel.GolfRangerViewModel
 import com.example.viewmodel.GolfScreen
 
+/**
+ * Professional Golfer Survey Screen (Clinical Athletic Intake)
+ * Clean, restrained, high-legibility layout for mature golfers without emojis.
+ */
 @Composable
 fun SurveyScreen(
   viewModel: GolfRangerViewModel,
@@ -76,36 +76,36 @@ fun SurveyScreen(
     contract = ActivityResultContracts.PickVisualMedia()
   ) { uri: Uri? ->
     if (uri != null) {
-      viewModel.setSwingVideo(uri.toString(), "골퍼 본인 스윙 영상")
+      viewModel.setSwingVideo(uri.toString(), "골퍼 등록 스윙 영상")
     }
   }
 
   val allRoundIssues = listOf(
-    "드라이버 슬라이스 / 훅",
-    "비거리 부족 (드라이버 180m 이하)",
-    "아이언 뒷땅 / 탑핑이 잦음",
-    "숏게임 어프로치 거리감 불안",
-    "3퍼트가 너무 많음",
-    "후반에 무너짐 (체력 저하)",
-    "필드만 가면 스윙이 바뀜",
-    "라운드 후 허리/손목이 아픔",
-    "연습해도 제자리걸음 (정체기)"
+    "드라이버 슬라이스 및 푸시 샷",
+    "비거리 부족 (드라이버 190m 이하)",
+    "아이언 뒷땅 및 탑핑 타점 오차",
+    "그린 주변 숏게임 거리감 불안정",
+    "홀당 3퍼트 빈도 과다",
+    "후반 나인홀 체력 저하 및 샷 난조",
+    "연습장 대비 실전 필드 스윙 괴리",
+    "라운드 후 요추 및 손목 통증",
+    "지속적 연습에도 타수 정체"
   )
 
-  val confidenceOptions = listOf("드라이버 티샷", "아이언 온그린", "숏게임 어프로치", "원펏 거리감", "트러블 탈출")
-  val anxietyOptions = listOf("아이언 뒷땅/탑핑", "티샷 슬라이스 OB", "30m 쌩크", "3퍼트", "후반 체력 고갈")
+  val confidenceOptions = listOf("드라이버 티샷", "아이언 온그린", "숏게임 어프로치", "퍼팅 거리감", "트러블 탈출")
+  val anxietyOptions = listOf("아이언 타점 오차", "티샷 슬라이스 OB", "30m 쌩크", "퍼팅 쓰리펏", "후반 체력 고갈")
   val swingHabits = listOf(
-    "임팩트 시 골반이 앞으로 밀림 (배치기)",
-    "백스윙 시 상체가 엎어 들어옴 (오버 더 탑)",
-    "임팩트 후 왼팔이 당겨짐 (치킨윙)",
-    "다운스윙 손목이 일찍 풀림 (캐스팅)"
+    "임팩트 시 골반 조기 전진 (얼리 익스텐션)",
+    "백스윙 탑 상체 덮어침 (오버 더 탑)",
+    "팔로우스루 좌측 팔꿈치 당김 (치킨윙)",
+    "다운스윙 손목 조기 풀림 (캐스팅)"
   )
 
   Scaffold(
     topBar = {
       GolfTopBar(
-        title = "1단계: 골퍼 성향 설문",
-        subtitle = "글자는 적게, 터치는 빠르게!",
+        title = "1단계: 골퍼 프로필 및 실전 문진",
+        subtitle = "골프 기능 해부학 분석 기초 자료 수집",
         canNavigateBack = true,
         onBackClick = { viewModel.navigateTo(GolfScreen.HOME) }
       )
@@ -118,43 +118,37 @@ fun SurveyScreen(
         .fillMaxSize()
         .padding(innerPadding)
         .verticalScroll(rememberScrollState())
-        .padding(horizontal = 16.dp, vertical = 12.dp)
+        .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
-      // 1. 평균 핸디캡 선택 (슬라이더)
+      // 1. 평균 핸디캡 선택 (슬라이더 & 수치)
       Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
+        border = androidx.compose.foundation.BorderStroke(1.dp, SurfaceBorder),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
       ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(18.dp)) {
           Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
           ) {
             Text(
-              text = "🏌️ 평균 핸디캡",
-              fontSize = 15.sp,
-              fontWeight = FontWeight.Bold,
-              color = TextMainDark
+              text = "최근 5게임 평균 핸디캡",
+              fontSize = 14.sp,
+              fontWeight = FontWeight.SemiBold,
+              color = TextPrimary
             )
-            Box(
-              modifier = Modifier
-                .clip(RoundedCornerShape(8.dp))
-                .background(TagMintBg)
-                .padding(horizontal = 10.dp, vertical = 4.dp)
-            ) {
-              Text(
-                text = "${profile.handicap}핸디 (평균 ${72 + profile.handicap}타)",
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Bold,
-                color = TagMintText
-              )
-            }
+            Text(
+              text = "${profile.handicap} (평균 ${72 + profile.handicap}타)",
+              fontSize = 14.sp,
+              fontWeight = FontWeight.SemiBold,
+              color = PerformanceGreenPrimary
+            )
           }
 
-          Spacer(modifier = Modifier.height(6.dp))
+          Spacer(modifier = Modifier.height(8.dp))
 
           Slider(
             value = profile.handicap.toFloat(),
@@ -162,9 +156,9 @@ fun SurveyScreen(
             valueRange = 0f..36f,
             steps = 35,
             colors = SliderDefaults.colors(
-              thumbColor = FairwayGreenPrimary,
-              activeTrackColor = FairwayGreenPrimary,
-              inactiveTrackColor = Color(0xFFE5E7EB)
+              thumbColor = PerformanceGreenPrimary,
+              activeTrackColor = PerformanceGreenPrimary,
+              inactiveTrackColor = SurfaceBorder
             ),
             modifier = Modifier.testTag("handicap_slider")
           )
@@ -173,41 +167,43 @@ fun SurveyScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
           ) {
-            Text("싱글 (0~9)", fontSize = 11.sp, color = TextMuted)
-            Text("보기플레이 (18)", fontSize = 11.sp, color = TextMuted)
-            Text("백돌이 (28+)", fontSize = 11.sp, color = TextMuted)
+            Text("싱글 (0~9)", fontSize = 11.sp, color = TextTertiary)
+            Text("보기플레이 (18)", fontSize = 11.sp, color = TextTertiary)
+            Text("초급 (28+)", fontSize = 11.sp, color = TextTertiary)
           }
         }
       }
 
-      Spacer(modifier = Modifier.height(12.dp))
+      Spacer(modifier = Modifier.height(14.dp))
 
-      // 2. 자신 있는 부분 & 불안한 부분 (원터치 칩)
+      // 2. 강점 및 불안 영역 선택 (정제된 칩)
       Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
+        border = androidx.compose.foundation.BorderStroke(1.dp, SurfaceBorder),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
       ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(18.dp)) {
           Text(
-            text = "👍 가장 자신 있는 무기",
+            text = "가장 안정적인 샷 (자신감)",
             fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
-            color = TextMainDark
+            fontWeight = FontWeight.SemiBold,
+            color = TextPrimary
           )
-          Spacer(modifier = Modifier.height(6.dp))
+          Spacer(modifier = Modifier.height(8.dp))
           Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
           ) {
             confidenceOptions.take(3).forEach { option ->
+              val isSelected = profile.strongestArea == option
               FilterChip(
-                selected = profile.strongestArea == option,
+                selected = isSelected,
                 onClick = { viewModel.updateStrongestArea(option) },
-                label = { Text(option, fontSize = 11.5.sp) },
+                label = { Text(option, fontSize = 12.sp) },
                 colors = FilterChipDefaults.filterChipColors(
-                  selectedContainerColor = FairwayGreenPrimary,
+                  selectedContainerColor = PerformanceGreenPrimary,
                   selectedLabelColor = Color.White
                 )
               )
@@ -218,38 +214,40 @@ fun SurveyScreen(
             horizontalArrangement = Arrangement.spacedBy(6.dp)
           ) {
             confidenceOptions.drop(3).forEach { option ->
+              val isSelected = profile.strongestArea == option
               FilterChip(
-                selected = profile.strongestArea == option,
+                selected = isSelected,
                 onClick = { viewModel.updateStrongestArea(option) },
-                label = { Text(option, fontSize = 11.5.sp) },
+                label = { Text(option, fontSize = 12.sp) },
                 colors = FilterChipDefaults.filterChipColors(
-                  selectedContainerColor = FairwayGreenPrimary,
+                  selectedContainerColor = PerformanceGreenPrimary,
                   selectedLabelColor = Color.White
                 )
               )
             }
           }
 
-          Spacer(modifier = Modifier.height(12.dp))
+          Spacer(modifier = Modifier.height(16.dp))
 
           Text(
-            text = "⚠️ 가장 불안한 샷",
+            text = "가장 불안정한 샷 (미스 다발)",
             fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
-            color = TextMainDark
+            fontWeight = FontWeight.SemiBold,
+            color = TextPrimary
           )
-          Spacer(modifier = Modifier.height(6.dp))
+          Spacer(modifier = Modifier.height(8.dp))
           Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
           ) {
             anxietyOptions.take(3).forEach { option ->
+              val isSelected = profile.weakestArea == option
               FilterChip(
-                selected = profile.weakestArea == option,
+                selected = isSelected,
                 onClick = { viewModel.updateWeakestArea(option) },
-                label = { Text(option, fontSize = 11.5.sp) },
+                label = { Text(option, fontSize = 12.sp) },
                 colors = FilterChipDefaults.filterChipColors(
-                  selectedContainerColor = Color(0xFFEF4444),
+                  selectedContainerColor = Color(0xFFB91C1C),
                   selectedLabelColor = Color.White
                 )
               )
@@ -260,12 +258,13 @@ fun SurveyScreen(
             horizontalArrangement = Arrangement.spacedBy(6.dp)
           ) {
             anxietyOptions.drop(3).forEach { option ->
+              val isSelected = profile.weakestArea == option
               FilterChip(
-                selected = profile.weakestArea == option,
+                selected = isSelected,
                 onClick = { viewModel.updateWeakestArea(option) },
-                label = { Text(option, fontSize = 11.5.sp) },
+                label = { Text(option, fontSize = 12.sp) },
                 colors = FilterChipDefaults.filterChipColors(
-                  selectedContainerColor = Color(0xFFEF4444),
+                  selectedContainerColor = Color(0xFFB91C1C),
                   selectedLabelColor = Color.White
                 )
               )
@@ -274,36 +273,36 @@ fun SurveyScreen(
         }
       }
 
-      Spacer(modifier = Modifier.height(12.dp))
+      Spacer(modifier = Modifier.height(14.dp))
 
-      // 3. 최근 라운드 문제점 체크 (복수 선택)
+      // 3. 최근 라운드 미스 항목 (복수 선택 리스트)
       Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
+        border = androidx.compose.foundation.BorderStroke(1.dp, SurfaceBorder),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
       ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(18.dp)) {
           Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
           ) {
             Text(
-              text = "💣 최근 라운드 미스 (복수 선택)",
+              text = "실전 라운드 미스 증상 (복수 선택)",
               fontSize = 14.sp,
-              fontWeight = FontWeight.Bold,
-              color = TextMainDark
+              fontWeight = FontWeight.SemiBold,
+              color = TextPrimary
             )
             Text(
-              text = "${profile.roundIssues.size}개 선택",
+              text = "${profile.roundIssues.size}개 항목 선택됨",
               fontSize = 12.sp,
-              fontWeight = FontWeight.Bold,
-              color = FairwayGreenPrimary
+              color = TextTertiary
             )
           }
 
-          Spacer(modifier = Modifier.height(8.dp))
+          Spacer(modifier = Modifier.height(10.dp))
 
           allRoundIssues.forEach { issue ->
             val isChecked = profile.roundIssues.contains(issue)
@@ -311,104 +310,55 @@ fun SurveyScreen(
               modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 3.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(if (isChecked) FairwayGreenPrimary.copy(alpha = 0.08f) else Color.Transparent)
+                .clip(RoundedCornerShape(6.dp))
+                .background(if (isChecked) PerformanceGreenContainer else Color.Transparent)
                 .clickable { viewModel.toggleRoundIssue(issue) }
-                .padding(horizontal = 8.dp, vertical = 6.dp),
+                .padding(horizontal = 10.dp, vertical = 8.dp),
               verticalAlignment = Alignment.CenterVertically
             ) {
               Box(
                 modifier = Modifier
-                  .size(18.dp)
-                  .clip(RoundedCornerShape(4.dp))
-                  .background(if (isChecked) FairwayGreenPrimary else Color(0xFFE5E7EB)),
+                  .size(16.dp)
+                  .clip(RoundedCornerShape(3.dp))
+                  .border(1.dp, if (isChecked) PerformanceGreenPrimary else SurfaceBorder, RoundedCornerShape(3.dp))
+                  .background(if (isChecked) PerformanceGreenPrimary else Color.White),
                 contentAlignment = Alignment.Center
               ) {
                 if (isChecked) {
-                  Icon(Icons.Default.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(13.dp))
+                  Icon(Icons.Default.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(12.dp))
                 }
               }
               Spacer(modifier = Modifier.width(10.dp))
               Text(
                 text = issue,
-                fontSize = 13.sp,
+                fontSize = 13.5.sp,
                 fontWeight = if (isChecked) FontWeight.SemiBold else FontWeight.Normal,
-                color = if (isChecked) FairwayGreenPrimary else TextMainDark
+                color = if (isChecked) PerformanceGreenPrimary else TextPrimary
               )
             }
           }
         }
       }
 
-      Spacer(modifier = Modifier.height(12.dp))
+      Spacer(modifier = Modifier.height(14.dp))
 
-      // 4. 스윙 습관 자가 선택 & 영상 진단 (간편 선택)
+      // 4. 스윙 패턴 및 영상 진단 옵션
       Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
+        border = androidx.compose.foundation.BorderStroke(1.dp, SurfaceBorder),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
       ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(18.dp)) {
           Text(
-            text = "🎬 내 스윙 영상 & 습관",
+            text = "체감되는 스윙 보상 동작",
             fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
-            color = TextMainDark
+            fontWeight = FontWeight.SemiBold,
+            color = TextPrimary
           )
-
-          Spacer(modifier = Modifier.height(8.dp))
-
-          Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(
-              onClick = {
-                videoPickerLauncher.launch(
-                  PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)
-                )
-              },
-              colors = ButtonDefaults.buttonColors(containerColor = FairwayGreenPrimary),
-              shape = RoundedCornerShape(8.dp),
-              modifier = Modifier.weight(1f)
-            ) {
-              Icon(Icons.Default.Videocam, contentDescription = null, modifier = Modifier.size(16.dp))
-              Spacer(modifier = Modifier.width(4.dp))
-              Text("영상 등록", fontSize = 12.sp)
-            }
-
-            Button(
-              onClick = {
-                viewModel.setSwingVideo("demo_video", "샘플 스윙 영상 적용됨")
-              },
-              colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF3F4F6)),
-              shape = RoundedCornerShape(8.dp),
-              modifier = Modifier.weight(1f)
-            ) {
-              Icon(Icons.Default.Movie, contentDescription = null, tint = TextMainDark, modifier = Modifier.size(16.dp))
-              Spacer(modifier = Modifier.width(4.dp))
-              Text("샘플 적용", fontSize = 12.sp, color = TextMainDark)
-            }
-          }
-
-          if (profile.swingVideoFileName != null) {
-            Spacer(modifier = Modifier.height(6.dp))
-            Text(
-              text = "✅ ${profile.swingVideoFileName}",
-              fontSize = 11.5.sp,
-              color = FairwayGreenPrimary,
-              fontWeight = FontWeight.Bold
-            )
-          }
 
           Spacer(modifier = Modifier.height(10.dp))
-
-          Text(
-            text = "체감되는 스윙 습관 1가지",
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
-            color = TextMuted
-          )
-
-          Spacer(modifier = Modifier.height(6.dp))
 
           swingHabits.forEach { habit ->
             val isSelected = profile.selectedSwingHabit == habit
@@ -416,54 +366,88 @@ fun SurveyScreen(
               modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 3.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(6.dp))
                 .clickable { viewModel.setSwingHabit(habit) }
-                .padding(vertical = 4.dp),
+                .padding(vertical = 6.dp, horizontal = 4.dp),
               verticalAlignment = Alignment.CenterVertically
             ) {
               Box(
                 modifier = Modifier
                   .size(16.dp)
-                  .clip(CircleShape)
-                  .background(if (isSelected) FairwayGreenPrimary else Color(0xFFD1D5DB)),
+                  .clip(RoundedCornerShape(8.dp))
+                  .border(1.5.dp, if (isSelected) PerformanceGreenPrimary else SurfaceBorder, RoundedCornerShape(8.dp)),
                 contentAlignment = Alignment.Center
               ) {
                 if (isSelected) {
                   Box(
                     modifier = Modifier
-                      .size(6.dp)
-                      .clip(CircleShape)
-                      .background(Color.White)
+                      .size(8.dp)
+                      .clip(RoundedCornerShape(4.dp))
+                      .background(PerformanceGreenPrimary)
                   )
                 }
               }
-              Spacer(modifier = Modifier.width(8.dp))
+              Spacer(modifier = Modifier.width(10.dp))
               Text(
                 text = habit,
-                fontSize = 12.5.sp,
-                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                color = if (isSelected) FairwayGreenPrimary else TextMuted
+                fontSize = 13.5.sp,
+                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                color = if (isSelected) PerformanceGreenPrimary else TextSecondary
               )
             }
+          }
+
+          Spacer(modifier = Modifier.height(12.dp))
+
+          Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedButton(
+              onClick = {
+                videoPickerLauncher.launch(
+                  PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)
+                )
+              },
+              shape = RoundedCornerShape(6.dp),
+              modifier = Modifier.weight(1f)
+            ) {
+              Text("영상 파일 등록", fontSize = 12.sp, color = TextPrimary)
+            }
+
+            OutlinedButton(
+              onClick = {
+                viewModel.setSwingVideo("demo_video", "샘플 스윙 영상 적용됨")
+              },
+              shape = RoundedCornerShape(6.dp),
+              modifier = Modifier.weight(1f)
+            ) {
+              Text("기준 영상 적용", fontSize = 12.sp, color = TextSecondary)
+            }
+          }
+
+          if (profile.swingVideoFileName != null) {
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+              text = "등록됨: ${profile.swingVideoFileName}",
+              fontSize = 12.sp,
+              color = PerformanceGreenPrimary
+            )
           }
         }
       }
 
-      Spacer(modifier = Modifier.height(16.dp))
+      Spacer(modifier = Modifier.height(18.dp))
 
-      // 다음: 신체검진 버튼
       Button(
         onClick = { viewModel.navigateTo(GolfScreen.SCREENING) },
-        shape = RoundedCornerShape(14.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = FairwayGreenPrimary),
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = PerformanceGreenPrimary),
         modifier = Modifier
           .fillMaxWidth()
-          .height(52.dp)
+          .height(48.dp)
           .testTag("goto_screening_button")
       ) {
-        Text("다음: 13가지 신체검진 (그림&음성)", fontSize = 15.sp, fontWeight = FontWeight.Bold)
+        Text("다음: 13가지 신체검진 프로토콜", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         Spacer(modifier = Modifier.width(6.dp))
-        Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
+        Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, modifier = Modifier.size(16.dp))
       }
 
       Spacer(modifier = Modifier.height(24.dp))

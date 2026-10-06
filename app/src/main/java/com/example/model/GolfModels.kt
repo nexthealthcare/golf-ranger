@@ -1,7 +1,7 @@
 package com.example.model
 
 /**
- * 골퍼의 기본 정보 및 라운드 문제점 설문 데이터
+ * 골퍼 프로필 및 라운드 데이터
  */
 data class GolferProfile(
   val handicap: Int = 18,
@@ -17,25 +17,26 @@ data class GolferProfile(
   ),
   val swingVideoUri: String? = null,
   val swingVideoFileName: String? = null,
-  val selectedSwingHabit: String = "임팩트 시 골반이 앞으로 밀림 (배치기)"
+  val selectedSwingHabit: String = "임팩트 시 골반 조기 전진 (얼리 익스텐션)"
 )
 
 /**
- * 재미있고 직관적인 골프 바디 MBTI 유형
+ * 골프 신체 기능 분석 유형 (Golf Body Performance Classification)
+ * 전문 스포츠 퍼포먼스 랩 표준 분류 체계
  */
-data class GolfMbtiType(
-  val code: String,
-  val name: String,
-  val animalEmoji: String,
-  val tagline: String,
-  val keyHabit: String,
-  val bodyCause: String,
-  val superpower: String,
-  val quickFix: String
+data class GolfBodyType(
+  val code: String,              // 예: "TYPE-A (EE)", "TYPE-B (OTT)"
+  val name: String,              // 예: "얼리 익스텐션 보상 유형"
+  val categoryTitle: String,     // 예: "골반 틸트 & 족배굴곡 제한군"
+  val summaryText: String,       // 핵심 요약
+  val keyHabit: String,          // 주요 스윙 기전
+  val bodyCause: String,         // 해부학적 신체 원인
+  val performanceStrength: String, // 유지되는 장점
+  val correctiveStrategy: String // 교정 핵심 전략
 )
 
 /**
- * 13가지 골프 기능성 신체 검진 항목
+ * 13가지 기능 해부학적 골프 신체 검진 항목
  */
 data class ScreeningItem(
   val id: Int,
@@ -47,53 +48,52 @@ data class ScreeningItem(
   val voiceGuideText: String,
   val passCriteria: String,
   val swingImpact: String,
-  val previewIconType: String,
-  val quickTip: String = ""
+  val technicalId: String
 )
 
 /**
- * 신체 검진 평가 결과
+ * 신체 검진 판정 등급 (Clinical Assessment Grade)
  */
-enum class ScreeningGrade(val label: String, val emoji: String) {
-  PASS("정상 통과", "🟢"),
-  LIMITED("제한됨 (주의)", "🟡"),
-  RESTRICTED("불가 / 심함", "🔴")
+enum class ScreeningGrade(val label: String, val code: String) {
+  PASS("정상 (Normal)", "PASS"),
+  LIMITED("주의 (Borderline)", "LIMITED"),
+  RESTRICTED("제한 (Restricted)", "RESTRICTED")
 }
 
 /**
- * 처방 운동 (상세 세트/반복 & 좌우 횟수 & 음성 코칭)
+ * 처방 모빌리티 운동 (Prescription Mobility Exercise)
  */
 data class BodyExercise(
   val title: String,
   val targetArea: String,
   val repsOrTime: String,
-  val leftRightDetail: String, // 예: "좌측 15회 / 우측 15회 (총 3세트)"
+  val leftRightDetail: String,
   val durationSeconds: Int,
   val instructions: List<String>,
   val coachingKey: String,
-  val voiceCoachScript: String, // 조교의 실전 음성 코칭 대사
-  val visualType: String = "MOBILITY"
+  val voiceCoachScript: String,
+  val technicalId: String
 )
 
 /**
- * 골프 연습 드릴 (일러스트 & 음성 가이드 포함)
+ * 처방 골프 실전 드릴 (Prescription Golf Drill)
  */
 data class GolfDrill(
   val title: String,
   val recommendedClub: String,
-  val setAndReps: String, // 예: "10회 스윙씩 3세트 (총 30구)"
+  val setAndReps: String,
   val howToPractice: List<String>,
   val feelVsReal: String,
   val checkpoint: String,
   val voiceCoachScript: String,
-  val visualType: String = "DRILL_BUTT"
+  val technicalId: String
 )
 
 /**
- * AI Body-Swing-Game 연결 분석 결과
+ * 바디-스윙-게임 통합 분석 리포트 (Performance Diagnostic Report)
  */
 data class AnalysisReport(
-  val mbti: GolfMbtiType,
+  val bodyType: GolfBodyType,
   val bodyContribution: Int,
   val swingContribution: Int,
   val gameContribution: Int,
@@ -105,5 +105,5 @@ data class AnalysisReport(
   val exercises: List<BodyExercise>,
   val drills: List<GolfDrill>,
   val retestWeeks: Int = 4,
-  val coachingMessage: String
+  val clinicalCoachingMessage: String
 )
