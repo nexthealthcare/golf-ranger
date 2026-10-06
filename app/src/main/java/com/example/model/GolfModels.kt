@@ -24,14 +24,14 @@ data class GolferProfile(
  * 재미있고 직관적인 골프 바디 MBTI 유형
  */
 data class GolfMbtiType(
-  val code: String,        // 예: BSE-T, OSD-D, CWL-E, SCP-F
-  val name: String,        // 예: "배치기 파이터형"
-  val animalEmoji: String, // 예: "🐯"
-  val tagline: String,     // 예: "마음은 싱글, 임팩트는 벌떡!"
-  val keyHabit: String,    // 주요 스윙 습관
-  val bodyCause: String,   // 신체 브레이크 원인
-  val superpower: String,  // 장점
-  val quickFix: String     // 원포인트 치트키
+  val code: String,
+  val name: String,
+  val animalEmoji: String,
+  val tagline: String,
+  val keyHabit: String,
+  val bodyCause: String,
+  val superpower: String,
+  val quickFix: String
 )
 
 /**
@@ -61,26 +61,32 @@ enum class ScreeningGrade(val label: String, val emoji: String) {
 }
 
 /**
- * 처방 운동 (3~5가지)
+ * 처방 운동 (상세 세트/반복 & 좌우 횟수 & 음성 코칭)
  */
 data class BodyExercise(
   val title: String,
   val targetArea: String,
   val repsOrTime: String,
+  val leftRightDetail: String, // 예: "좌측 15회 / 우측 15회 (총 3세트)"
   val durationSeconds: Int,
   val instructions: List<String>,
-  val coachingKey: String
+  val coachingKey: String,
+  val voiceCoachScript: String, // 조교의 실전 음성 코칭 대사
+  val visualType: String = "MOBILITY"
 )
 
 /**
- * 골프 연습 드릴 (2~3가지)
+ * 골프 연습 드릴 (일러스트 & 음성 가이드 포함)
  */
 data class GolfDrill(
   val title: String,
   val recommendedClub: String,
+  val setAndReps: String, // 예: "10회 스윙씩 3세트 (총 30구)"
   val howToPractice: List<String>,
   val feelVsReal: String,
-  val checkpoint: String
+  val checkpoint: String,
+  val voiceCoachScript: String,
+  val visualType: String = "DRILL_BUTT"
 )
 
 /**

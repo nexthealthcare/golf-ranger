@@ -50,7 +50,6 @@
       box-shadow: 0 0 24px rgba(0,0,0,0.06);
     }
 
-    /* Top Bar */
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -91,7 +90,6 @@
       color: var(--text-muted);
     }
 
-    /* Tab Content */
     main {
       flex: 1;
       padding: 16px;
@@ -113,7 +111,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Cards */
     .card {
       background: var(--surface);
       border-radius: var(--radius);
@@ -147,7 +144,6 @@
       color: #991B1B;
     }
 
-    /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -192,7 +188,6 @@
       color: var(--text);
     }
 
-    /* Bottom Navigation */
     nav {
       position: fixed;
       bottom: 0;
@@ -229,7 +224,6 @@
       font-size: 19px;
     }
 
-    /* Chips */
     .chips-group {
       display: flex;
       flex-wrap: wrap;
@@ -253,7 +247,6 @@
       font-weight: 600;
     }
 
-    /* 3D Canvas Box */
     .pose-canvas-box {
       width: 100%;
       height: 140px;
@@ -270,7 +263,6 @@
       display: block;
     }
 
-    /* Radio rating */
     .rating-row {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -307,7 +299,6 @@
       color: #991B1B;
     }
 
-    /* Slider */
     .slider-box {
       margin-top: 10px;
     }
@@ -317,7 +308,6 @@
       accent-color: var(--primary);
     }
 
-    /* Modal */
     .modal-backdrop {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -580,26 +570,22 @@
           </div>
         </div>
 
-        <!-- 처방 운동 목록 (음성 코칭 실행 버튼 포함) -->
+        <!-- 처방 운동 목록 -->
         <div class="card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <h3 style="font-size:14px; font-weight:700;">💪 맞춤 모빌리티 운동 (음성 코칭)</h3>
             <span class="badge">좌우 횟수 안내</span>
           </div>
-          <div id="report-exercise-list">
-            <!-- Dynamic inject -->
-          </div>
+          <div id="report-exercise-list"></div>
         </div>
 
-        <!-- 골프 드릴 목록 (음성 코칭 실행 버튼 포함) -->
+        <!-- 골프 드릴 목록 -->
         <div class="card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <h3 style="font-size:14px; font-weight:700;">🏌️ 연습장 원포인트 드릴</h3>
             <span class="badge amber">스윙 교정</span>
           </div>
-          <div id="report-drill-list">
-            <!-- Dynamic inject -->
-          </div>
+          <div id="report-drill-list"></div>
         </div>
 
         <button class="btn" onclick="navigateTo('home')">
@@ -608,7 +594,7 @@
       </section>
     </main>
 
-    <!-- Execution Modal Dialog (음성 코칭 & 세트 트래커) -->
+    <!-- Execution Modal Dialog -->
     <div id="coach-modal" class="modal-backdrop">
       <div class="modal-box">
         <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -687,10 +673,8 @@
     let ratings = {};
     screeningItems.forEach(i => ratings[i.id] = (i.id === 4 || i.id === 12) ? "RESTRICTED" : "PASS");
 
-    // Modal state
     let modalItem = null;
     let modalCurrentSet = 1;
-    let isModalSpeaking = false;
 
     function navigateTo(screenId) {
       currentScreen = screenId;
@@ -782,7 +766,6 @@
       }
     }
 
-    // 3D 입체 일러스트 드로잉 함수
     function draw3DPose(canvasId, type) {
       const cv = document.getElementById(canvasId);
       if (!cv) return;
@@ -790,13 +773,11 @@
       const w = cv.width, h = cv.height;
       ctx.clearRect(0, 0, w, h);
 
-      // 1. 3D 타원 바닥 그림자
       ctx.fillStyle = "rgba(226, 235, 229, 0.7)";
       ctx.beginPath();
       ctx.ellipse(w * 0.5, h * 0.88, w * 0.35, 12, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // 입체 그라데이션
       const grad = ctx.createLinearGradient(0, h * 0.2, 0, h * 0.85);
       grad.addColorStop(0, "#22C55E");
       grad.addColorStop(0.5, "#147A40");
@@ -808,7 +789,6 @@
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
 
-      // 머리 구체 & 하이라이트
       ctx.beginPath();
       ctx.arc(w * 0.45, h * 0.25, 14, 0, Math.PI * 2);
       ctx.fill();
@@ -819,8 +799,7 @@
 
       ctx.fillStyle = grad;
 
-      if (type === 4) { // 스쿼트 3D 볼륨
-        // 머리 위 골드 클럽
+      if (type === 4) {
         ctx.strokeStyle = "#F59E0B";
         ctx.lineWidth = 5;
         ctx.beginPath();
@@ -841,8 +820,7 @@
         ctx.lineTo(w * 0.62, h * 0.62);
         ctx.lineTo(w * 0.58, h * 0.86);
         ctx.stroke();
-      } else if (type === "DRILL_BUTT") { // 엉덩이 벽 터치 드릴
-        // 스틱 (골드)
+      } else if (type === "DRILL_BUTT") {
         ctx.strokeStyle = "#F59E0B";
         ctx.lineWidth = 6;
         ctx.beginPath();
@@ -858,7 +836,6 @@
         ctx.lineTo(w * 0.48, h * 0.86);
         ctx.stroke();
 
-        // 힙 터치 골드 하이라이트
         ctx.fillStyle = "#F59E0B";
         ctx.beginPath();
         ctx.arc(w * 0.60, h * 0.55, 8, 0, Math.PI * 2);
@@ -867,14 +844,13 @@
         ctx.beginPath();
         ctx.arc(w * 0.60, h * 0.55, 4, 0, Math.PI * 2);
         ctx.fill();
-      } else { // 기본 어드레스 3D
+      } else {
         ctx.beginPath();
         ctx.moveTo(w * 0.45, h * 0.32);
         ctx.lineTo(w * 0.52, h * 0.58);
         ctx.lineTo(w * 0.45, h * 0.86);
         ctx.stroke();
 
-        // 회전 리본 아크
         ctx.strokeStyle = "#F59E0B";
         ctx.lineWidth = 6;
         ctx.beginPath();
@@ -912,7 +888,6 @@
         };
       }
 
-      // Update Home & Report
       document.getElementById("home-mbti-emoji").innerText = mbti.emoji;
       document.getElementById("home-mbti-title").innerText = mbti.code + " " + mbti.name;
       document.getElementById("home-mbti-tagline").innerText = "“" + mbti.tagline + "”";
@@ -928,7 +903,6 @@
       document.getElementById("report-pct-swing").innerText = mbti.swingPct + "%";
       document.getElementById("report-pct-game").innerText = mbti.gamePct + "%";
 
-      // Render Exercises with Voice Execution Button
       document.getElementById("report-exercise-list").innerHTML = `
         <div style="background:#F9FAFB; border:1px solid #E5E7EB; border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
           <div>
@@ -948,7 +922,6 @@
         </div>
       `;
 
-      // Render Drills with Voice Execution Button
       document.getElementById("report-drill-list").innerHTML = `
         <div style="background:#F9FAFB; border:1px solid #E5E7EB; border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
           <div>
@@ -961,7 +934,6 @@
       `;
     }
 
-    // Modal Control
     function openExerciseModal(type) {
       modalCurrentSet = 1;
       modalItem = {

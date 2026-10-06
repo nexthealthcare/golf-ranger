@@ -20,10 +20,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Timer
-import androidx.compose.material.icons.filled.TrendingDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -48,9 +48,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.model.BodyExercise
+import com.example.model.GolfDrill
 import com.example.ui.components.ContributionPieCard
-import com.example.ui.components.ExerciseTimerDialog
+import com.example.ui.components.ExecutionCoachDialog
 import com.example.ui.components.GolfTopBar
+import com.example.ui.components.ScreeningPoseVisualizer
 import com.example.ui.theme.CleanWhiteBorder
 import com.example.ui.theme.EnergeticGold
 import com.example.ui.theme.FairwayGreenPrimary
@@ -74,7 +76,8 @@ fun ReportScreen(
   val profile by viewModel.golferProfile.collectAsState()
   val completedExercises by viewModel.completedExercises.collectAsState()
 
-  var selectedTimerExercise by remember { mutableStateOf<BodyExercise?>(null) }
+  var selectedExercise by remember { mutableStateOf<BodyExercise?>(null) }
+  var selectedDrill by remember { mutableStateOf<GolfDrill?>(null) }
 
   Scaffold(
     topBar = {
@@ -163,7 +166,6 @@ fun ReportScreen(
 
           Spacer(modifier = Modifier.height(12.dp))
 
-          // 장점 & 약점 & 치트키 3줄 카드
           MbtiTraitRow(label = "슈퍼파워", text = mbti.superpower, tagBg = TagMintBg, tagText = TagMintText)
           Spacer(modifier = Modifier.height(4.dp))
           MbtiTraitRow(label = "신체원인", text = mbti.bodyCause, tagBg = TagRedBg, tagText = TagRedText)
@@ -225,7 +227,7 @@ fun ReportScreen(
 
       Spacer(modifier = Modifier.height(14.dp))
 
-      // 4. 개인 맞춤 운동 처방 (3~4가지)
+      // 4. 개인 맞춤 운동 처방 (상세 좌우 세트/반복 & 음성 실행 버튼)
       Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -238,7 +240,7 @@ fun ReportScreen(
           color = TextMainDark
         )
         Text(
-          text = "하루 5분 투자",
+          text = "음성 코칭 포함",
           fontSize = 11.5.sp,
           fontWeight = FontWeight.Bold,
           color = FairwayGreenPrimary
@@ -252,54 +254,78 @@ fun ReportScreen(
         Card(
           modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 3.dp),
-          shape = RoundedCornerShape(12.dp),
+            .padding(vertical = 4.dp),
+          shape = RoundedCornerShape(14.dp),
           colors = CardDefaults.cardColors(
             containerColor = if (isDone) Color(0xFFF0FDF4) else Color.White
           ),
           border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
         ) {
-          Row(
-            modifier = Modifier
-              .fillMaxWidth()
-              .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-          ) {
-            Column(modifier = Modifier.weight(1f)) {
+          Column(modifier = Modifier.padding(14.dp)) {
+            Row(
+              modifier = Modifier.fillMaxWidth(),
+              horizontalArrangement = Arrangement.SpaceBetween,
+              verticalAlignment = Alignment.CenterVertically
+            ) {
+              Column(modifier = Modifier.weight(1f)) {
+                Text(
+                  text = "${idx + 1}. ${ex.title}",
+                  fontSize = 14.sp,
+                  fontWeight = FontWeight.Bold,
+                  color = TextMainDark
+                )
+                Text(
+                  text = "타겟: ${ex.targetArea}",
+                  fontSize = 11.5.sp,
+                  color = TextMuted
+                )
+              }
+
+              // 운동 실행 (음성 코칭) 버튼
+              Button(
+                onClick = { selectedExercise = ex },
+                colors = ButtonDefaults.buttonColors(containerColor = FairwayGreenPrimary),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.testTag("action_exercise_${idx}")
+              ) {
+                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = null, modifier = Modifier.size(15.dp))
+                Spacer(modifier = Modifier.width(4.dp))
+                Text("운동 실행", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+              }
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            // 좌우 세트 상세 태그
+            Box(
+              modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(6.dp))
+                .background(TagMintBg)
+                .padding(horizontal = 8.dp, vertical = 4.dp)
+            ) {
               Text(
-                text = "${idx + 1}. ${ex.title}",
-                fontSize = 13.5.sp,
+                text = "📌 ${ex.leftRightDetail}",
+                fontSize = 11.5.sp,
                 fontWeight = FontWeight.Bold,
-                color = TextMainDark
-              )
-              Text(
-                text = "${ex.targetArea} • ${ex.repsOrTime}",
-                fontSize = 11.sp,
-                color = TextMuted
-              )
-              Text(
-                text = "💡 ${ex.coachingKey}",
-                fontSize = 11.sp,
-                color = FairwayGreenPrimary
+                color = TagMintText
               )
             }
 
-            Button(
-              onClick = { selectedTimerExercise = ex },
-              colors = ButtonDefaults.buttonColors(containerColor = FairwayGreenPrimary),
-              shape = RoundedCornerShape(8.dp)
-            ) {
-              Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(14.dp))
-              Spacer(modifier = Modifier.width(2.dp))
-              Text("타이머", fontSize = 11.sp)
-            }
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+              text = "💡 ${ex.coachingKey}",
+              fontSize = 11.5.sp,
+              color = FairwayGreenPrimary
+            )
           }
         }
       }
 
       Spacer(modifier = Modifier.height(14.dp))
 
-      // 5. 골프 연습장 드릴 (2가지)
+      // 5. 골프 연습장 드릴 (일러스트 & 음성 실행 버튼)
       Text(
         text = "🏌️ 연습장 원포인트 드릴 (${r.drills.size}가지)",
         fontSize = 15.sp,
@@ -310,35 +336,70 @@ fun ReportScreen(
       Spacer(modifier = Modifier.height(8.dp))
 
       r.drills.forEachIndexed { idx, drill ->
+        val isDone = completedExercises.contains(drill.title)
         Card(
           modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 3.dp),
-          shape = RoundedCornerShape(12.dp),
-          colors = CardDefaults.cardColors(containerColor = Color.White),
+            .padding(vertical = 4.dp),
+          shape = RoundedCornerShape(14.dp),
+          colors = CardDefaults.cardColors(
+            containerColor = if (isDone) Color(0xFFF0FDF4) else Color.White
+          ),
           border = androidx.compose.foundation.BorderStroke(1.dp, CleanWhiteBorder)
         ) {
-          Column(modifier = Modifier.padding(12.dp)) {
+          Column(modifier = Modifier.padding(14.dp)) {
             Row(
               modifier = Modifier.fillMaxWidth(),
-              horizontalArrangement = Arrangement.SpaceBetween
+              horizontalArrangement = Arrangement.SpaceBetween,
+              verticalAlignment = Alignment.CenterVertically
             ) {
-              Text(
-                text = "${idx + 1}. ${drill.title}",
-                fontSize = 13.5.sp,
-                fontWeight = FontWeight.Bold,
-                color = TextMainDark
-              )
-              Box(
-                modifier = Modifier
-                  .clip(RoundedCornerShape(6.dp))
-                  .background(TagMintBg)
-                  .padding(horizontal = 6.dp, vertical = 2.dp)
+              Column(modifier = Modifier.weight(1f)) {
+                Text(
+                  text = "${idx + 1}. ${drill.title}",
+                  fontSize = 14.sp,
+                  fontWeight = FontWeight.Bold,
+                  color = TextMainDark
+                )
+                Text(
+                  text = "추천 클럽: ${drill.recommendedClub}",
+                  fontSize = 11.5.sp,
+                  color = TextMuted
+                )
+              }
+
+              // 드릴 실행 (음성 코칭) 버튼
+              Button(
+                onClick = { selectedDrill = drill },
+                colors = ButtonDefaults.buttonColors(containerColor = EnergeticGold),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.testTag("action_drill_${idx}")
               ) {
-                Text(drill.recommendedClub, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = TagMintText)
+                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = null, tint = Color.White, modifier = Modifier.size(15.dp))
+                Spacer(modifier = Modifier.width(4.dp))
+                Text("드릴 실행", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.White)
               }
             }
-            Spacer(modifier = Modifier.height(4.dp))
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            // 드릴 세트/반복수 태그
+            Box(
+              modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(6.dp))
+                .background(TagAmberBg)
+                .padding(horizontal = 8.dp, vertical = 4.dp)
+            ) {
+              Text(
+                text = "🎯 ${drill.setAndReps}",
+                fontSize = 11.5.sp,
+                fontWeight = FontWeight.Bold,
+                color = TagAmberText
+              )
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
             Text(
               text = drill.feelVsReal,
               fontSize = 11.5.sp,
@@ -368,7 +429,7 @@ fun ReportScreen(
       ) {
         Icon(Icons.Default.Timer, contentDescription = null, modifier = Modifier.size(18.dp))
         Spacer(modifier = Modifier.width(6.dp))
-        Text("오늘의 3분 루틴 실천하기", fontSize = 14.sp, fontWeight = FontWeight.Bold)
+        Text("오늘의 실천 루틴으로 이동", fontSize = 14.sp, fontWeight = FontWeight.Bold)
       }
 
       Spacer(modifier = Modifier.height(8.dp))
@@ -403,11 +464,33 @@ fun ReportScreen(
     }
   }
 
-  selectedTimerExercise?.let { exercise ->
-    ExerciseTimerDialog(
-      exercise = exercise,
-      onDismiss = { selectedTimerExercise = null },
-      onCompleted = { viewModel.toggleExerciseComplete(exercise.title) }
+  // 운동 코칭 다이얼로그 (음성 + 세트 트래커 + 3D 일러스트)
+  selectedExercise?.let { ex ->
+    ExecutionCoachDialog(
+      title = ex.title,
+      targetOrClub = "타겟: ${ex.targetArea}",
+      setsAndReps = ex.leftRightDetail,
+      coachingKey = ex.coachingKey,
+      voiceScript = ex.voiceCoachScript,
+      visualType = ex.visualType,
+      instructions = ex.instructions,
+      onDismiss = { selectedExercise = null },
+      onCompleted = { viewModel.toggleExerciseComplete(ex.title) }
+    )
+  }
+
+  // 드릴 코칭 다이얼로그 (음성 + 스윙 드릴 가이드)
+  selectedDrill?.let { drill ->
+    ExecutionCoachDialog(
+      title = drill.title,
+      targetOrClub = "추천 클럽: ${drill.recommendedClub}",
+      setsAndReps = drill.setAndReps,
+      coachingKey = drill.feelVsReal,
+      voiceScript = drill.voiceCoachScript,
+      visualType = drill.visualType,
+      instructions = drill.howToPractice,
+      onDismiss = { selectedDrill = null },
+      onCompleted = { viewModel.toggleExerciseComplete(drill.title) }
     )
   }
 }

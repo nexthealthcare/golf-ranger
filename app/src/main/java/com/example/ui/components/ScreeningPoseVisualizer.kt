@@ -1,275 +1,217 @@
 package com.example.ui.components
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
-import com.example.ui.theme.AccentGold
-import com.example.ui.theme.PineGreenPrimary
+import com.example.ui.theme.EnergeticGold
+import com.example.ui.theme.FairwayGreenDark
+import com.example.ui.theme.FairwayGreenLight
+import com.example.ui.theme.FairwayGreenPrimary
 
 @Composable
 fun ScreeningPoseVisualizer(
   iconType: String,
-  modifier: Modifier = Modifier.width(160.dp).height(140.dp)
+  modifier: Modifier = Modifier.width(180.dp).height(140.dp)
 ) {
   Canvas(modifier = modifier) {
     val w = size.width
     val h = size.height
-    val bodyColor = PineGreenPrimary
-    val motionColor = AccentGold
 
-    // Base ground line
-    drawLine(
-      color = Color.LightGray.copy(alpha = 0.5f),
-      start = Offset(w * 0.1f, h * 0.9f),
-      end = Offset(w * 0.9f, h * 0.9f),
-      strokeWidth = 3f,
-      cap = StrokeCap.Round
+    // 1. 3D 원형 플랫폼 그림자
+    drawOval(
+      brush = Brush.radialGradient(
+        colors = listOf(Color(0xFFE2EBE5), Color(0x00F8FAF9)),
+        center = Offset(w * 0.5f, h * 0.90f),
+        radius = w * 0.42f
+      ),
+      topLeft = Offset(w * 0.12f, h * 0.82f),
+      size = Size(w * 0.76f, h * 0.16f)
     )
+
+    // 입체감 있는 바디 컬러 그라데이션
+    val bodyGrad = Brush.verticalGradient(
+      colors = listOf(FairwayGreenLight, FairwayGreenPrimary, FairwayGreenDark)
+    )
+    val accentRibbon = EnergeticGold
+    val jointColor = Color.White
 
     when (iconType) {
       "PELVIC_TILT" -> {
-        // Golfer in address posture with pelvic tilt arrows
-        val headCenter = Offset(w * 0.4f, h * 0.25f)
-        drawCircle(color = bodyColor, radius = 14f, center = headCenter)
-        // Torso inclined
-        val hipPoint = Offset(w * 0.52f, h * 0.52f)
-        drawLine(bodyColor, headCenter, hipPoint, strokeWidth = 10f, cap = StrokeCap.Round)
-        // Knee and foot
-        val kneePoint = Offset(w * 0.45f, h * 0.72f)
-        val footPoint = Offset(w * 0.42f, h * 0.9f)
-        drawLine(bodyColor, hipPoint, kneePoint, strokeWidth = 9f, cap = StrokeCap.Round)
-        drawLine(bodyColor, kneePoint, footPoint, strokeWidth = 9f, cap = StrokeCap.Round)
-        // Pelvic tilt bidirectional arc
-        val arcPath = Path().apply {
-          moveTo(w * 0.42f, h * 0.50f)
-          quadraticTo(w * 0.56f, h * 0.46f, w * 0.64f, h * 0.54f)
+        // 어드레스 골반 틸트 - 입체감 있는 상체 경사 & 골반 커브
+        // 머리 (입체 구)
+        drawCircle(bodyGrad, radius = 13f, center = Offset(w * 0.38f, h * 0.22f))
+        drawCircle(jointColor.copy(alpha = 0.6f), radius = 4f, center = Offset(w * 0.36f, h * 0.20f))
+
+        // 상체 볼륨 캡슐
+        drawRoundRect(
+          brush = bodyGrad,
+          topLeft = Offset(w * 0.36f, h * 0.30f),
+          size = Size(18f, 32f),
+          cornerRadius = CornerRadius(9f, 9f)
+        )
+
+        // 골반 힙 볼륨
+        drawCircle(brush = bodyGrad, radius = 11f, center = Offset(w * 0.52f, h * 0.54f))
+
+        // 허벅지 & 종아리
+        drawLine(bodyGrad, Offset(w * 0.52f, h * 0.54f), Offset(w * 0.45f, h * 0.72f), strokeWidth = 12f, cap = StrokeCap.Round)
+        drawLine(bodyGrad, Offset(w * 0.45f, h * 0.72f), Offset(w * 0.42f, h * 0.88f), strokeWidth = 10f, cap = StrokeCap.Round)
+
+        // 골반 앞뒤 틸트 3D 모션 리본 화살표
+        val ribbon = Path().apply {
+          moveTo(w * 0.38f, h * 0.54f)
+          quadraticTo(w * 0.54f, h * 0.42f, w * 0.68f, h * 0.56f)
         }
-        drawPath(arcPath, motionColor, style = Stroke(width = 6f, cap = StrokeCap.Round))
-        drawCircle(motionColor, radius = 6f, center = Offset(w * 0.64f, h * 0.54f))
+        drawPath(ribbon, color = accentRibbon, style = Stroke(width = 6f, cap = StrokeCap.Round))
+        drawCircle(accentRibbon, radius = 6f, center = Offset(w * 0.68f, h * 0.56f))
       }
 
       "PELVIC_ROTATION" -> {
-        // Front standing golfer with rotating hips
-        val headCenter = Offset(w * 0.5f, h * 0.2f)
-        drawCircle(color = bodyColor, radius = 14f, center = headCenter)
-        val spineBottom = Offset(w * 0.5f, h * 0.52f)
-        drawLine(bodyColor, headCenter, spineBottom, strokeWidth = 10f, cap = StrokeCap.Round)
-        // Folded arms
-        drawLine(bodyColor, Offset(w * 0.35f, h * 0.36f), Offset(w * 0.65f, h * 0.36f), strokeWidth = 8f, cap = StrokeCap.Round)
-        // Legs
-        drawLine(bodyColor, spineBottom, Offset(w * 0.4f, h * 0.9f), strokeWidth = 8f, cap = StrokeCap.Round)
-        drawLine(bodyColor, spineBottom, Offset(w * 0.6f, h * 0.9f), strokeWidth = 8f, cap = StrokeCap.Round)
-        // Rotation oval arrow around hips
-        val rotPath = Path().apply {
-          moveTo(w * 0.32f, h * 0.52f)
-          quadraticTo(w * 0.5f, h * 0.60f, w * 0.68f, h * 0.52f)
+        // 골반 분리 회전 - 정면 상체 고정, 골반 트위스트 리본
+        drawCircle(bodyGrad, radius = 13f, center = Offset(w * 0.5f, h * 0.18f))
+        drawRoundRect(bodyGrad, topLeft = Offset(w * 0.44f, h * 0.28f), size = Size(22f, 30f), cornerRadius = CornerRadius(10f, 10f))
+        // 가슴 위 모은 팔
+        drawRoundRect(bodyGrad, topLeft = Offset(w * 0.32f, h * 0.32f), size = Size(64f, 12f), cornerRadius = CornerRadius(6f, 6f))
+
+        // 회전 리본 타원
+        val ovalPath = Path().apply {
+          moveTo(w * 0.30f, h * 0.54f)
+          quadraticTo(w * 0.50f, h * 0.64f, w * 0.70f, h * 0.54f)
         }
-        drawPath(rotPath, motionColor, style = Stroke(width = 6f, cap = StrokeCap.Round))
-        drawCircle(motionColor, radius = 5f, center = Offset(w * 0.68f, h * 0.52f))
+        drawPath(ovalPath, accentRibbon, style = Stroke(width = 7f, cap = StrokeCap.Round))
+        drawCircle(accentRibbon, radius = 5.5f, center = Offset(w * 0.70f, h * 0.54f))
+
+        // 하체
+        drawLine(bodyGrad, Offset(w * 0.45f, h * 0.58f), Offset(w * 0.40f, h * 0.88f), strokeWidth = 11f, cap = StrokeCap.Round)
+        drawLine(bodyGrad, Offset(w * 0.55f, h * 0.58f), Offset(w * 0.60f, h * 0.88f), strokeWidth = 11f, cap = StrokeCap.Round)
       }
 
       "TORSO_ROTATION" -> {
-        // Fixed lower body, rotating upper torso
-        val headCenter = Offset(w * 0.55f, h * 0.2f)
-        drawCircle(color = bodyColor, radius = 14f, center = headCenter)
-        val spineBottom = Offset(w * 0.5f, h * 0.52f)
-        drawLine(bodyColor, headCenter, spineBottom, strokeWidth = 10f, cap = StrokeCap.Round)
-        // Rotation arrow on chest
-        val rotChest = Path().apply {
-          moveTo(w * 0.3f, h * 0.34f)
-          quadraticTo(w * 0.5f, h * 0.26f, w * 0.72f, h * 0.36f)
+        // 흉추 상체 회전 - 하체 고정 + 가슴 회전
+        drawCircle(bodyGrad, radius = 13f, center = Offset(w * 0.56f, h * 0.18f))
+        drawRoundRect(bodyGrad, topLeft = Offset(w * 0.46f, h * 0.28f), size = Size(24f, 32f), cornerRadius = CornerRadius(10f, 10f))
+
+        // 가슴 회전 리본
+        val chestRibbon = Path().apply {
+          moveTo(w * 0.28f, h * 0.34f)
+          quadraticTo(w * 0.50f, h * 0.22f, w * 0.74f, h * 0.36f)
         }
-        drawPath(rotChest, motionColor, style = Stroke(width = 6f, cap = StrokeCap.Round))
-        drawCircle(motionColor, radius = 5f, center = Offset(w * 0.72f, h * 0.36f))
-        // Legs fixed
-        drawLine(bodyColor, spineBottom, Offset(w * 0.38f, h * 0.9f), strokeWidth = 9f, cap = StrokeCap.Round)
-        drawLine(bodyColor, spineBottom, Offset(w * 0.62f, h * 0.9f), strokeWidth = 9f, cap = StrokeCap.Round)
+        drawPath(chestRibbon, accentRibbon, style = Stroke(width = 7f, cap = StrokeCap.Round))
+        drawCircle(accentRibbon, radius = 6f, center = Offset(w * 0.74f, h * 0.36f))
+
+        // 하체 단단한 지지
+        drawLine(bodyGrad, Offset(w * 0.45f, h * 0.60f), Offset(w * 0.38f, h * 0.88f), strokeWidth = 12f, cap = StrokeCap.Round)
+        drawLine(bodyGrad, Offset(w * 0.55f, h * 0.60f), Offset(w * 0.62f, h * 0.88f), strokeWidth = 12f, cap = StrokeCap.Round)
       }
 
       "OVERHEAD_SQUAT" -> {
-        // Deep squat with club overhead
-        val headCenter = Offset(w * 0.5f, h * 0.35f)
-        drawCircle(color = bodyColor, radius = 13f, center = headCenter)
-        // Club bar over head
-        drawLine(motionColor, Offset(w * 0.22f, h * 0.16f), Offset(w * 0.78f, h * 0.16f), strokeWidth = 6f, cap = StrokeCap.Round)
-        // Upright arms
-        drawLine(bodyColor, Offset(w * 0.35f, h * 0.40f), Offset(w * 0.28f, h * 0.16f), strokeWidth = 7f, cap = StrokeCap.Round)
-        drawLine(bodyColor, Offset(w * 0.65f, h * 0.40f), Offset(w * 0.72f, h * 0.16f), strokeWidth = 7f, cap = StrokeCap.Round)
-        // Torso and deep bent thighs
-        val hipPoint = Offset(w * 0.5f, h * 0.65f)
-        drawLine(bodyColor, headCenter, hipPoint, strokeWidth = 10f, cap = StrokeCap.Round)
-        // Knees out and feet flat
-        drawLine(bodyColor, hipPoint, Offset(w * 0.32f, h * 0.63f), strokeWidth = 8f, cap = StrokeCap.Round)
-        drawLine(bodyColor, Offset(w * 0.32f, h * 0.63f), Offset(w * 0.35f, h * 0.9f), strokeWidth = 8f, cap = StrokeCap.Round)
-        drawLine(bodyColor, hipPoint, Offset(w * 0.68f, h * 0.63f), strokeWidth = 8f, cap = StrokeCap.Round)
-        drawLine(bodyColor, Offset(w * 0.68f, h * 0.63f), Offset(w * 0.65f, h * 0.9f), strokeWidth = 8f, cap = StrokeCap.Round)
-      }
+        // 딥 오버헤드 스쿼트 - 클럽을 머리 위로 들고 깊게 앉은 입체 자세
+        // 머리
+        drawCircle(bodyGrad, radius = 12f, center = Offset(w * 0.5f, h * 0.32f))
 
-      "SINGLE_LEG_BALANCE" -> {
-        // One leg standing, one leg lifted at 90 deg
-        val headCenter = Offset(w * 0.48f, h * 0.2f)
-        drawCircle(color = bodyColor, radius = 14f, center = headCenter)
-        val hipPoint = Offset(w * 0.48f, h * 0.52f)
-        drawLine(bodyColor, headCenter, hipPoint, strokeWidth = 10f, cap = StrokeCap.Round)
-        // Support leg
-        drawLine(bodyColor, hipPoint, Offset(w * 0.46f, h * 0.9f), strokeWidth = 9f, cap = StrokeCap.Round)
-        // Lifted leg 90 degrees
-        val liftedKnee = Offset(w * 0.68f, h * 0.52f)
-        val liftedFoot = Offset(w * 0.68f, h * 0.72f)
-        drawLine(bodyColor, hipPoint, liftedKnee, strokeWidth = 8f, cap = StrokeCap.Round)
-        drawLine(bodyColor, liftedKnee, liftedFoot, strokeWidth = 8f, cap = StrokeCap.Round)
-        // Balance circle
-        drawCircle(motionColor, radius = 8f, center = Offset(w * 0.46f, h * 0.9f), style = Stroke(3f))
-      }
+        // 머리 위 클럽 샤프트 (골드)
+        drawLine(Brush.horizontalGradient(listOf(EnergeticGold, Color(0xFFFCD34D), EnergeticGold)),
+          Offset(w * 0.20f, h * 0.14f), Offset(w * 0.80f, h * 0.14f), strokeWidth = 6f, cap = StrokeCap.Round)
 
-      "SHOULDER_EXTERNAL" -> {
-        // Torso with L-shaped arms rotating back
-        val headCenter = Offset(w * 0.5f, h * 0.25f)
-        drawCircle(color = bodyColor, radius = 14f, center = headCenter)
-        val spine = Offset(w * 0.5f, h * 0.65f)
-        drawLine(bodyColor, headCenter, spine, strokeWidth = 10f, cap = StrokeCap.Round)
-        // Right shoulder L shape
-        val shoulderR = Offset(w * 0.65f, h * 0.38f)
-        val elbowR = Offset(w * 0.75f, h * 0.38f)
-        val handR = Offset(w * 0.78f, h * 0.18f)
-        drawLine(bodyColor, Offset(w * 0.5f, h * 0.38f), elbowR, strokeWidth = 8f, cap = StrokeCap.Round)
-        drawLine(bodyColor, elbowR, handR, strokeWidth = 8f, cap = StrokeCap.Round)
-        // Arc motion
-        val extPath = Path().apply {
-          moveTo(w * 0.68f, h * 0.18f)
-          quadraticTo(w * 0.80f, h * 0.12f, w * 0.86f, h * 0.22f)
-        }
-        drawPath(extPath, motionColor, style = Stroke(5f, cap = StrokeCap.Round))
-        drawCircle(motionColor, radius = 5f, center = Offset(w * 0.86f, h * 0.22f))
-      }
+        // 수직 팔 볼륨
+        drawLine(bodyGrad, Offset(w * 0.36f, h * 0.36f), Offset(w * 0.28f, h * 0.14f), strokeWidth = 9f, cap = StrokeCap.Round)
+        drawLine(bodyGrad, Offset(w * 0.64f, h * 0.36f), Offset(w * 0.72f, h * 0.14f), strokeWidth = 9f, cap = StrokeCap.Round)
 
-      "SHOULDER_INTERNAL" -> {
-        val headCenter = Offset(w * 0.5f, h * 0.25f)
-        drawCircle(color = bodyColor, radius = 14f, center = headCenter)
-        val spine = Offset(w * 0.5f, h * 0.65f)
-        drawLine(bodyColor, headCenter, spine, strokeWidth = 10f, cap = StrokeCap.Round)
-        // Arm downward rotation
-        val elbowR = Offset(w * 0.75f, h * 0.38f)
-        val handR = Offset(w * 0.75f, h * 0.58f)
-        drawLine(bodyColor, Offset(w * 0.5f, h * 0.38f), elbowR, strokeWidth = 8f, cap = StrokeCap.Round)
-        drawLine(bodyColor, elbowR, handR, strokeWidth = 8f, cap = StrokeCap.Round)
-        // Downward arc
-        val intPath = Path().apply {
-          moveTo(w * 0.78f, h * 0.44f)
-          quadraticTo(w * 0.84f, h * 0.54f, w * 0.76f, h * 0.62f)
-        }
-        drawPath(intPath, motionColor, style = Stroke(5f, cap = StrokeCap.Round))
-        drawCircle(motionColor, radius = 5f, center = Offset(w * 0.76f, h * 0.62f))
-      }
-
-      "TOE_TOUCH" -> {
-        // Person bending down touching toes with straight legs
-        val hipPoint = Offset(w * 0.38f, h * 0.48f)
-        // Straight legs
-        drawLine(bodyColor, hipPoint, Offset(w * 0.38f, h * 0.9f), strokeWidth = 9f, cap = StrokeCap.Round)
-        // Folded forward upper body
-        val headCenter = Offset(w * 0.52f, h * 0.68f)
-        drawLine(bodyColor, hipPoint, headCenter, strokeWidth = 9f, cap = StrokeCap.Round)
-        drawCircle(bodyColor, radius = 12f, center = headCenter)
-        // Hands reaching to toes
-        val handPoint = Offset(w * 0.42f, h * 0.88f)
-        drawLine(bodyColor, Offset(w * 0.45f, h * 0.58f), handPoint, strokeWidth = 7f, cap = StrokeCap.Round)
-        drawCircle(motionColor, radius = 6f, center = handPoint)
-      }
-
-      "SEATED_HIP" -> {
-        // Chair and seated hip rotation
-        drawLine(Color.Gray, Offset(w * 0.35f, h * 0.62f), Offset(w * 0.55f, h * 0.62f), strokeWidth = 6f)
-        drawLine(Color.Gray, Offset(w * 0.4f, h * 0.62f), Offset(w * 0.4f, h * 0.9f), strokeWidth = 5f)
-        // Seated torso
-        val headCenter = Offset(w * 0.45f, h * 0.3f)
-        drawCircle(bodyColor, radius = 13f, center = headCenter)
-        drawLine(bodyColor, headCenter, Offset(w * 0.45f, h * 0.62f), strokeWidth = 9f, cap = StrokeCap.Round)
-        // Knee 90 deg and foot swinging out
-        val kneePoint = Offset(w * 0.62f, h * 0.62f)
-        drawLine(bodyColor, Offset(w * 0.45f, h * 0.62f), kneePoint, strokeWidth = 8f, cap = StrokeCap.Round)
-        val footPoint = Offset(w * 0.75f, h * 0.82f)
-        drawLine(bodyColor, kneePoint, footPoint, strokeWidth = 8f, cap = StrokeCap.Round)
-        drawCircle(motionColor, radius = 6f, center = footPoint)
-      }
-
-      "LATERAL_FLEXION" -> {
-        // Standing side tilt
-        val headCenter = Offset(w * 0.58f, h * 0.22f)
-        drawCircle(bodyColor, radius = 14f, center = headCenter)
-        val spineCurved = Path().apply {
-          moveTo(w * 0.5f, h * 0.6f)
-          quadraticTo(w * 0.52f, h * 0.4f, w * 0.58f, h * 0.25f)
-        }
-        drawPath(spineCurved, bodyColor, style = Stroke(9f, cap = StrokeCap.Round))
-        // Reaching hand down to knee
-        drawLine(bodyColor, Offset(w * 0.56f, h * 0.38f), Offset(w * 0.68f, h * 0.72f), strokeWidth = 7f, cap = StrokeCap.Round)
-        drawCircle(motionColor, radius = 6f, center = Offset(w * 0.68f, h * 0.72f))
-        // Legs
-        drawLine(bodyColor, Offset(w * 0.5f, h * 0.6f), Offset(w * 0.44f, h * 0.9f), strokeWidth = 8f, cap = StrokeCap.Round)
-        drawLine(bodyColor, Offset(w * 0.5f, h * 0.6f), Offset(w * 0.56f, h * 0.9f), strokeWidth = 8f, cap = StrokeCap.Round)
-      }
-
-      "WRIST_MOBILITY" -> {
-        // Forearm and cocked wrist
-        drawLine(bodyColor, Offset(w * 0.2f, h * 0.6f), Offset(w * 0.55f, h * 0.6f), strokeWidth = 10f, cap = StrokeCap.Round)
-        // Hand cocked up 70 deg
-        drawLine(bodyColor, Offset(w * 0.55f, h * 0.6f), Offset(w * 0.68f, h * 0.32f), strokeWidth = 9f, cap = StrokeCap.Round)
-        drawCircle(bodyColor, radius = 10f, center = Offset(w * 0.68f, h * 0.32f))
-        // Angular arc
-        val arcPath = Path().apply {
-          moveTo(w * 0.62f, h * 0.58f)
-          quadraticTo(w * 0.68f, h * 0.50f, w * 0.64f, h * 0.38f)
-        }
-        drawPath(arcPath, motionColor, style = Stroke(5f, cap = StrokeCap.Round))
+        // 상체 & 스쿼트 엉덩이 볼륨
+        drawRoundRect(bodyGrad, topLeft = Offset(w * 0.44f, h * 0.38f), size = Size(20f, 28f), cornerRadius = CornerRadius(9f, 9f))
+        // 깊게 굽힌 다리 볼륨
+        drawLine(bodyGrad, Offset(w * 0.46f, h * 0.60f), Offset(w * 0.28f, h * 0.64f), strokeWidth = 12f, cap = StrokeCap.Round)
+        drawLine(bodyGrad, Offset(w * 0.28f, h * 0.64f), Offset(w * 0.32f, h * 0.88f), strokeWidth = 10f, cap = StrokeCap.Round)
+        drawLine(bodyGrad, Offset(w * 0.54f, h * 0.60f), Offset(w * 0.72f, h * 0.64f), strokeWidth = 12f, cap = StrokeCap.Round)
+        drawLine(bodyGrad, Offset(w * 0.72f, h * 0.64f), Offset(w * 0.68f, h * 0.88f), strokeWidth = 10f, cap = StrokeCap.Round)
       }
 
       "ANKLE_MOBILITY" -> {
-        // Vertical wall line on right
-        drawLine(Color.DarkGray, Offset(w * 0.8f, h * 0.2f), Offset(w * 0.8f, h * 0.9f), strokeWidth = 8f)
-        // Foot on floor, heel down
-        val footHeel = Offset(w * 0.4f, h * 0.9f)
-        val footToe = Offset(w * 0.65f, h * 0.9f)
-        drawLine(bodyColor, footHeel, footToe, strokeWidth = 9f, cap = StrokeCap.Round)
-        // Knee touching wall
-        val kneeAtWall = Offset(w * 0.78f, h * 0.62f)
-        drawLine(bodyColor, footHeel, kneeAtWall, strokeWidth = 9f, cap = StrokeCap.Round)
-        drawCircle(motionColor, radius = 7f, center = kneeAtWall)
+        // 발목 벽 검사 - 입체 벽 & 굽힌 무릎
+        // 입체 벽 기둥
+        drawRoundRect(
+          brush = Brush.verticalGradient(listOf(Color(0xFF9CA3AF), Color(0xFF6B7280))),
+          topLeft = Offset(w * 0.82f, h * 0.16f),
+          size = Size(16f, h * 0.74f),
+          cornerRadius = CornerRadius(4f, 4f)
+        )
+
+        // 발목 & 다리
+        val heel = Offset(w * 0.38f, h * 0.88f)
+        val toe = Offset(w * 0.68f, h * 0.88f)
+        drawLine(bodyGrad, heel, toe, strokeWidth = 12f, cap = StrokeCap.Round)
+
+        // 벽에 닿는 무릎 캡슐
+        val kneeAtWall = Offset(w * 0.80f, h * 0.60f)
+        drawLine(bodyGrad, heel, kneeAtWall, strokeWidth = 12f, cap = StrokeCap.Round)
+        drawCircle(accentRibbon, radius = 7f, center = kneeAtWall)
+
+        // 상체
+        drawCircle(bodyGrad, radius = 12f, center = Offset(w * 0.50f, h * 0.26f))
+        drawLine(bodyGrad, Offset(w * 0.50f, h * 0.26f), kneeAtWall, strokeWidth = 10f, cap = StrokeCap.Round)
       }
 
-      "GLUTE_BRIDGE" -> {
-        // Mat on floor
-        val shoulderGround = Offset(w * 0.25f, h * 0.78f)
-        drawCircle(bodyColor, radius = 13f, center = Offset(w * 0.16f, h * 0.78f))
-        // Elevated hips in bridge
-        val elevatedHips = Offset(w * 0.48f, h * 0.52f)
-        drawLine(bodyColor, shoulderGround, elevatedHips, strokeWidth = 9f, cap = StrokeCap.Round)
-        // Support foot on floor
-        val footGround = Offset(w * 0.58f, h * 0.9f)
-        val kneeSupport = Offset(w * 0.55f, h * 0.58f)
-        drawLine(bodyColor, elevatedHips, kneeSupport, strokeWidth = 8f, cap = StrokeCap.Round)
-        drawLine(bodyColor, kneeSupport, footGround, strokeWidth = 8f, cap = StrokeCap.Round)
-        // Extended straight leg
-        val extendedFoot = Offset(w * 0.84f, h * 0.52f)
-        drawLine(bodyColor, elevatedHips, extendedFoot, strokeWidth = 8f, cap = StrokeCap.Round)
-        drawCircle(motionColor, radius = 6f, center = extendedFoot)
+      "DRILL_BUTT" -> {
+        // 골프 드릴: 엉덩이 벽 터치 & 얼라인먼트 스틱
+        // 얼라인먼트 스틱 (골드)
+        drawLine(Brush.verticalGradient(listOf(EnergeticGold, Color(0xFFD97706))),
+          Offset(w * 0.62f, h * 0.20f), Offset(w * 0.62f, h * 0.90f), strokeWidth = 6f, cap = StrokeCap.Round)
+
+        // 골퍼 어드레스 & 힙 접촉점
+        drawCircle(bodyGrad, radius = 12f, center = Offset(w * 0.40f, h * 0.26f))
+        drawLine(bodyGrad, Offset(w * 0.40f, h * 0.26f), Offset(w * 0.58f, h * 0.54f), strokeWidth = 14f, cap = StrokeCap.Round)
+        // 힙 터치 강조 원
+        drawCircle(accentRibbon, radius = 8f, center = Offset(w * 0.58f, h * 0.54f))
+        drawCircle(Color.White, radius = 4f, center = Offset(w * 0.58f, h * 0.54f))
+
+        // 다리
+        drawLine(bodyGrad, Offset(w * 0.58f, h * 0.54f), Offset(w * 0.48f, h * 0.72f), strokeWidth = 11f, cap = StrokeCap.Round)
+        drawLine(bodyGrad, Offset(w * 0.48f, h * 0.72f), Offset(w * 0.45f, h * 0.88f), strokeWidth = 10f, cap = StrokeCap.Round)
+
+        // 골프채 7번 아이언
+        drawLine(Brush.linearGradient(listOf(Color(0xFF94A3B8), Color(0xFF475569))),
+          Offset(w * 0.38f, h * 0.44f), Offset(w * 0.32f, h * 0.86f), strokeWidth = 5f, cap = StrokeCap.Round)
+      }
+
+      "DRILL_TEE" -> {
+        // 티 1cm 스치기 정타 드릴
+        // 바닥 티 (골드)
+        drawLine(Brush.verticalGradient(listOf(Color(0xFFCBD5E1), Color(0xFF94A3B8))),
+          Offset(w * 0.50f, h * 0.88f), Offset(w * 0.50f, h * 0.74f), strokeWidth = 7f, cap = StrokeCap.Round)
+        drawCircle(accentRibbon, radius = 6f, center = Offset(w * 0.50f, h * 0.72f))
+
+        // 스윙 궤도 스치기 잔상 아크
+        val sweepArc = Path().apply {
+          moveTo(w * 0.25f, h * 0.65f)
+          quadraticTo(w * 0.50f, h * 0.73f, w * 0.75f, h * 0.62f)
+        }
+        drawPath(sweepArc, accentRibbon, style = Stroke(width = 6f, cap = StrokeCap.Round))
+
+        // 클럽 헤드
+        drawRoundRect(bodyGrad, topLeft = Offset(w * 0.44f, h * 0.68f), size = Size(20f, 10f), cornerRadius = CornerRadius(3f, 3f))
       }
 
       else -> {
-        // General athletic stance
-        drawCircle(bodyColor, radius = 14f, center = Offset(w * 0.5f, h * 0.25f))
-        drawLine(bodyColor, Offset(w * 0.5f, h * 0.35f), Offset(w * 0.5f, h * 0.65f), strokeWidth = 9f)
-        drawLine(bodyColor, Offset(w * 0.5f, h * 0.65f), Offset(w * 0.4f, h * 0.9f), strokeWidth = 8f)
-        drawLine(bodyColor, Offset(w * 0.5f, h * 0.65f), Offset(w * 0.6f, h * 0.9f), strokeWidth = 8f)
+        // 범용 모빌리티 자세 (입체 볼륨감)
+        drawCircle(bodyGrad, radius = 13f, center = Offset(w * 0.5f, h * 0.22f))
+        drawRoundRect(bodyGrad, topLeft = Offset(w * 0.45f, h * 0.32f), size = Size(20f, 32f), cornerRadius = CornerRadius(9f, 9f))
+        drawLine(bodyGrad, Offset(w * 0.46f, h * 0.64f), Offset(w * 0.38f, h * 0.88f), strokeWidth = 11f, cap = StrokeCap.Round)
+        drawLine(bodyGrad, Offset(w * 0.54f, h * 0.64f), Offset(w * 0.62f, h * 0.88f), strokeWidth = 11f, cap = StrokeCap.Round)
+
+        // 다이내믹 에너지 링
+        drawCircle(accentRibbon, radius = 9f, center = Offset(w * 0.5f, h * 0.44f), style = Stroke(3f))
       }
     }
   }

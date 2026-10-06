@@ -18,8 +18,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -44,11 +44,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.model.BodyExercise
-import com.example.ui.components.ExerciseTimerDialog
+import com.example.model.GolfDrill
+import com.example.ui.components.ExecutionCoachDialog
 import com.example.ui.components.GolfTopBar
 import com.example.ui.theme.CleanWhiteBorder
 import com.example.ui.theme.EnergeticGold
 import com.example.ui.theme.FairwayGreenPrimary
+import com.example.ui.theme.TagAmberBg
+import com.example.ui.theme.TagAmberText
 import com.example.ui.theme.TagMintBg
 import com.example.ui.theme.TagMintText
 import com.example.ui.theme.TextMainDark
@@ -64,7 +67,8 @@ fun RoutineScreen(
   val report by viewModel.analysisReport.collectAsState()
   val completedExercises by viewModel.completedExercises.collectAsState()
 
-  var selectedTimerExercise by remember { mutableStateOf<BodyExercise?>(null) }
+  var selectedExercise by remember { mutableStateOf<BodyExercise?>(null) }
+  var selectedDrill by remember { mutableStateOf<GolfDrill?>(null) }
 
   val exercises = report?.exercises ?: emptyList()
   val drills = report?.drills ?: emptyList()
@@ -75,8 +79,8 @@ fun RoutineScreen(
   Scaffold(
     topBar = {
       GolfTopBar(
-        title = "오늘의 3분 실천 루틴",
-        subtitle = "타이머 누르고 뚝딱 완료!",
+        title = "오늘의 실천 루틴",
+        subtitle = "음성 코칭과 함께 따라하기",
         canNavigateBack = true,
         onBackClick = { viewModel.navigateTo(GolfScreen.HOME) }
       )
@@ -91,7 +95,7 @@ fun RoutineScreen(
         .verticalScroll(rememberScrollState())
         .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
-      // 상단 달성률 카드 (화이트 & 그린)
+      // 상단 달성률 카드
       Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -140,7 +144,7 @@ fun RoutineScreen(
           Spacer(modifier = Modifier.height(8.dp))
 
           Text(
-            text = "“오늘 실천한 3분이 이번 주말 라운드의 3타를 아껴줍니다!”",
+            text = "“음성 코칭 버튼을 누르고 조교의 구령에 맞춰 따라 해보세요!”",
             fontSize = 12.sp,
             color = TextMuted
           )
@@ -150,7 +154,7 @@ fun RoutineScreen(
       Spacer(modifier = Modifier.height(14.dp))
 
       Text(
-        text = "💪 신체 모빌리티 회복 (터치하여 체크)",
+        text = "💪 신체 모빌리티 회복 훈련",
         fontSize = 14.sp,
         fontWeight = FontWeight.Bold,
         color = TextMainDark
@@ -199,20 +203,20 @@ fun RoutineScreen(
                 color = if (isDone) FairwayGreenPrimary else TextMainDark
               )
               Text(
-                text = "${ex.targetArea} • ${ex.repsOrTime}",
+                text = "📌 ${ex.leftRightDetail}",
                 fontSize = 11.sp,
                 color = TextMuted
               )
             }
 
             Button(
-              onClick = { selectedTimerExercise = ex },
+              onClick = { selectedExercise = ex },
               colors = ButtonDefaults.buttonColors(containerColor = FairwayGreenPrimary),
               shape = RoundedCornerShape(8.dp)
             ) {
-              Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(14.dp))
-              Spacer(modifier = Modifier.width(2.dp))
-              Text("타이머", fontSize = 11.sp)
+              Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = null, modifier = Modifier.size(14.dp))
+              Spacer(modifier = Modifier.width(3.dp))
+              Text("실행", fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
             }
           }
         }
@@ -270,10 +274,20 @@ fun RoutineScreen(
                 color = if (isDone) FairwayGreenPrimary else TextMainDark
               )
               Text(
-                text = "${drill.recommendedClub} • ${drill.checkpoint}",
+                text = "🎯 ${drill.setAndReps}",
                 fontSize = 11.sp,
                 color = TextMuted
               )
+            }
+
+            Button(
+              onClick = { selectedDrill = drill },
+              colors = ButtonDefaults.buttonColors(containerColor = EnergeticGold),
+              shape = RoundedCornerShape(8.dp)
+            ) {
+              Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
+              Spacer(modifier = Modifier.width(3.dp))
+              Text("실행", fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = Color.White)
             }
           }
         }
@@ -295,11 +309,31 @@ fun RoutineScreen(
     }
   }
 
-  selectedTimerExercise?.let { exercise ->
-    ExerciseTimerDialog(
-      exercise = exercise,
-      onDismiss = { selectedTimerExercise = null },
-      onCompleted = { viewModel.toggleExerciseComplete(exercise.title) }
+  selectedExercise?.let { ex ->
+    ExecutionCoachDialog(
+      title = ex.title,
+      targetOrClub = "타겟: ${ex.targetArea}",
+      setsAndReps = ex.leftRightDetail,
+      coachingKey = ex.coachingKey,
+      voiceScript = ex.voiceCoachScript,
+      visualType = ex.visualType,
+      instructions = ex.instructions,
+      onDismiss = { selectedExercise = null },
+      onCompleted = { viewModel.toggleExerciseComplete(ex.title) }
+    )
+  }
+
+  selectedDrill?.let { drill ->
+    ExecutionCoachDialog(
+      title = drill.title,
+      targetOrClub = "추천 클럽: ${drill.recommendedClub}",
+      setsAndReps = drill.setAndReps,
+      coachingKey = drill.feelVsReal,
+      voiceScript = drill.voiceCoachScript,
+      visualType = drill.visualType,
+      instructions = drill.howToPractice,
+      onDismiss = { selectedDrill = null },
+      onCompleted = { viewModel.toggleExerciseComplete(drill.title) }
     )
   }
 }
