@@ -729,7 +729,7 @@ fun SurveyScreen(
           .height(52.dp)
           .testTag("goto_screening_button")
       ) {
-        Text("다음: 13가지 신체검진으로 이동", fontSize = 15.sp, fontWeight = FontWeight.Bold)
+        Text("다음: SFMA 5대 신체검진으로 이동", fontSize = 15.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.width(8.dp))
         Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, modifier = Modifier.size(18.dp))
       }

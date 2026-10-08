@@ -8,18 +8,19 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
   <style>
     :root {
-      --primary: #147A40;
-      --primary-light: #22C55E;
-      --primary-bg: #E8F7ED;
-      --gold: #F59E0B;
+      --primary: #227C3E;
+      --primary-light: #38A169;
+      --primary-bg: #E2F2E6;
+      --gold: #D97706;
       --gold-bg: #FEF3C7;
-      --red: #EF4444;
+      --red: #DC2626;
       --red-bg: #FEE2E2;
-      --bg: #F8FAF9;
-      --surface: #FFFFFF;
-      --text: #111827;
-      --text-muted: #4B5563;
-      --border: #E5E7EB;
+      --bg: #EEF6F0;
+      --surface: #F7FAF8;
+      --surface-highlight: #E2F2E6;
+      --text: #132317;
+      --text-muted: #3E5443;
+      --border: #C3DEC8;
       --radius: 16px;
     }
 
@@ -511,20 +512,28 @@
       </div>
 
       <div class="card">
-        <div style="font-size: 14px; font-weight: 800;">가장 자신 있는 샷 (강점)</div>
-        <div class="chip-group" id="confidence-chips">
-          <div class="chip active" onclick="selectStrongest(this, '드라이버 티샷')">드라이버 티샷</div>
-          <div class="chip" onclick="selectStrongest(this, '아이언 온그린')">아이언 온그린</div>
-          <div class="chip" onclick="selectStrongest(this, '숏게임 어프로치')">숏게임 어프로치</div>
-          <div class="chip" onclick="selectStrongest(this, '퍼팅 거리감')">퍼팅 거리감</div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="font-size: 14px; font-weight: 800;">가장 자신 있는 샷 (복수 선택)</div>
+          <span id="strongest-count-badge" class="badge badge-primary">1개 선택</span>
+        </div>
+        <div class="chip-group" id="confidence-chips" style="margin-top: 8px;">
+          <div class="chip active" onclick="toggleStrongest(this, '드라이버 티샷')">✓ 드라이버 티샷</div>
+          <div class="chip" onclick="toggleStrongest(this, '아이언 온그린')">아이언 온그린</div>
+          <div class="chip" onclick="toggleStrongest(this, '숏게임 어프로치')">숏게임 어프로치</div>
+          <div class="chip" onclick="toggleStrongest(this, '퍼팅 거리감')">퍼팅 거리감</div>
+          <div class="chip" onclick="toggleStrongest(this, '트러블 탈출')">트러블 탈출</div>
         </div>
 
-        <div style="font-size: 14px; font-weight: 800; margin-top: 14px;">가장 불안한 샷 (미스 다발)</div>
-        <div class="chip-group" id="anxiety-chips">
-          <div class="chip active-red" onclick="selectWeakest(this, '아이언 타점 오차')">아이언 뒷땅/탑핑</div>
-          <div class="chip" onclick="selectWeakest(this, '티샷 슬라이스 OB')">티샷 슬라이스 OB</div>
-          <div class="chip" onclick="selectWeakest(this, '30m 쌩크')">30m 쌩크</div>
-          <div class="chip" onclick="selectWeakest(this, '퍼팅 쓰리펏')">퍼팅 3펏</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
+          <div style="font-size: 14px; font-weight: 800;">가장 불안한 샷 (복수 선택)</div>
+          <span id="weakest-count-badge" class="badge badge-red">1개 선택</span>
+        </div>
+        <div class="chip-group" id="anxiety-chips" style="margin-top: 8px;">
+          <div class="chip active-red" onclick="toggleWeakest(this, '아이언 뒷땅/탑핑')">✓ 아이언 뒷땅/탑핑</div>
+          <div class="chip" onclick="toggleWeakest(this, '티샷 슬라이스 OB')">티샷 슬라이스 OB</div>
+          <div class="chip" onclick="toggleWeakest(this, '30m 섕크')">30m 섕크</div>
+          <div class="chip" onclick="toggleWeakest(this, '퍼팅 3펏')">퍼팅 3펏</div>
+          <div class="chip" onclick="toggleWeakest(this, '후반 체력 고갈')">후반 체력 고갈</div>
         </div>
       </div>
 
@@ -537,8 +546,27 @@
       </div>
 
       <div class="card">
-        <div style="font-size: 14px; font-weight: 800;">체감되는 스윙 습관</div>
-        <div id="swing-habits-list" style="margin-top: 8px;"></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div style="font-size: 14px; font-weight: 800;">체감되는 스윙 보상 동작 (복수 선택)</div>
+          <span id="habits-count-badge" class="badge badge-primary">1개 선택</span>
+        </div>
+        <div id="swing-habits-list"></div>
+      </div>
+
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div style="font-size: 14px; font-weight: 800;">최근 라운드 기억나는 실수 (복수 선택)</div>
+          <span id="mistakes-count-badge" class="badge badge-red">1개 선택</span>
+        </div>
+        <div id="mistakes-list"></div>
+      </div>
+
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div style="font-size: 14px; font-weight: 800;">원하는 골프 목표 (복수 선택)</div>
+          <span id="goals-count-badge" class="badge badge-primary">1개 선택</span>
+        </div>
+        <div id="goals-list"></div>
       </div>
 
       <button class="btn btn-primary" onclick="navigateTo('screening')">
@@ -564,8 +592,8 @@
         <h3 id="screening-title" style="font-size: 17px; font-weight: 800; color: var(--text);">1. 골반 전후방 기울임 조절력</h3>
         <p id="screening-sub" style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Pelvic Tilt Test</p>
 
-        <div style="height: 120px; background: #F3F4F6; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 12px 0;">
-          <svg id="schematic-svg" width="170" height="100" viewBox="0 0 170 100"></svg>
+        <div style="height: 220px; background: #fff; border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 12px 0; overflow: hidden;">
+          <img id="screening-img" src="img/img_sfma_flexion.jpg" alt="동작 자세 사진" style="width: 100%; height: 100%; object-fit: contain;">
         </div>
 
         <button id="tts-audio-btn" class="btn btn-outline btn-sm" style="width: 100%;" onclick="toggleTtsAudio()">
@@ -761,34 +789,71 @@ const state = {
   currentScreen: 'home',
   profile: {
     handicap: 18,
-    strongestArea: '드라이버 티샷',
-    weakestArea: '아이언 뒷땅/탑핑',
+    strongestAreas: ['드라이버 티샷'],
+    weakestAreas: ['아이언 뒷땅/탑핑'],
     roundIssues: ['드라이버 슬라이스 및 푸시 샷', '아이언 뒷땅 및 탑핑 타점 오차', '후반 나인홀 체력 저하 및 샷 난조'],
-    selectedSwingHabit: '임팩트 시 골반 조기 전진 (얼리 익스텐션)'
+    selectedSwingHabits: ['임팩트 시 골반 조기 전진 (얼리 익스텐션)'],
+    memorableMistakes: ['세컨샷 깊은 뒷땅으로 해저드'],
+    targetGoals: ['80대 후반 안정 진입 (라베 달성)']
   },
   currentScreeningIndex: 0,
   screeningGrades: {
-    1: 'RESTRICTED', 2: 'LIMITED', 3: 'PASS', 4: 'RESTRICTED',
-    5: 'PASS', 6: 'PASS', 7: 'PASS', 8: 'PASS', 9: 'PASS',
-    10: 'PASS', 11: 'PASS', 12: 'LIMITED', 13: 'PASS'
+    1: 'LIMITED', 2: 'LIMITED', 3: 'RESTRICTED', 4: 'PASS', 5: 'RESTRICTED'
   },
   completedTasks: new Set()
 };
 
 const screeningItems = [
-  { id: 1, title: "골반 전후방 기울임 조절력", sub: "Pelvic Tilt Test", category: "골반 및 코어", criteria: "어드레스 자세에서 상체 흔들림 없이 골반을 부드럽게 틸트할 수 있음", impact: "다운스윙 시 척추각이 무너져 얼리 익스텐션 및 타점 오차 유발", voice: "차렷 후 어드레스 자세를 취하세요. 가슴을 고정하고 오직 골반과 허리만을 전방 및 후방으로 부드럽게 틸트해 봅니다." },
-  { id: 2, title: "골반 수평 회전 분리 가동성", sub: "Pelvic Rotation Disassociation", category: "골반 및 고관절", criteria: "상체를 고정한 채 골반만을 좌우로 30도 이상 독립 회전 가능한가", impact: "백스윙 시 골반 스웨이 및 파워 누수 유발", voice: "양팔을 가슴에 교차하고 상체를 고정하세요. 어깨를 돌리지 않고 골반만을 좌우로 회전합니다." },
-  { id: 3, title: "흉추 상체 독립 회전 가동성", sub: "Torso Rotation Disassociation", category: "흉추 및 상체", criteria: "하체를 고정한 채 상체만을 좌우로 45도 이상 회전 가능한가", impact: "상체 코일링 부족으로 엎어치는 궤도(오버 더 탑) 유발", voice: "하체를 단단히 바닥에 고정하세요. 하체 움직임 없이 상체만을 힘차게 좌우로 비틀어줍니다." },
-  { id: 4, title: "오버헤드 딥 스쿼트 힌지", sub: "Overhead Deep Squat Hinge", category: "전신 가동성 & 힌지", criteria: "클럽을 머리 위로 든 상태에서 뒤꿈치 들림 없이 수평 이하로 스쿼트 가능", impact: "다운스윙 시 고관절 힌지가 풀려 배치기 및 뒷땅 유발", voice: "클럽을 머리 위로 들고 서서 뒤꿈치를 땅에 붙인 채 깊게 앉았다 일어납니다." },
-  { id: 5, title: "편측 한 발 동적 밸런스", sub: "Single Leg Dynamic Balance", category: "신경근 안정성", criteria: "한 발로 서서 눈을 감고 15초 이상 균형 유지", impact: "체중 이동 붕괴 및 타점 불안정 유발", voice: "한 발로 서서 눈을 감고 중심을 유지해 보세요. 15초 이상 버틸 수 있는지 체크합니다." },
-  { id: 6, title: "어깨 관절 외회전 가동 범위", sub: "Shoulder External Rotation", category: "어깨 및 상지", criteria: "어깨 90도 굴곡 상태에서 손등을 후방으로 90도 젖힘 가능", impact: "백스윙 탑에서 플라잉 엘보 발생", voice: "팔꿈치를 90도로 들고 손등을 뒤쪽으로 넘겨 어깨 외회전 각도를 점검합니다." },
-  { id: 7, title: "어깨 관절 내회전 가동 범위", sub: "Shoulder Internal Rotation", category: "어깨 및 상지", criteria: "팔꿈치 90도에서 손바닥을 아래로 60도 이상 회전 가능", impact: "팔로우스루 치킨윙 유발", voice: "팔꿈치를 고정한 채 손바닥을 바닥 쪽으로 돌려 내회전 가동성을 봅니다." },
-  { id: 8, title: "광배근 및 견갑골 유연성", sub: "Lat & Scapular Flexibility", category: "등 및 견갑골", criteria: "벽에 허리를 붙인 채 양팔을 올려 벽에 닿을 수 있는가", impact: "백스윙 아크 축소 및 척추 펴짐 유발", voice: "벽에 등을 대고 서서 양팔을 위로 곧게 뻗어 벽에 닿는지 확인하세요." },
-  { id: 9, title: "리드 사이드 고관절 내회전", sub: "Lead Hip Internal Rotation", category: "고관절 및 하지", criteria: "의자에 앉아 한쪽 발을 바깥으로 40도 이상 벌림 가능", impact: "다운스윙 힙 턴이 막히며 슬라이스 유발", voice: "의자에 앉아 무릎을 모은 채 왼쪽 발목만 바깥쪽으로 부드럽게 벌려줍니다." },
-  { id: 10, title: "트레일 사이드 고관절 외회전", sub: "Trail Hip External Rotation", category: "고관절 및 하지", criteria: "의자에 앉아 한쪽 발을 안쪽으로 45도 이상 회전 가능", impact: "백스윙 체중 싣기 실패 및 리버스 피봇 유발", voice: "의자에 앉아 우측 발목을 안쪽으로 들어 올려 고관절 가동성을 봅니다." },
-  { id: 11, title: "손목 코킹 및 힌징 가동성", sub: "Wrist Radial / Ulnar Deviation", category: "손목 및 팔꿈치", criteria: "주먹 쥔 상태에서 손목 꺾임 및 풀림 각도 정상", impact: "캐스팅 및 스쿠핑 타점 오차 유발", voice: "팔을 뻗어 가볍게 주먹을 쥐고 위아래로 손목을 꺾어 각도를 확인합니다." },
-  { id: 12, title: "발목 족배굴곡 가동성", sub: "Ankle Dorsiflexion Mobility", category: "발목 및 하지", criteria: "벽에서 10cm 띄운 후 뒤꿈치 떼지 않고 무릎이 벽에 닿음", impact: "다운스윙 시 배치기 및 체중 이동 지연 유발", voice: "벽 앞에 한 발을 띄우고 서서 뒤꿈치를 붙인 채 무릎을 앞으로 밀어 벽에 닿게 합니다." },
-  { id: 13, title: "경추 좌우 회전 가동 범위", sub: "Cervical Spine Rotation", category: "목 및 척추", criteria: "어깨 고정 상태로 턱이 쇄골 중앙선을 넘어 70도 회전", impact: "헤드업 조기 발생 및 시선 흔들림", voice: "정면을 보고 어깨를 고정한 채 고개를 좌우로 천천히 돌려봅니다." }
+  { 
+    id: 1, 
+    title: "전신 굴곡 검진 (SFMA Flexion)", 
+    sub: "Multi-Segmental Flexion", 
+    category: "후방 사슬 유연성 & 힙 힌지", 
+    criteria: "무릎 굽힘 없이 손가락 끝이 발끝에 편안하게 터치 가능", 
+    impact: "후방 사슬 결핍 -> 어드레스 C-포스처, 다운스윙 배치기(얼리 익스텐션), 뒷땅/탑핑 유발", 
+    voice: "양발을 모으고 무릎을 곧게 펴세요. 숨을 내쉬며 천천히 상체를 앞으로 숙여 손끝으로 발끝을 터치해 봅니다.", 
+    img: "img_sfma_flexion" 
+  },
+  { 
+    id: 2, 
+    title: "전신 신전 검진 (SFMA Extension)", 
+    sub: "Multi-Segmental Extension", 
+    category: "전방 사슬 가동성 & 흉추 신전", 
+    criteria: "통증 없이 ASIS(골반)가 발끝선을 넘고 견갑골이 뒤꿈치 수직선 뒤로 넘어감", 
+    impact: "흉추 신전 부족 -> 백스윙 역피봇, 다운스윙 척추각 붕괴(Loss of Posture), 슬라이스 및 요통", 
+    voice: "양발을 모으고 양팔을 위로 뻗으세요. 무릎을 편 채 가슴을 활짝 펴며 뒤로 부드럽게 젖혀봅니다.", 
+    img: "img_sfma_extension" 
+  },
+  { 
+    id: 3, 
+    title: "전신 회전 검진 (SFMA Rotation)", 
+    sub: "Multi-Segmental Rotation", 
+    category: "몸통 & 골반 회전 분리 (코일링)", 
+    criteria: "발바닥 고정 상태에서 골반 50도 이상, 어깨선 100도 이상 회전 가능", 
+    impact: "회전 결핍 -> 백스윙 코일링 부족으로 상체 덤비는 오버 더 탑(엎어치기/슬라이스), 골반 스웨이", 
+    voice: "양발을 모으고 양팔을 가슴에 교차하세요. 발바닥을 고정한 채 몸통 전체를 좌우로 회전합니다.", 
+    img: "img_sfma_rotation" 
+  },
+  { 
+    id: 4, 
+    title: "외발서기 밸런스 (SFMA SLS)", 
+    sub: "Single Leg Stance (SLS)", 
+    category: "단일 하지 지지력 & 중둔근 안정성", 
+    criteria: "골반 기울임이나 흔들림 없이 좌우 각 10초 이상 안정적 유지", 
+    impact: "하지 지지력 저하 -> 다운스윙 체중 이동 슬라이드, 축 붕괴, 후반 라운드 난조", 
+    voice: "한 발로 서서 반대쪽 다리를 90도로 들어 올리세요. 골반이 비뚤어지지 않고 10초 이상 안정적으로 서 있는지 점검합니다.", 
+    img: "img_sfma_sls" 
+  },
+  { 
+    id: 5, 
+    title: "오버헤드 딥 스쿼트 (SFMA Squat)", 
+    sub: "Overhead Deep Squat", 
+    category: "발목·고관절·흉추 복합 가동성", 
+    criteria: "뒤꿈치 들림 없이 대퇴부가 지면과 수평 이하로 하강", 
+    impact: "발목 족배굴곡 및 고관절 힌지 제한 -> 다운스윙 얼리 익스텐션(배치기), 캐스팅 및 비거리 손실", 
+    voice: "클럽을 머리 위로 들고 서서 뒤꿈치를 바닥에 붙인 채 깊게 앉으세요.", 
+    img: "img_sfma_squat" 
+  }
 ];
 
 const allRoundIssues = [
@@ -808,6 +873,22 @@ const swingHabits = [
   "백스윙 탑 상체 덮어침 (오버 더 탑)",
   "팔로우스루 좌측 팔꿈치 당김 (치킨윙)",
   "다운스윙 손목 조기 풀림 (캐스팅)"
+];
+
+const mistakePresets = [
+  "세컨샷 깊은 뒷땅으로 해저드",
+  "티샷 우측 슬라이스 OB",
+  "그린 주변 30m 어프로치 섕크",
+  "1m 파퍼트 놓친 후 3퍼트",
+  "벙커에서 한 번에 탈출 실패"
+];
+
+const goalPresets = [
+  "80대 후반 안정 진입 (라베 달성)",
+  "보기플레이어 탈피 및 안정 싱글",
+  "드라이버 비거리 20m 증가",
+  "18홀 내내 일정한 아이언 정타율",
+  "부상 없이 평생 즐기는 건강한 스윙"
 ];
 
 const prescriptions = {
@@ -862,6 +943,8 @@ const prescriptions = {
 function init() {
   renderRoundIssuesList();
   renderSwingHabitsList();
+  renderMistakesList();
+  renderGoalsList();
   renderScreeningTabs();
   loadScreeningItem(state.currentScreeningIndex);
   renderReportLists();
@@ -894,16 +977,40 @@ function updateHandicap(v) {
   document.getElementById('home-handicap-val').innerText = v;
 }
 
-function selectStrongest(el, a) {
-  document.querySelectorAll('#confidence-chips .chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  state.profile.strongestArea = a;
+function toggleStrongest(el, a) {
+  const list = state.profile.strongestAreas;
+  const idx = list.indexOf(a);
+  if (idx > -1) {
+    if (list.length > 1) {
+      list.splice(idx, 1);
+      el.classList.remove('active');
+      el.innerText = a;
+    }
+  } else {
+    list.push(a);
+    el.classList.add('active');
+    el.innerText = `✓ ${a}`;
+  }
+  const badge = document.getElementById('strongest-count-badge');
+  if (badge) badge.innerText = `${list.length}개 선택`;
 }
 
-function selectWeakest(el, a) {
-  document.querySelectorAll('#anxiety-chips .chip').forEach(c => c.classList.remove('active-red'));
-  el.classList.add('active-red');
-  state.profile.weakestArea = a;
+function toggleWeakest(el, a) {
+  const list = state.profile.weakestAreas;
+  const idx = list.indexOf(a);
+  if (idx > -1) {
+    if (list.length > 1) {
+      list.splice(idx, 1);
+      el.classList.remove('active-red');
+      el.innerText = a;
+    }
+  } else {
+    list.push(a);
+    el.classList.add('active-red');
+    el.innerText = `✓ ${a}`;
+  }
+  const badge = document.getElementById('weakest-count-badge');
+  if (badge) badge.innerText = `${list.length}개 선택`;
 }
 
 function renderRoundIssuesList() {
@@ -917,7 +1024,8 @@ function renderRoundIssuesList() {
       </div>
     `;
   }).join('');
-  document.getElementById('issues-count-badge').innerText = `${state.profile.roundIssues.length}개 선택됨`;
+  const badge = document.getElementById('issues-count-badge');
+  if (badge) badge.innerText = `${state.profile.roundIssues.length}개 선택됨`;
 }
 
 function toggleRoundIssue(issue) {
@@ -930,19 +1038,72 @@ function toggleRoundIssue(issue) {
 function renderSwingHabitsList() {
   const c = document.getElementById('swing-habits-list');
   c.innerHTML = swingHabits.map(h => {
-    const isSel = state.profile.selectedSwingHabit === h;
+    const isSel = state.profile.selectedSwingHabits.includes(h);
     return `
-      <div style="display: flex; align-items: center; gap: 8px; padding: 6px 0; cursor: pointer;" onclick="selectHabit('${h}')">
-        <input type="radio" name="habit" ${isSel ? 'checked' : ''} style="accent-color: var(--primary);">
+      <div class="check-row ${isSel ? 'checked' : ''}" onclick="toggleSwingHabit('${h}')">
+        <div class="check-box">${isSel ? '✓' : ''}</div>
         <span style="font-size: 13px; font-weight: ${isSel ? '700' : '500'}; color: ${isSel ? 'var(--primary)' : 'var(--text)'};">${h}</span>
       </div>
     `;
   }).join('');
+  const badge = document.getElementById('habits-count-badge');
+  if (badge) badge.innerText = `${state.profile.selectedSwingHabits.length}개 선택`;
 }
 
-function selectHabit(h) {
-  state.profile.selectedSwingHabit = h;
+function toggleSwingHabit(h) {
+  const list = state.profile.selectedSwingHabits;
+  const idx = list.indexOf(h);
+  if (idx > -1) list.splice(idx, 1);
+  else list.push(h);
   renderSwingHabitsList();
+}
+
+function renderMistakesList() {
+  const c = document.getElementById('mistakes-list');
+  if (!c) return;
+  c.innerHTML = mistakePresets.map(m => {
+    const isSel = state.profile.memorableMistakes.includes(m);
+    return `
+      <div class="check-row ${isSel ? 'checked' : ''}" onclick="toggleMistake('${m}')">
+        <div class="check-box" style="${isSel ? 'background: var(--red); border-color: var(--red);' : ''}">${isSel ? '✓' : ''}</div>
+        <span style="font-size: 13px; font-weight: ${isSel ? '700' : '500'}; color: ${isSel ? 'var(--red)' : 'var(--text)'};">${m}</span>
+      </div>
+    `;
+  }).join('');
+  const badge = document.getElementById('mistakes-count-badge');
+  if (badge) badge.innerText = `${state.profile.memorableMistakes.length}개 선택`;
+}
+
+function toggleMistake(m) {
+  const list = state.profile.memorableMistakes;
+  const idx = list.indexOf(m);
+  if (idx > -1) list.splice(idx, 1);
+  else list.push(m);
+  renderMistakesList();
+}
+
+function renderGoalsList() {
+  const c = document.getElementById('goals-list');
+  if (!c) return;
+  c.innerHTML = goalPresets.map(g => {
+    const isSel = state.profile.targetGoals.includes(g);
+    return `
+      <div class="check-row ${isSel ? 'checked' : ''}" onclick="toggleGoal('${g}')">
+        <div class="check-box">${isSel ? '✓' : ''}</div>
+        <span style="font-size: 13px; font-weight: ${isSel ? '700' : '500'}; color: ${isSel ? 'var(--primary)' : 'var(--text)'};">${g}</span>
+      </div>
+    `;
+  }).join('');
+  const badge = document.getElementById('goals-count-badge');
+  if (badge) badge.innerText = `${state.profile.targetGoals.length}개 선택`;
+}
+
+function toggleGoal(g) {
+  const list = state.profile.targetGoals;
+  const idx = list.indexOf(g);
+  if (idx > -1) list.splice(idx, 1);
+  else list.push(g);
+  renderGoalsList();
 }
 
 function renderScreeningTabs() {
@@ -965,19 +1126,23 @@ function selectScreeningIndex(idx) {
 
 function loadScreeningItem(idx) {
   const item = screeningItems[idx];
-  document.getElementById('screening-index-txt').innerText = `검진 항목 ${idx + 1} / 13`;
+  document.getElementById('screening-index-txt').innerText = `SFMA 검진 항목 ${idx + 1} / 5`;
   document.getElementById('screening-category-badge').innerText = item.category;
   document.getElementById('screening-title').innerText = `${idx + 1}. ${item.title}`;
   document.getElementById('screening-sub').innerText = item.sub;
   document.getElementById('screening-criteria').innerText = item.criteria;
   document.getElementById('screening-impact').innerText = item.impact;
 
-  document.getElementById('screening-progress-bar').style.width = `${((idx + 1) / 13) * 100}%`;
+  const imgEl = document.getElementById('screening-img');
+  if (imgEl && item.img) {
+    imgEl.src = `img/${item.img}.jpg`;
+  }
+
+  document.getElementById('screening-progress-bar').style.width = `${((idx + 1) / 5) * 100}%`;
 
   const grade = state.screeningGrades[item.id] || 'PASS';
   updateGradeUI(grade);
   renderScreeningTabs();
-  drawSchematic(item.id);
 }
 
 function updateGradeUI(grade) {

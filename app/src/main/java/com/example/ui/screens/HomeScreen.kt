@@ -46,22 +46,7 @@ import androidx.compose.ui.unit.sp
 import com.example.model.ScreeningGrade
 import com.example.ui.components.CycleVisualizer
 import com.example.ui.components.GolfTopBar
-import com.example.ui.theme.GolfCourseBackground
-import com.example.ui.theme.GolfFairwayCardSurface
-import com.example.ui.theme.GolfGrassBorder
-import com.example.ui.theme.PerformanceGreenPrimary
-import com.example.ui.theme.PerformanceGreenContainer
-import com.example.ui.theme.StatusCaution
-import com.example.ui.theme.StatusCautionBg
-import com.example.ui.theme.StatusPass
-import com.example.ui.theme.StatusPassBg
-import com.example.ui.theme.StatusRestricted
-import com.example.ui.theme.StatusRestrictedBg
-import com.example.ui.theme.SurfaceBorder
-import com.example.ui.theme.SurfaceCardSecondary
-import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
-import com.example.ui.theme.TextTertiary
+import com.example.ui.theme.*
 import com.example.viewmodel.GolfRangerViewModel
 import com.example.viewmodel.GolfScreen
 
@@ -241,8 +226,8 @@ fun HomeScreen(
       Spacer(modifier = Modifier.height(8.dp))
 
       PerformanceMenuRow(
-        title = "🩺 골프 신체검진 13항목",
-        subtitle = "대표 일러스트 및 친절한 음성 안내",
+        title = "🩺 SFMA 5대 핵심 신체검진",
+        subtitle = "골퍼 동작 사진 가이드 & 5가지 스윙 제한점 예측",
         tag = "screening_action_card",
         onClick = { viewModel.navigateTo(GolfScreen.SCREENING) }
       )

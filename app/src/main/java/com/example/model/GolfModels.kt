@@ -53,7 +53,7 @@ data class GolfBodyType(
 )
 
 /**
- * 13가지 기능 해부학적 골프 신체 검진 항목
+ * SFMA 5대 기능적 신체 검진 항목 (Flexion, Extension, SLS, Rotation, Squat)
  */
 data class ScreeningItem(
   val id: Int,
@@ -65,7 +65,8 @@ data class ScreeningItem(
   val voiceGuideText: String,
   val passCriteria: String,
   val swingImpact: String,
-  val technicalId: String
+  val technicalId: String,
+  val drawableResName: String = ""
 )
 
 /**

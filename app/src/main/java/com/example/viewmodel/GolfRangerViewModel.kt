@@ -27,23 +27,14 @@ class GolfRangerViewModel : ViewModel() {
   private val _golferProfile = MutableStateFlow(GolferProfile())
   val golferProfile: StateFlow<GolferProfile> = _golferProfile.asStateFlow()
 
-  // 13개 신체 검진 결과 맵
+  // SFMA 5대 신체 검진 결과 맵 (Flexion, Extension, Rotation, SLS, Squat)
   private val _screeningResults = MutableStateFlow<Map<Int, ScreeningGrade>>(
-    // 기본 초기값으로 샘플 상태를 제공해 편리하게 시작할 수 있게 함
     mapOf(
-      1 to ScreeningGrade.LIMITED, // 골반 틸트
-      2 to ScreeningGrade.PASS,
-      3 to ScreeningGrade.LIMITED, // 흉추 회전
-      4 to ScreeningGrade.RESTRICTED, // 오버헤드 스쿼트
-      5 to ScreeningGrade.PASS,
-      6 to ScreeningGrade.PASS,
-      7 to ScreeningGrade.LIMITED,
-      8 to ScreeningGrade.LIMITED,
-      9 to ScreeningGrade.PASS,
-      10 to ScreeningGrade.PASS,
-      11 to ScreeningGrade.PASS,
-      12 to ScreeningGrade.RESTRICTED, // 발목
-      13 to ScreeningGrade.LIMITED
+      1 to ScreeningGrade.LIMITED,    // SFMA Flexion (전신 굴곡)
+      2 to ScreeningGrade.LIMITED,    // SFMA Extension (전신 신전)
+      3 to ScreeningGrade.RESTRICTED, // SFMA Rotation (전신 회전)
+      4 to ScreeningGrade.PASS,       // SFMA SLS (외발서기 밸런스)
+      5 to ScreeningGrade.RESTRICTED  // SFMA Squat (오버헤드 딥 스쿼트)
     )
   )
   val screeningResults: StateFlow<Map<Int, ScreeningGrade>> = _screeningResults.asStateFlow()
@@ -198,7 +189,7 @@ class GolfRangerViewModel : ViewModel() {
     if (_currentScreeningIndex.value < total - 1) {
       _currentScreeningIndex.value += 1
     } else {
-      // 13개 모두 완료 시 리포트 생성 후 리포트 화면으로 이동
+      // SFMA 5개 모두 완료 시 리포트 생성 후 리포트 화면으로 이동
       refreshAnalysis()
       navigateTo(GolfScreen.REPORT)
     }
